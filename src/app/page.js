@@ -1,65 +1,104 @@
-import Image from "next/image";
-
-export default function Home() {
+export default function Dashboard() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon blue">
+            <i className="fa-solid fa-ticket"></i>
+          </div>
+          <div>
+            <div className="stat-number">24</div>
+            <div className="stat-label">Total Tickets</div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        
+        <div className="stat-card">
+          <div className="stat-icon yellow">
+            <i className="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <div className="stat-number">5</div>
+            <div className="stat-label">In Progress</div>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div className="stat-card">
+          <div className="stat-icon green">
+            <i className="fa-solid fa-check-circle"></i>
+          </div>
+          <div>
+            <div className="stat-number">18</div>
+            <div className="stat-label">Resolved</div>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon red">
+            <i className="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div>
+            <div className="stat-number">1</div>
+            <div className="stat-label">SLA Breach</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Recent Tickets</h2>
+          <button className="btn btn-primary btn-sm">
+            <i className="fa-solid fa-plus"></i> New Ticket
+          </button>
+        </div>
+        <div className="card-body p-0">
+          <div className="table-wrap">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Ticket No.</th>
+                  <th>Subject</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="font-mono">HD-202604-00001</td>
+                  <td>Computer cannot boot up</td>
+                  <td><span className="badge badge-danger">High</span></td>
+                  <td><span className="badge badge-warning">In Progress</span></td>
+                  <td>2026-04-29 10:30</td>
+                  <td>
+                    <button className="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-mono">HD-202604-00002</td>
+                  <td>Request access to ERP</td>
+                  <td><span className="badge badge-primary">Medium</span></td>
+                  <td><span className="badge badge-success">Resolved</span></td>
+                  <td>2026-04-28 14:15</td>
+                  <td>
+                    <button className="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-mono">HD-202604-00003</td>
+                  <td>Printer paper jam</td>
+                  <td><span className="badge badge-gray">Low</span></td>
+                  <td><span className="badge badge-gray">Closed</span></td>
+                  <td>2026-04-27 09:00</td>
+                  <td>
+                    <button className="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

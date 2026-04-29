@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BusinessUnit {
+  bu_id          Int      @id @default(autoincrement())
+  bu_code        String   @db.VarChar(20)
+  bu_name        String   @db.VarChar(100)
+  bu_description String?  @db.Text
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  users          User[]
+  systems        System[]
+}
+
+model Location {
+  location_id   Int      @id @default(autoincrement())
+  location_code String   @db.VarChar(20)
+  location_name String   @db.VarChar(100)
+  location_type String   // e.g. hq, store, warehouse, other
+  floor         String?  @db.VarChar(10)
+  address       String?  @db.Text
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  users         User[]
+  tickets       Ticket[]
+}
+
+model System {
+  system_id     Int      @id @default(autoincrement())
+  system_code   String   @db.VarChar(20)
+  system_name   String   @db.VarChar(100)
+  system_type   String   // hardware / software
+  vendor        String?  @db.VarChar(100)
+  version       String?  @db.VarChar(50)
+  owner_bu_id   Int?
+  tier2_team_id Int?
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  owner_bu      BusinessUnit? @relation(fields: [owner_bu_id], references: [bu_id])
+  tickets       Ticket[]
+}
+
+model User {
+  user_id      Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(50)
+  email        String   @unique @db.VarChar(100)
+  full_name    String   @db.VarChar(100)
+  phone        String?  @db.VarChar(20)
+  role         String   // admin, tier1, tier2, end_user
+  bu_id        Int?
+  location_id  Int?
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  bu           BusinessUnit? @relation(fields: [bu_id], references: [bu_id])
+  location     Location?     @relation(fields: [location_id], references: [location_id])
+
+  reported_tickets Ticket[] @relation("Reporter")
+  tier1_tickets    Ticket[] @relation("Tier1Assigned")
+  tier2_tickets    Ticket[] @relation("Tier2Assigned")
+}
+
+model Ticket {
+  ticket_id           Int      @id @default(autoincrement())
+  ticket_no           String   @unique
+  subject             String
+  problem_type        String   // hardware, software
+  system_id           Int
+  location_id         Int
+  reporter_id         Int
+  tier1_id            Int?
+  tier2_id            Int?
+  status              String   // NEW, IN_PROGRESS, ESCALATED, PENDING_USER, RESOLVED, CLOSED, REOPENED, CANCELLED
+  priority            String   // Critical, High, Medium, Low
+  description         String   @db.Text
+  symptom             String   @db.Text
+  
+  // Tier 1
+  initial_assessment  String?  @db.Text
+  preliminary_cause   String?  @db.Text
+  escalate_reason     String?  @db.Text
+  
+  // Tier 2
+  root_cause          String?  @db.Text
+  root_cause_category String?
+  resolution          String?  @db.Text
+  resolution_detail   String?  @db.Text
+  preventive_action   String?  @db.Text
+  
+  // Closure
+  user_satisfaction   Int?
+  user_comment        String?  @db.Text
+
+  // Timestamps
+  created_at          DateTime @default(now())
+  tier1_accepted_at   DateTime?
+  tier1_assessed_at   DateTime?
+  escalated_at        DateTime?
+  tier2_accepted_at   DateTime?
+  repair_started_at   DateTime?
+  resolved_at         DateTime?
+  user_confirmed_at   DateTime?
+  closed_at           DateTime?
+  reopened_at         DateTime?
+
+  // Relations
+  system              System   @relation(fields: [system_id], references: [system_id])
+  location            Location @relation(fields: [location_id], references: [location_id])
+  reporter            User     @relation("Reporter", fields: [reporter_id], references: [user_id])
+  tier1               User?    @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
+  tier2               User?    @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
+}
