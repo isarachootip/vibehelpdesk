@@ -9,7 +9,7 @@ datasource db {
 
 model BusinessUnit {
   bu_id          Int      @id @default(autoincrement())
-  bu_code        String   @db.VarChar(20)
+  bu_code        String   @unique @db.VarChar(20)
   bu_name        String   @db.VarChar(100)
   bu_description String?  @db.Text
   is_active      Boolean  @default(true)
@@ -17,15 +17,59 @@ model BusinessUnit {
   updated_at     DateTime @updatedAt
 
   users          User[]
-  systems        System[]
+  systems        SystemGroup[]
+  tickets        Ticket[]
+  job_counters   JobCounter[]
+}
+
+model SystemGroup {
+  system_id     Int      @id @default(autoincrement())
+  system_code   String   @unique @db.VarChar(20)
+  system_name   String   @db.VarChar(100)
+  system_type   String   @db.VarChar(20)
+  group_name    String?  @db.VarChar(50)
+  vendor        String?  @db.VarChar(100)
+  version       String?  @db.VarChar(50)
+  owner_bu_id   Int?
+  owner_user_id Int?
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  owner_bu      BusinessUnit? @relation(fields: [owner_bu_id], references: [bu_id])
+  owner_user    User?         @relation("SystemOwner", fields: [owner_user_id], references: [user_id])
+  tickets       Ticket[]
+}
+
+model User {
+  user_id      Int      @id @default(autoincrement())
+  email        String   @unique @db.VarChar(255)
+  full_name    String   @db.VarChar(100)
+  phone        String?  @db.VarChar(20)
+  role         String   @db.VarChar(20)
+  bu_id        Int?
+  location_id  Int?
+  avatar_url   String?  @db.Text
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  bu               BusinessUnit? @relation(fields: [bu_id], references: [bu_id])
+  location         Location?     @relation(fields: [location_id], references: [location_id])
+
+  reported_tickets Ticket[]      @relation("Reporter")
+  tier1_tickets    Ticket[]      @relation("Tier1Assigned")
+  tier2_tickets    Ticket[]      @relation("Tier2Assigned")
+  owner_tickets    Ticket[]      @relation("OwnerAssigned")
+  owned_systems    SystemGroup[] @relation("SystemOwner")
 }
 
 model Location {
   location_id   Int      @id @default(autoincrement())
-  location_code String   @db.VarChar(20)
+  location_code String   @unique @db.VarChar(20)
   location_name String   @db.VarChar(100)
-  location_type String   // e.g. hq, store, warehouse, other
-  floor         String?  @db.VarChar(10)
+  location_type String   @db.VarChar(30)
+  floor         String?  @db.VarChar(20)
   address       String?  @db.Text
   is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
@@ -35,76 +79,39 @@ model Location {
   tickets       Ticket[]
 }
 
-model System {
-  system_id     Int      @id @default(autoincrement())
-  system_code   String   @db.VarChar(20)
-  system_name   String   @db.VarChar(100)
-  system_type   String   // hardware / software
-  vendor        String?  @db.VarChar(100)
-  version       String?  @db.VarChar(50)
-  owner_bu_id   Int?
-  tier2_team_id Int?
-  is_active     Boolean  @default(true)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-
-  owner_bu      BusinessUnit? @relation(fields: [owner_bu_id], references: [bu_id])
-  tickets       Ticket[]
-}
-
-model User {
-  user_id      Int      @id @default(autoincrement())
-  username     String   @unique @db.VarChar(50)
-  email        String   @unique @db.VarChar(100)
-  full_name    String   @db.VarChar(100)
-  phone        String?  @db.VarChar(20)
-  role         String   // admin, tier1, tier2, end_user
-  bu_id        Int?
-  location_id  Int?
-  is_active    Boolean  @default(true)
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-
-  bu           BusinessUnit? @relation(fields: [bu_id], references: [bu_id])
-  location     Location?     @relation(fields: [location_id], references: [location_id])
-
-  reported_tickets Ticket[] @relation("Reporter")
-  tier1_tickets    Ticket[] @relation("Tier1Assigned")
-  tier2_tickets    Ticket[] @relation("Tier2Assigned")
-}
-
 model Ticket {
   ticket_id           Int      @id @default(autoincrement())
-  ticket_no           String   @unique
-  subject             String
-  problem_type        String   // hardware, software
+  ticket_no           String   @unique @db.VarChar(30)
+  subject             String   @db.VarChar(255)
+  problem_type        String   @db.VarChar(20)
   system_id           Int
   location_id         Int
   reporter_id         Int
+  reporter_email      String   @db.VarChar(255)
+  bu_id               Int
   tier1_id            Int?
   tier2_id            Int?
-  status              String   // NEW, IN_PROGRESS, ESCALATED, PENDING_USER, RESOLVED, CLOSED, REOPENED, CANCELLED
-  priority            String   // Critical, High, Medium, Low
+  owner_id            Int?
+  status              String   @default("NEW") @db.VarChar(30)
+  priority            String   @db.VarChar(20)
   description         String   @db.Text
   symptom             String   @db.Text
-  
-  // Tier 1
+
   initial_assessment  String?  @db.Text
   preliminary_cause   String?  @db.Text
+  tier1_action        String?  @db.Text
+  is_escalated        Boolean  @default(false)
   escalate_reason     String?  @db.Text
-  
-  // Tier 2
+
   root_cause          String?  @db.Text
-  root_cause_category String?
+  root_cause_category String?  @db.VarChar(50)
   resolution          String?  @db.Text
   resolution_detail   String?  @db.Text
   preventive_action   String?  @db.Text
-  
-  // Closure
+
   user_satisfaction   Int?
   user_comment        String?  @db.Text
 
-  // Timestamps
   created_at          DateTime @default(now())
   tier1_accepted_at   DateTime?
   tier1_assessed_at   DateTime?
@@ -115,11 +122,53 @@ model Ticket {
   user_confirmed_at   DateTime?
   closed_at           DateTime?
   reopened_at         DateTime?
+  updated_at          DateTime @updatedAt
 
-  // Relations
-  system              System   @relation(fields: [system_id], references: [system_id])
-  location            Location @relation(fields: [location_id], references: [location_id])
-  reporter            User     @relation("Reporter", fields: [reporter_id], references: [user_id])
-  tier1               User?    @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
-  tier2               User?    @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
+  system              SystemGroup  @relation(fields: [system_id], references: [system_id])
+  location            Location     @relation(fields: [location_id], references: [location_id])
+  reporter            User         @relation("Reporter", fields: [reporter_id], references: [user_id])
+  tier1               User?        @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
+  tier2               User?        @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
+  owner               User?        @relation("OwnerAssigned", fields: [owner_id], references: [user_id])
+  bu                  BusinessUnit @relation(fields: [bu_id], references: [bu_id])
+  attachments         Attachment[]
+  audit_logs          AuditLog[]
+}
+
+model Attachment {
+  attachment_id Int      @id @default(autoincrement())
+  ticket_id     Int
+  file_name     String   @db.VarChar(255)
+  file_url      String   @db.Text
+  file_type     String   @db.VarChar(100)
+  file_size     Int
+  uploaded_by   Int
+  created_at    DateTime @default(now())
+
+  ticket        Ticket   @relation(fields: [ticket_id], references: [ticket_id])
+}
+
+model AuditLog {
+  log_id        Int      @id @default(autoincrement())
+  ticket_id     Int?
+  user_id       Int
+  action        String   @db.VarChar(50)
+  detail        String?  @db.Text
+  old_value     String?  @db.Text
+  new_value     String?  @db.Text
+  created_at    DateTime @default(now())
+
+  ticket        Ticket?  @relation(fields: [ticket_id], references: [ticket_id])
+}
+
+model JobCounter {
+  counter_id    Int      @id @default(autoincrement())
+  bu_code       String   @db.VarChar(20)
+  bu_id         Int
+  date_key      String   @db.VarChar(10)
+  last_number   Int      @default(0)
+
+  bu            BusinessUnit @relation(fields: [bu_id], references: [bu_id])
+
+  @@unique([bu_code, date_key])
 }

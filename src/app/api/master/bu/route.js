@@ -1,50 +1,28 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// GET: Fetch all Business Units
+// GET all BUs
 export async function GET() {
   try {
-    const bus = await prisma.businessUnit.findMany({
-      orderBy: { created_at: 'desc' },
-    });
+    const bus = await prisma.businessUnit.findMany({ orderBy: { bu_code: 'asc' } });
     return NextResponse.json(bus);
   } catch (error) {
-    console.error('Error fetching Business Units:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch Business Units' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed' }, { status: 500 });
   }
 }
 
-// POST: Create a new Business Unit
+// POST create BU
 export async function POST(request) {
   try {
-    const data = await request.json();
-    
-    // Validate required fields
-    if (!data.bu_code || !data.bu_name) {
-      return NextResponse.json(
-        { error: 'bu_code and bu_name are required' },
-        { status: 400 }
-      );
-    }
+    const { bu_code, bu_name, bu_description } = await request.json();
+    if (!bu_code || !bu_name) return NextResponse.json({ error: 'bu_code and bu_name required' }, { status: 400 });
 
-    const newBu = await prisma.businessUnit.create({
-      data: {
-        bu_code: data.bu_code,
-        bu_name: data.bu_name,
-        bu_description: data.bu_description || null,
-        is_active: data.is_active ?? true,
-      },
+    const bu = await prisma.businessUnit.create({
+      data: { bu_code, bu_name, bu_description },
     });
-
-    return NextResponse.json(newBu, { status: 201 });
+    return NextResponse.json(bu, { status: 201 });
   } catch (error) {
-    console.error('Error creating Business Unit:', error);
-    return NextResponse.json(
-      { error: 'Failed to create Business Unit' },
-      { status: 500 }
-    );
+    if (error.code === 'P2002') return NextResponse.json({ error: 'BU code already exists' }, { status: 409 });
+    return NextResponse.json({ error: 'Failed' }, { status: 500 });
   }
 }

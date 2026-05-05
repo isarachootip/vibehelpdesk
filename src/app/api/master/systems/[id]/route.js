@@ -1,26 +1,29 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// PUT update BU
 export async function PUT(request, { params }) {
   try {
     const { id } = await params;
     const data = await request.json();
-    const bu = await prisma.businessUnit.update({
-      where: { bu_id: parseInt(id) },
-      data: { bu_code: data.bu_code, bu_name: data.bu_name, bu_description: data.bu_description, is_active: data.is_active },
+    const sys = await prisma.systemGroup.update({
+      where: { system_id: parseInt(id) },
+      data: {
+        system_code: data.system_code, system_name: data.system_name,
+        system_type: data.system_type, group_name: data.group_name,
+        owner_user_id: data.owner_user_id ? parseInt(data.owner_user_id) : null,
+        is_active: data.is_active,
+      },
     });
-    return NextResponse.json(bu);
+    return NextResponse.json(sys);
   } catch (error) {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });
   }
 }
 
-// DELETE
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
-    await prisma.businessUnit.update({ where: { bu_id: parseInt(id) }, data: { is_active: false } });
+    await prisma.systemGroup.update({ where: { system_id: parseInt(id) }, data: { is_active: false } });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });

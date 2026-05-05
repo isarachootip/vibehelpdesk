@@ -1,233 +1,98 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
-export default function BusinessUnitManagement() {
-  const [bus, setBus] = useState([]);
+export default function MasterBU() {
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    bu_code: "",
-    bu_name: "",
-    bu_description: "",
-    is_active: true,
-  });
-  const [editingId, setEditingId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editItem, setEditItem] = useState(null);
+  const [form, setForm] = useState({ bu_code: "", bu_name: "", bu_description: "" });
 
-  // Fetch Business Units
-  const fetchBUs = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/master/bu");
-      const data = await res.json();
-      setBus(data);
-    } catch (error) {
-      console.error("Failed to fetch BUs:", error);
-    } finally {
-      setLoading(false);
-    }
+  const fetchData = () => {
+    fetch("/api/master/bu").then(r => r.json()).then(d => { if (Array.isArray(d)) setItems(d); setLoading(false); }).catch(() => setLoading(false));
   };
-
-  useEffect(() => {
-    fetchBUs();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  useEffect(() => { fetchData(); }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const url = editingId ? `/api/master/bu/${editingId}` : "/api/master/bu";
-      const method = editingId ? "PUT" : "POST";
-
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        setFormData({ bu_code: "", bu_name: "", bu_description: "", is_active: true });
-        setEditingId(null);
-        fetchBUs();
-      } else {
-        alert("Operation failed.");
-      }
-    } catch (error) {
-      console.error("Submit error:", error);
-    }
+    const url = editItem ? `/api/master/bu/${editItem.bu_id}` : "/api/master/bu";
+    const method = editItem ? "PUT" : "POST";
+    const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    if (res.ok) { fetchData(); setShowForm(false); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "" }); }
+    else { const err = await res.json(); alert(err.error || "Error"); }
   };
 
-  const handleEdit = (bu) => {
-    setEditingId(bu.bu_id);
-    setFormData({
-      bu_code: bu.bu_code,
-      bu_name: bu.bu_name,
-      bu_description: bu.bu_description || "",
-      is_active: bu.is_active,
-    });
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setForm({ bu_code: item.bu_code, bu_name: item.bu_name, bu_description: item.bu_description || "" });
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this Business Unit?")) return;
-    try {
-      const res = await fetch(`/api/master/bu/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        fetchBUs();
-      } else {
-        alert("Failed to delete. It might be in use.");
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
-    }
+    if (!confirm("ปิดใช้งาน BU นี้?")) return;
+    await fetch(`/api/master/bu/${id}`, { method: "DELETE" });
+    fetchData();
   };
 
   return (
     <>
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">
-            {editingId ? "Edit Business Unit" : "Add New Business Unit"}
-          </h2>
-        </div>
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label>BU Code <span className="req">*</span></label>
-                <input
-                  type="text"
-                  name="bu_code"
-                  value={formData.bu_code}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  placeholder="e.g. IT"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>BU Name <span className="req">*</span></label>
-                <input
-                  type="text"
-                  name="bu_name"
-                  value={formData.bu_name}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  placeholder="e.g. Information Technology"
-                  required
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Description</label>
-                <textarea
-                  name="bu_description"
-                  value={formData.bu_description}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  rows="2"
-                  placeholder="Optional description"
-                ></textarea>
-              </div>
-            </div>
-            <div className="form-row" style={{ alignItems: 'center', marginBottom: '20px' }}>
-              <div className="form-group flex gap-2" style={{ flexDirection: 'row', width: 'auto', flex: 'none' }}>
-                <input
-                  type="checkbox"
-                  name="is_active"
-                  id="is_active"
-                  checked={formData.is_active}
-                  onChange={handleInputChange}
-                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                />
-                <label htmlFor="is_active" style={{ marginBottom: 0, cursor: 'pointer' }}>Active</label>
-              </div>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-primary">
-                <i className="fa-solid fa-save"></i> {editingId ? "Update BU" : "Save BU"}
-              </button>
-              {editingId && (
-                <button
-                  type="button"
-                  className="btn btn-outline"
-                  onClick={() => {
-                    setEditingId(null);
-                    setFormData({ bu_code: "", bu_name: "", bu_description: "", is_active: true });
-                  }}
-                  style={{ marginLeft: '10px' }}
-                >
-                  Cancel
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: 700 }}><i className="fa-solid fa-building" style={{ marginRight: "8px", color: "var(--primary-light)" }}></i>Business Units</h2>
+        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "" }); }}>
+          <i className="fa-solid fa-plus"></i> เพิ่ม BU ใหม่
+        </button>
       </div>
 
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Business Unit List</h2>
+      {/* Add/Edit Form */}
+      {showForm && (
+        <div className="card" style={{ marginBottom: "16px" }}>
+          <div className="card-header"><h3 className="card-title">{editItem ? "แก้ไข BU" : "เพิ่ม BU ใหม่"}</h3></div>
+          <div className="card-body">
+            <form onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group" style={{ maxWidth: "200px" }}>
+                  <label>BU Code <span className="req">*</span></label>
+                  <input className="form-control" value={form.bu_code} onChange={e => setForm(f => ({ ...f, bu_code: e.target.value }))} placeholder="เช่น TWD" required />
+                </div>
+                <div className="form-group">
+                  <label>BU Name <span className="req">*</span></label>
+                  <input className="form-control" value={form.bu_name} onChange={e => setForm(f => ({ ...f, bu_name: e.target.value }))} placeholder="เช่น Thaiwatsadu" required />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <input className="form-control" value={form.bu_description} onChange={e => setForm(f => ({ ...f, bu_description: e.target.value }))} placeholder="คำอธิบาย (optional)" />
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
+                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className="card-body p-0">
+      )}
+
+      {/* Table */}
+      <div className="card">
+        <div className="card-body" style={{ padding: 0 }}>
           <div className="table-wrap">
             <table className="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Code</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+              <thead><tr><th>BU Code</th><th>BU Name</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan="5" className="text-center py-4 text-muted">Loading...</td>
+                {items.map(item => (
+                  <tr key={item.bu_id} style={{ opacity: item.is_active ? 1 : 0.5 }}>
+                    <td><span className="chip">{item.bu_code}</span></td>
+                    <td style={{ fontWeight: 600 }}>{item.bu_name}</td>
+                    <td className="text-muted" style={{ fontSize: ".82rem" }}>{item.bu_description || "-"}</td>
+                    <td><span className={`badge ${item.is_active ? "badge-success" : "badge-gray"}`}>{item.is_active ? "Active" : "Inactive"}</span></td>
+                    <td>
+                      <div style={{ display: "flex", gap: "6px" }}>
+                        <button className="btn btn-outline btn-sm" onClick={() => handleEdit(item)}><i className="fa-solid fa-pen"></i></button>
+                        {item.is_active && <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => handleDelete(item.bu_id)}><i className="fa-solid fa-trash"></i></button>}
+                      </div>
+                    </td>
                   </tr>
-                ) : bus.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="text-center py-4 text-muted">No records found.</td>
-                  </tr>
-                ) : (
-                  bus.map((bu) => (
-                    <tr key={bu.bu_id}>
-                      <td>{bu.bu_id}</td>
-                      <td className="font-mono">{bu.bu_code}</td>
-                      <td>{bu.bu_name}</td>
-                      <td>
-                        {bu.is_active ? (
-                          <span className="badge badge-success">Active</span>
-                        ) : (
-                          <span className="badge badge-danger">Inactive</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="flex gap-2">
-                          <button
-                            className="btn btn-outline btn-sm"
-                            onClick={() => handleEdit(bu)}
-                          >
-                            <i className="fa-solid fa-edit"></i> Edit
-                          </button>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDelete(bu.bu_id)}
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
