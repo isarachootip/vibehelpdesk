@@ -9,7 +9,8 @@ export async function GET() {
     });
     return NextResponse.json(systems);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: error.message || 'Failed' }, { status: 500 });
   }
 }
 
@@ -24,6 +25,7 @@ export async function POST(request) {
     return NextResponse.json(sys, { status: 201 });
   } catch (error) {
     if (error.code === 'P2002') return NextResponse.json({ error: 'System code already exists' }, { status: 409 });
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: error.message || 'Failed' }, { status: 500 });
   }
 }
