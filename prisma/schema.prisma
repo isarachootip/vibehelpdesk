@@ -131,6 +131,8 @@ model Ticket {
   tier2               User?        @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
   owner               User?        @relation("OwnerAssigned", fields: [owner_id], references: [user_id])
   bu                  BusinessUnit @relation(fields: [bu_id], references: [bu_id])
+  hardware_id         Int?
+  hardware            Hardware?    @relation(fields: [hardware_id], references: [hardware_id])
   attachments         Attachment[]
   audit_logs          AuditLog[]
 }
@@ -171,4 +173,34 @@ model JobCounter {
   bu            BusinessUnit @relation(fields: [bu_id], references: [bu_id])
 
   @@unique([bu_code, date_key])
+}
+
+model Hardware {
+  hardware_id    Int      @id @default(autoincrement())
+  hardware_code  String   @unique @db.VarChar(50)
+  hardware_name  String   @db.VarChar(100)
+  brand          String?  @db.VarChar(50)
+  model          String?  @db.VarChar(50)
+  description    String?  @db.Text
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  symptoms       HardwareSymptom[]
+  tickets        Ticket[]
+}
+
+model HardwareSymptom {
+  symptom_id     Int      @id @default(autoincrement())
+  hardware_id    Int
+  symptom_code   String   @db.VarChar(50)
+  symptom_name   String   @db.VarChar(100)
+  description    String?  @db.Text
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  hardware       Hardware @relation(fields: [hardware_id], references: [hardware_id], onDelete: Cascade)
+
+  @@unique([hardware_id, symptom_code])
 }

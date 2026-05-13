@@ -68,7 +68,11 @@ export default function RootLayout({ children }) {
               </a>
               <a href="/master/systems" className="nav-item" id="nav-master-systems">
                 <i className="fa-solid fa-server nav-icon"></i>
-                <span className="nav-label">Systems</span>
+                <span className="nav-label">Systems / Software</span>
+              </a>
+              <a href="/master/hardware" className="nav-item" id="nav-master-hardware">
+                <i className="fa-solid fa-microchip nav-icon"></i>
+                <span className="nav-label">Hardware / Products</span>
               </a>
               <a href="/master/locations" className="nav-item" id="nav-master-locations">
                 <i className="fa-solid fa-map-marker-alt nav-icon"></i>
