@@ -57,8 +57,8 @@ export default function MasterSystems() {
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="form-row">
-                <div className="form-group" style={{ maxWidth: "150px" }}>
-                  <label>System Code <span className="req">*</span></label>
+                <div className="form-group" style={{ maxWidth: "200px" }}>
+                  <label>System Group (Code) <span className="req">*</span></label>
                   <input className="form-control" value={form.system_code} onChange={e => setForm(f => ({ ...f, system_code: e.target.value }))} placeholder="เช่น POS" required />
                 </div>
                 <div className="form-group">
@@ -75,7 +75,7 @@ export default function MasterSystems() {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Group</label>
+                  <label>Category Group</label>
                   <input className="form-control" value={form.group_name} onChange={e => setForm(f => ({ ...f, group_name: e.target.value }))} placeholder="เช่น WEB/App, AI/Chat, Data/Report" />
                 </div>
                 <div className="form-group">

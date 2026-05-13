@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 // GET all master data for dropdowns (BU, Systems, Locations, Users)
 export async function GET() {
   try {
