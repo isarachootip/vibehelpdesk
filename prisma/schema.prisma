@@ -20,6 +20,7 @@ model BusinessUnit {
   systems        SystemGroup[]
   tickets        Ticket[]
   job_counters   JobCounter[]
+  locations      Location[]
 }
 
 model SystemGroup {
@@ -71,10 +72,12 @@ model Location {
   location_type String   @db.VarChar(30)
   floor         String?  @db.VarChar(20)
   address       String?  @db.Text
+  bu_id         Int?
   is_active     Boolean  @default(true)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
+  bu            BusinessUnit? @relation(fields: [bu_id], references: [bu_id])
   users         User[]
   tickets       Ticket[]
 }
