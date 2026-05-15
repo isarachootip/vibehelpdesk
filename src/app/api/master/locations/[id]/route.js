@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     const body = await req.json();
     const location = await prisma.location.update({
       where: { location_id: Number(id) },
@@ -27,7 +28,8 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
     // Soft delete
     const location = await prisma.location.update({
       where: { location_id: Number(id) },
