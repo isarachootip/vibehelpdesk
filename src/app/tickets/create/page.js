@@ -42,20 +42,29 @@ export default function CreateTicket() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    
+    setForm((prev) => {
+      const updated = { ...prev, [name]: value };
 
-    // Auto-fill reporter email when selecting user
-    if (name === "reporter_id") {
-      const user = masterData.users.find((u) => u.user_id === parseInt(value));
-      if (user) {
-        setForm((prev) => ({
-          ...prev,
-          reporter_id: value,
-          reporter_email: user.email,
-          bu_id: user.bu_id ? String(user.bu_id) : prev.bu_id,
-        }));
+      // If BU changes, reset dependent fields
+      if (name === "bu_id") {
+        updated.reporter_id = "";
+        updated.reporter_email = "";
+        updated.location_id = "";
       }
-    }
+
+      // Auto-fill reporter email when selecting user
+      if (name === "reporter_id") {
+        const user = masterData.users.find((u) => u.user_id === parseInt(value));
+        if (user) {
+          updated.reporter_email = user.email;
+        } else {
+          updated.reporter_email = "";
+        }
+      }
+
+      return updated;
+    });
   };
 
   const handleFiles = (e) => {
@@ -133,6 +142,10 @@ export default function CreateTicket() {
   }
 
   const selectedSystem = masterData.systems.find((s) => s.system_id === parseInt(form.system_id));
+  
+  // Filtering logic
+  const filteredUsers = form.bu_id ? masterData.users.filter(u => String(u.bu_id) === String(form.bu_id) && u.role === "end_user") : [];
+  const filteredLocations = form.bu_id ? masterData.locations.filter(loc => !loc.bu_id || String(loc.bu_id) === String(form.bu_id)) : masterData.locations;
 
   return (
     <>
@@ -157,21 +170,6 @@ export default function CreateTicket() {
           <div className="card-body">
             <div className="form-row">
               <div className="form-group">
-                <label>ผู้แจ้ง (Reporter) <span className="req">*</span></label>
-                <select name="reporter_id" className="form-control" value={form.reporter_id} onChange={handleChange} required>
-                  <option value="">-- เลือกผู้แจ้ง --</option>
-                  {masterData.users.filter((u) => u.role === "end_user").map((u) => (
-                    <option key={u.user_id} value={u.user_id}>{u.full_name} ({u.email})</option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Email (Outlook)</label>
-                <input type="email" name="reporter_email" className="form-control" value={form.reporter_email} onChange={handleChange} readOnly placeholder="Auto-fill from reporter" />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
                 <label>Business Unit (BU) <span className="req">*</span></label>
                 <select name="bu_id" className="form-control" value={form.bu_id} onChange={handleChange} required>
                   <option value="">-- เลือก BU --</option>
@@ -182,14 +180,29 @@ export default function CreateTicket() {
               </div>
               <div className="form-group">
                 <label>จุดเกิดเหตุ (Location) <span className="req">*</span></label>
-                <select name="location_id" className="form-control" value={form.location_id} onChange={handleChange} required>
+                <select name="location_id" className="form-control" value={form.location_id} onChange={handleChange} required disabled={!form.bu_id && false}>
                   <option value="">-- เลือกสถานที่ --</option>
-                  {masterData.locations.map((loc) => (
+                  {filteredLocations.map((loc) => (
                     <option key={loc.location_id} value={loc.location_id}>
                       {loc.location_code} — {loc.location_name} {loc.floor ? `(ชั้น ${loc.floor})` : ""}
                     </option>
                   ))}
                 </select>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>ผู้แจ้ง (Reporter) <span className="req">*</span></label>
+                <select name="reporter_id" className="form-control" value={form.reporter_id} onChange={handleChange} required disabled={!form.bu_id}>
+                  <option value="">{form.bu_id ? "-- เลือกผู้แจ้ง --" : "-- กรุณาเลือก BU ก่อน --"}</option>
+                  {filteredUsers.map((u) => (
+                    <option key={u.user_id} value={u.user_id}>{u.full_name} ({u.email})</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Email (Outlook)</label>
+                <input type="email" name="reporter_email" className="form-control" value={form.reporter_email} onChange={handleChange} readOnly placeholder="Auto-fill from reporter" />
               </div>
             </div>
           </div>
