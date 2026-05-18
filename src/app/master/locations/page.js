@@ -80,6 +80,12 @@ export default function MasterLocations() {
     fetchData();
   };
 
+  const filteredItems = items.filter(item => {
+    if (!filterBuId) return true;
+    if (filterBuId === "null") return item.bu_id === null;
+    return String(item.bu_id) === filterBuId;
+  });
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
@@ -180,16 +186,9 @@ export default function MasterLocations() {
         <div className="card-body" style={{ padding: 0 }}>
           {loading ? (
             <div style={{ padding: "20px", textAlign: "center" }}>กำลังโหลดข้อมูล...</div>
-          ) : (() => {
-            const filteredItems = items.filter(item => {
-              if (!filterBuId) return true;
-              if (filterBuId === "null") return item.bu_id === null;
-              return String(item.bu_id) === filterBuId;
-            });
-            
-            return (
-              <div className="table-wrap">
-                <table className="data-table">
+          ) : (
+            <div className="table-wrap">
+              <table className="data-table">
                 <thead>
                   <tr>
                     <th>Code</th>
@@ -242,7 +241,7 @@ export default function MasterLocations() {
                 </tbody>
               </table>
             </div>
-          )})}
+          )}
         </div>
       </div>
     </>
