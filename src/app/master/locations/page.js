@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 export default function MasterLocations() {
   const [items, setItems] = useState([]);
   const [buItems, setBuItems] = useState([]);
+  const [filterBuId, setFilterBuId] = useState("");
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
@@ -98,6 +99,22 @@ export default function MasterLocations() {
         </button>
       </div>
 
+      <div style={{ display: "flex", gap: "10px", marginBottom: "16px", alignItems: "center" }}>
+        <label style={{ fontWeight: 600, fontSize: "0.9rem" }}>กรองตาม BU:</label>
+        <select 
+          className="form-control" 
+          style={{ maxWidth: "250px" }}
+          value={filterBuId} 
+          onChange={(e) => setFilterBuId(e.target.value)}
+        >
+          <option value="">-- แสดงทั้งหมด --</option>
+          <option value="null">-- ส่วนกลาง (ไม่ระบุ BU) --</option>
+          {buItems.map(bu => (
+            <option key={bu.bu_id} value={bu.bu_id}>{bu.bu_code} - {bu.bu_name}</option>
+          ))}
+        </select>
+      </div>
+
       {showForm && (
         <div className="card" style={{ marginBottom: "16px" }}>
           <div className="card-header">
@@ -163,9 +180,16 @@ export default function MasterLocations() {
         <div className="card-body" style={{ padding: 0 }}>
           {loading ? (
             <div style={{ padding: "20px", textAlign: "center" }}>กำลังโหลดข้อมูล...</div>
-          ) : (
-            <div className="table-wrap">
-              <table className="data-table">
+          ) : (() => {
+            const filteredItems = items.filter(item => {
+              if (!filterBuId) return true;
+              if (filterBuId === "null") return item.bu_id === null;
+              return String(item.bu_id) === filterBuId;
+            });
+            
+            return (
+              <div className="table-wrap">
+                <table className="data-table">
                 <thead>
                   <tr>
                     <th>Code</th>
@@ -178,7 +202,7 @@ export default function MasterLocations() {
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map(item => (
+                  {filteredItems.map(item => (
                     <tr key={item.location_id} style={{ opacity: item.is_active ? 1 : 0.5 }}>
                       <td><span className="chip">{item.location_code}</span></td>
                       <td style={{ fontWeight: 600 }}>{item.location_name}</td>
@@ -210,15 +234,15 @@ export default function MasterLocations() {
                       </td>
                     </tr>
                   ))}
-                  {items.length === 0 && (
+                  {filteredItems.length === 0 && (
                     <tr>
-                      <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>ไม่พบข้อมูล Location</td>
+                      <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>ไม่พบข้อมูล Location</td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
-          )}
+          )})}
         </div>
       </div>
     </>
