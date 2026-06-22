@@ -7,6 +7,7 @@ export async function PUT(request, { params }) {
     const data = await request.json();
     
     const updateData = {
+      email: data.email ? data.email.toLowerCase().trim() : undefined,
       full_name: data.full_name,
       phone: data.phone || null,
       role: data.role,
@@ -25,7 +26,11 @@ export async function PUT(request, { params }) {
     });
     return NextResponse.json(user);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    console.error('Error updating user:', error);
+    if (error.code === 'P2002') {
+      return NextResponse.json({ error: 'อีเมลนี้ถูกใช้งานแล้วในระบบ' }, { status: 400 });
+    }
+    return NextResponse.json({ error: 'ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้' }, { status: 500 });
   }
 }
 

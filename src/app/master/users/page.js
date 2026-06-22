@@ -231,7 +231,7 @@ export default function MasterUsers() {
                     <label>Email <span className="req">*</span></label>
                     <input type="email" className="form-control" value={form.email}
                       onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      placeholder="user@example.com" required disabled={!!editItem} />
+                      placeholder="user@example.com" required />
                   </div>
                   <div className="form-group" style={{ flex: 1 }}>
                     <label>ชื่อ-นามสกุล <span className="req">*</span></label>
