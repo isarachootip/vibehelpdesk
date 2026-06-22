@@ -282,13 +282,13 @@ export default function LoginPage() {
           </span>
           <div style={{ fontSize: "0.76rem", color: "#cbd5e1", lineHeight: "1.4" }}>
             <div>
-              <strong>Admin:</strong> admin@company.com <span style={{ color: "#a1a5b7" }}>(password: <code>password123</code>)</span>
+              <strong>Admin:</strong> admin@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>password123</code>)</span>
             </div>
             <div>
-              <strong>Tier 1:</strong> tier1.support1@company.com <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
+              <strong>Tier 1:</strong> tier1.support@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
             </div>
             <div>
-              <strong>Tier 2:</strong> isara@company.com <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
+              <strong>Tier 2:</strong> isara@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
             </div>
           </div>
         </div>
