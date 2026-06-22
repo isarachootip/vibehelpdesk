@@ -6,7 +6,10 @@ export default function MasterBU() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const [form, setForm] = useState({ bu_code: "", bu_name: "", bu_description: "" });
+  const [form, setForm] = useState({ 
+    bu_code: "", bu_name: "", bu_description: "", 
+    contact_person: "", phone: "", line_id: "", website: "" 
+  });
 
   const fetchData = () => {
     fetch("/api/master/bu").then(r => r.json()).then(d => { if (Array.isArray(d)) setItems(d); setLoading(false); }).catch(() => setLoading(false));
@@ -18,13 +21,17 @@ export default function MasterBU() {
     const url = editItem ? `/api/master/bu/${editItem.bu_id}` : "/api/master/bu";
     const method = editItem ? "PUT" : "POST";
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-    if (res.ok) { fetchData(); setShowForm(false); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "" }); }
+    if (res.ok) { fetchData(); setShowForm(false); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "" }); }
     else { const err = await res.json(); alert(err.error || "Error"); }
   };
 
   const handleEdit = (item) => {
     setEditItem(item);
-    setForm({ bu_code: item.bu_code, bu_name: item.bu_name, bu_description: item.bu_description || "" });
+    setForm({ 
+      bu_code: item.bu_code, bu_name: item.bu_name, bu_description: item.bu_description || "",
+      contact_person: item.contact_person || "", phone: item.phone || "", 
+      line_id: item.line_id || "", website: item.website || ""
+    });
     setShowForm(true);
   };
 
@@ -38,7 +45,7 @@ export default function MasterBU() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700 }}><i className="fa-solid fa-building" style={{ marginRight: "8px", color: "var(--primary-light)" }}></i>Business Units</h2>
-        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "" }); }}>
+        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "" }); }}>
           <i className="fa-solid fa-plus"></i> เพิ่ม BU ใหม่
         </button>
       </div>
@@ -71,6 +78,26 @@ export default function MasterBU() {
                 </div>
                 <div className="form-row">
                   <div className="form-group" style={{ flex: 1 }}>
+                    <label>Contact Person</label>
+                    <input className="form-control" value={form.contact_person} onChange={e => setForm(f => ({ ...f, contact_person: e.target.value }))} placeholder="ชื่อผู้ติดต่อ" />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Phone</label>
+                    <input className="form-control" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="เบอร์โทรศัพท์" />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Line ID</label>
+                    <input className="form-control" value={form.line_id} onChange={e => setForm(f => ({ ...f, line_id: e.target.value }))} placeholder="Line ID" />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Website</label>
+                    <input className="form-control" value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://" />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
                     <label>Description</label>
                     <input className="form-control" value={form.bu_description} onChange={e => setForm(f => ({ ...f, bu_description: e.target.value }))} placeholder="คำอธิบาย (optional)" />
                   </div>
@@ -90,13 +117,20 @@ export default function MasterBU() {
         <div className="card-body" style={{ padding: 0 }}>
           <div className="table-wrap">
             <table className="data-table">
-              <thead><tr><th>BU Code</th><th>BU Name</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr><th>BU Code</th><th>BU Name</th><th>Description</th><th>Contact Info</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>
                 {items.map(item => (
                   <tr key={item.bu_id} style={{ opacity: item.is_active ? 1 : 0.5 }}>
                     <td><span className="chip">{item.bu_code}</span></td>
                     <td style={{ fontWeight: 600 }}>{item.bu_name}</td>
                     <td className="text-muted" style={{ fontSize: ".82rem" }}>{item.bu_description || "-"}</td>
+                    <td style={{ fontSize: ".8rem" }}>
+                      {item.contact_person && <div><i className="fa-solid fa-user text-muted" style={{width: "14px"}}></i> {item.contact_person}</div>}
+                      {item.phone && <div><i className="fa-solid fa-phone text-muted" style={{width: "14px"}}></i> {item.phone}</div>}
+                      {item.line_id && <div><i className="fa-brands fa-line text-muted" style={{width: "14px", color: "#06c755"}}></i> {item.line_id}</div>}
+                      {item.website && <div><i className="fa-solid fa-globe text-muted" style={{width: "14px"}}></i> <a href={item.website} target="_blank" rel="noreferrer" style={{color: "var(--primary)"}}>Link</a></div>}
+                      {!item.contact_person && !item.phone && !item.line_id && !item.website && <span className="text-muted">-</span>}
+                    </td>
                     <td><span className={`badge ${item.is_active ? "badge-success" : "badge-gray"}`}>{item.is_active ? "Active" : "Inactive"}</span></td>
                     <td>
                       <div style={{ display: "flex", gap: "6px" }}>

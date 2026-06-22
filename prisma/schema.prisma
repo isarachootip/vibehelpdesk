@@ -12,6 +12,10 @@ model BusinessUnit {
   bu_code        String   @unique @db.VarChar(20)
   bu_name        String   @db.VarChar(100)
   bu_description String?  @db.Text
+  contact_person String?  @db.VarChar(100)
+  phone          String?  @db.VarChar(50)
+  line_id        String?  @db.VarChar(50)
+  website        String?  @db.VarChar(255)
   is_active      Boolean  @default(true)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt

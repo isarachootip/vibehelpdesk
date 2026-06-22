@@ -8,7 +8,16 @@ export async function PUT(request, { params }) {
     const data = await request.json();
     const bu = await prisma.businessUnit.update({
       where: { bu_id: parseInt(id) },
-      data: { bu_code: data.bu_code, bu_name: data.bu_name, bu_description: data.bu_description, is_active: data.is_active },
+      data: { 
+        bu_code: data.bu_code, 
+        bu_name: data.bu_name, 
+        bu_description: data.bu_description, 
+        contact_person: data.contact_person,
+        phone: data.phone,
+        line_id: data.line_id,
+        website: data.website,
+        is_active: data.is_active 
+      },
     });
     return NextResponse.json(bu);
   } catch (error) {
