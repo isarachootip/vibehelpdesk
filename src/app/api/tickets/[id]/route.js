@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { sendEmail, getTicketEmailTemplate } from '@/lib/email';
 
 // GET: Fetch single ticket with full details
 export async function GET(request, { params }) {
@@ -165,6 +166,74 @@ export async function PUT(request, { params }) {
           new_value: ticket.status,
         },
       });
+    }
+
+    // Send email notification to reporter in background
+    const emailTo = ticket.reporter?.email || ticket.reporter_email;
+    const nameTo = ticket.reporter?.full_name || ticket.reporter_name;
+    
+    if (emailTo) {
+      let emailSubject = '';
+      let updateTitle = '';
+      let updateDetails = '';
+
+      switch (action) {
+        case 'TIER1_ACCEPT':
+          emailSubject = `[IT Helpdesk] รับเรื่องแจ้งปัญหาแล้ว - ${ticket.ticket_no}`;
+          updateTitle = 'เจ้าหน้าที่รับเรื่องเรียบร้อยแล้ว';
+          updateDetails = `เจ้าหน้าที่ IT ได้รับเรื่องแจ้งปัญหาของท่านเข้าระบบแล้ว และกำลังอยู่ในขั้นตอนประเมินหาสาเหตุครับ`;
+          break;
+        case 'TIER1_ASSESS':
+          emailSubject = `[IT Helpdesk] ผลการประเมินความคืบหน้า - ${ticket.ticket_no}`;
+          updateTitle = 'อัปเดตผลการประเมินและการแก้ไขเบื้องต้น';
+          updateDetails = `ผลการประเมินเบื้องต้น:\n${ticket.initial_assessment || '-'}\n\nสาเหตุที่คาดว่าจะเป็น:\n${ticket.preliminary_cause || '-'}\n\nสิ่งที่ได้ดำเนินการไปแล้ว:\n${ticket.tier1_action || '-'}`;
+          break;
+        case 'ESCALATE':
+          emailSubject = `[IT Helpdesk] ส่งเรื่องต่อไปยัง Tier 2 - ${ticket.ticket_no}`;
+          updateTitle = 'ส่งเรื่องต่อให้ผู้เชี่ยวชาญ Tier 2 (Escalated)';
+          updateDetails = `ปัญหาของท่านมีความจำเป็นต้องได้รับการตรวจสอบโดยทีมผู้เชี่ยวชาญ Tier 2\n\nเหตุผลการส่งต่อ: ${ticket.escalate_reason || '-'}`;
+          break;
+        case 'RESOLVE':
+          emailSubject = `[IT Helpdesk] แก้ไขปัญหาเสร็จสิ้น - ${ticket.ticket_no}`;
+          updateTitle = 'ปัญหาของท่านได้รับการแก้ไขเสร็จสิ้นเรียบร้อย';
+          updateDetails = `ผลการแก้ไขปัญหา:\n${ticket.resolution || '-'}\n\nกรุณาเข้าสู่ระบบเพื่อตรวจสอบงานและกดยืนยันปิดงาน หรือแชทสอบถามเจ้าหน้าที่เพิ่มเติมได้ครับ`;
+          break;
+        case 'CONFIRM':
+          emailSubject = `[IT Helpdesk] ปิดงานเสร็จสมบูรณ์ - ${ticket.ticket_no}`;
+          updateTitle = 'ปิดงาน (Closed) เรียบร้อย';
+          updateDetails = `ขอบคุณที่ใช้บริการ IT Helpdesk ทางเราได้ทำการปิดงาน Ticket นี้ในระบบเรียบร้อยแล้วครับ\nระดับความพึงพอใจ: ${ticket.user_satisfaction ? '⭐'.repeat(ticket.user_satisfaction) : '-'}`;
+          break;
+        case 'REOPEN':
+          emailSubject = `[IT Helpdesk] เปิดงานอีกครั้ง - ${ticket.ticket_no}`;
+          updateTitle = 'เปิดงานอีกครั้ง (Reopened)';
+          updateDetails = `ทิคเก็ตนี้ได้รับการเปิดเพื่อดึงกลับมาดำเนินการตรวจสอบเพิ่มเติมใหม่อีกครั้งแล้วครับ`;
+          break;
+        case 'CANCEL':
+          emailSubject = `[IT Helpdesk] ยกเลิกคำขอ - ${ticket.ticket_no}`;
+          updateTitle = 'ยกเลิกรายการแจ้งปัญหา (Cancelled)';
+          updateDetails = `รายการแจ้งปัญหาเลขที่ ${ticket.ticket_no} ได้รับการยกเลิกเรียบร้อยแล้ว`;
+          break;
+      }
+
+      if (emailSubject) {
+        try {
+          const html = getTicketEmailTemplate({
+            ticketNo: ticket.ticket_no,
+            subject: ticket.subject,
+            status: ticket.status,
+            updateTitle,
+            updateDetails,
+            reporterName: nameTo
+          });
+          
+          // Execute async and catch errors to prevent blocking
+          sendEmail({ to: emailTo, subject: emailSubject, html }).catch(err => {
+            console.error('Background sendEmail failed:', err);
+          });
+        } catch (e) {
+          console.error('Failed to construct email template:', e);
+        }
+      }
     }
 
     return NextResponse.json(ticket);
