@@ -12,7 +12,7 @@ async function main() {
   
   let updatedCount = 0;
   for (const user of users) {
-    const passwordToHash = user.role.toLowerCase() === 'admin' ? 'password123' : 'changeme123';
+    const passwordToHash = user.role.toLowerCase() === 'admin' ? 'password123' : 'test123';
     const hashedPassword = await bcrypt.hash(passwordToHash, 10);
     
     await prisma.user.update({
@@ -26,7 +26,7 @@ async function main() {
   
   console.log(`✅ Successfully updated ${updatedCount} users.`);
   console.log(`🔑 Admin accounts password is set to 'password123'`);
-  console.log(`🔑 Other accounts password is set to 'changeme123'`);
+  console.log(`🔑 Other accounts password is set to 'test123'`);
 }
 
 main()
