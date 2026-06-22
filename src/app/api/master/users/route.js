@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,13 +26,15 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    const passwordToSave = data.password ? await bcrypt.hash(data.password, 10) : null;
+
     const user = await prisma.user.create({
       data: {
         email: data.email,
         full_name: data.full_name,
         phone: data.phone || null,
         role: data.role,
-        password: data.password || null,
+        password: passwordToSave,
         bu_id: data.bu_id || null,
         location_id: data.location_id || null
       }
