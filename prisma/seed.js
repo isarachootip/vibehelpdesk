@@ -97,11 +97,11 @@ async function main() {
     { email: 'sutarat@company.com', full_name: 'Sutarat', role: 'end_user' },
   ];
 
-  const defaultPassword = 'changeme123';
-  const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-
   const userMap = {};
   for (const u of userData) {
+    const passwordToHash = u.email === 'admin@company.com' ? 'password123' : 'changeme123';
+    const hashedPassword = await bcrypt.hash(passwordToHash, 10);
+
     const user = await prisma.user.upsert({
       where: { email: u.email },
       update: { full_name: u.full_name, role: u.role },

@@ -10,12 +10,11 @@ async function main() {
   const users = await prisma.user.findMany();
   console.log(`Found ${users.length} users in database.`);
   
-  const defaultPassword = 'changeme123';
-  const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-  
   let updatedCount = 0;
   for (const user of users) {
-    // Only set if password is not set or we want to overwrite
+    const passwordToHash = user.email === 'admin@company.com' ? 'password123' : 'changeme123';
+    const hashedPassword = await bcrypt.hash(passwordToHash, 10);
+    
     await prisma.user.update({
       where: { user_id: user.user_id },
       data: {
@@ -25,7 +24,9 @@ async function main() {
     updatedCount++;
   }
   
-  console.log(`✅ Successfully updated ${updatedCount} users with password: '${defaultPassword}'`);
+  console.log(`✅ Successfully updated ${updatedCount} users.`);
+  console.log(`🔑 admin@company.com password is set to 'password123'`);
+  console.log(`🔑 Other users password is set to 'changeme123'`);
 }
 
 main()
