@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -8,7 +8,38 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const timerRef = useRef(null);
   const router = useRouter();
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => {
+      const nextShow = !prev;
+      
+      // Clear any existing timer
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      
+      // If toggled to show, set 20-second timer to auto-hide
+      if (nextShow) {
+        timerRef.current = setTimeout(() => {
+          setShowPassword(false);
+          timerRef.current = null;
+        }, 20000);
+      }
+      
+      return nextShow;
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -185,7 +216,7 @@ export default function LoginPage() {
               ></i>
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 placeholder="••••••••"
                 value={password}
@@ -195,7 +226,7 @@ export default function LoginPage() {
                   background: "rgba(15, 15, 25, 0.6)",
                   border: "1px solid rgba(255, 255, 255, 0.1)",
                   borderRadius: "8px",
-                  padding: "12px 12px 12px 38px",
+                  padding: "12px 38px 12px 38px",
                   fontSize: "0.94rem",
                   color: "#ffffff",
                   outline: "none",
@@ -204,6 +235,26 @@ export default function LoginPage() {
                 onFocus={(e) => (e.target.style.borderColor = "#6366f1")}
                 onBlur={(e) => (e.target.style.borderColor = "rgba(255, 255, 255, 0.1)")}
               />
+              <button
+                type="button"
+                onClick={handleTogglePassword}
+                style={{
+                  position: "absolute",
+                  right: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: "#64748b",
+                  cursor: "pointer",
+                  fontSize: "0.94rem",
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <i className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}></i>
+              </button>
             </div>
           </div>
 
