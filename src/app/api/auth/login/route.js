@@ -61,7 +61,7 @@ export async function POST(request) {
     const cookieStore = await cookies();
     cookieStore.set('hd_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // Set to false to support deployments accessed via HTTP
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24, // 1 day
