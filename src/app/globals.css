@@ -441,3 +441,67 @@ textarea.form-control { height: auto; padding: 12px 14px; resize: vertical; }
   .main-content { margin-left: 0 !important; background: #fff; }
   .card { box-shadow: none; border: 1px solid #ccc; }
 }
+
+/* ─── COLLAPSED SIDEBAR ─── */
+#app.collapsed .sidebar {
+  width: 70px;
+}
+#app.collapsed .sidebar .sidebar-logo-text,
+#app.collapsed .sidebar .nav-label,
+#app.collapsed .sidebar .sidebar-section,
+#app.collapsed .sidebar .user-details,
+#app.collapsed .sidebar .sidebar-footer {
+  display: none !important;
+}
+#app.collapsed .sidebar .sidebar-logo {
+  justify-content: center;
+  padding: 20px 0;
+}
+#app.collapsed .sidebar-nav {
+  padding: 6px 4px;
+}
+#app.collapsed .nav-item {
+  justify-content: center;
+  padding: 12px;
+}
+#app.collapsed .nav-icon {
+  margin: 0;
+  font-size: 1.15rem;
+}
+#app.collapsed .main-content {
+  margin-left: 70px;
+}
+
+/* ─── MOBILE RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -250px; /* Hide by default on mobile */
+  }
+  #app.sidebar-open .sidebar {
+    left: 0;
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  #app.collapsed .sidebar {
+    left: -250px; /* Keep hidden on mobile when collapsed */
+  }
+  #app.sidebar-open.collapsed .sidebar {
+    left: 0;
+    width: 250px; /* Expand on mobile toggle even if marked collapsed */
+  }
+  #app.sidebar-open.collapsed .sidebar .sidebar-logo-text,
+  #app.sidebar-open.collapsed .sidebar .nav-label,
+  #app.sidebar-open.collapsed .sidebar .sidebar-section,
+  #app.sidebar-open.collapsed .sidebar .user-details,
+  #app.sidebar-open.collapsed .sidebar .sidebar-footer {
+    display: block !important;
+  }
+  .topbar {
+    padding: 14px 16px;
+  }
+  .page-body {
+    padding: 16px;
+  }
+}
+

@@ -9,6 +9,11 @@ export default function AppLayout({ children }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   const isLoginPage = pathname === "/login";
 
@@ -111,7 +116,7 @@ export default function AppLayout({ children }) {
   };
 
   return (
-    <div id="app">
+    <div id="app" className={`${isCollapsed ? "collapsed" : ""} ${!isCollapsed ? "sidebar-open" : ""}`}>
       {/* Sidebar with active user */}
       <AppSidebar user={user} onLogout={handleLogout} />
 
@@ -119,9 +124,19 @@ export default function AppLayout({ children }) {
       <main className="main-content">
         {/* Topbar */}
         <header className="topbar">
-          <div>
-            <h1 className="topbar-title">IT Helpdesk</h1>
-            <div className="topbar-breadcrumb">ระบบรับแจ้งปัญหาและบริการไอที</div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button 
+              className="btn btn-ghost btn-icon" 
+              onClick={toggleSidebar} 
+              style={{ fontSize: "1.2rem", padding: "6px 10px", borderRadius: "8px" }}
+              aria-label="Toggle Sidebar"
+            >
+              <i className="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <h1 className="topbar-title" style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "var(--text-primary)" }}>IT Helpdesk</h1>
+              <div className="topbar-breadcrumb" style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: "2px" }}>ระบบรับแจ้งปัญหาและบริการไอที</div>
+            </div>
           </div>
           
           {user && (
