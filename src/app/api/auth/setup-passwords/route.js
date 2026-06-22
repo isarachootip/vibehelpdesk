@@ -17,7 +17,7 @@ export async function GET(request) {
     
     let updatedCount = 0;
     for (const user of users) {
-      const passwordToHash = user.email === 'admin@company.com' ? 'password123' : 'changeme123';
+      const passwordToHash = user.email.toLowerCase().trim() === 'admin@company.com' ? 'password123' : 'changeme123';
       const hashedPassword = await bcrypt.hash(passwordToHash, 10);
       
       await prisma.user.update({
