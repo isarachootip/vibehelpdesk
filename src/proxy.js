@@ -15,6 +15,7 @@ export async function proxy(request) {
     pathname.startsWith('/_next') || 
     pathname.startsWith('/favicon.ico') || 
     pathname.startsWith('/images') ||
+    pathname.startsWith('/uploads') ||
     pathname.includes('.'); // files like .png, .jpg, etc.
 
   if (isAuthApi || isStaticFile) {
