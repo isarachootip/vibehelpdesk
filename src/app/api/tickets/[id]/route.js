@@ -14,6 +14,7 @@ export async function GET(request, { params }) {
         reporter: { select: { user_id: true, full_name: true, email: true, phone: true } },
         tier1: { select: { user_id: true, full_name: true, email: true } },
         tier2: { select: { user_id: true, full_name: true, email: true } },
+        tier3: { select: { user_id: true, full_name: true, email: true } },
         owner: { select: { user_id: true, full_name: true, email: true } },
         bu: true,
         attachments: true,
@@ -80,6 +81,17 @@ export async function PUT(request, { params }) {
         auditDetail = `Escalated to Tier 2: ${data.escalate_reason}`;
         break;
 
+      case 'ESCALATE_TIER3':
+        updateData = {
+          status: 'ESCALATED_TIER3',
+          tier3_id: data.tier3_id ? parseInt(data.tier3_id) : null,
+          tier3_assigned_at: new Date(),
+          estimated_resolve_time: data.estimated_resolve_time ? new Date(data.estimated_resolve_time) : null,
+          assumption: data.assumption || null,
+        };
+        auditDetail = `Escalated to Tier 3: ${data.escalate_reason || 'Delegated'}`;
+        break;
+
       case 'TIER2_ACCEPT':
         updateData = {
           status: 'IN_PROGRESS',
@@ -89,11 +101,29 @@ export async function PUT(request, { params }) {
         auditDetail = 'Tier 2 accepted ticket';
         break;
 
+      case 'TIER3_ACCEPT':
+        updateData = {
+          status: 'IN_PROGRESS',
+          tier3_id: parseInt(user_id),
+          tier3_accepted_at: new Date(),
+        };
+        auditDetail = 'Tier 3 accepted ticket';
+        break;
+
+      case 'UPDATE_ESTIMATION':
+        updateData = {
+          estimated_resolve_time: data.estimated_resolve_time ? new Date(data.estimated_resolve_time) : null,
+          assumption: data.assumption || null,
+          root_cause: data.root_cause || null,
+        };
+        auditDetail = 'Updated resolution estimation and assumptions';
+        break;
+
       case 'START_REPAIR':
         updateData = {
           repair_started_at: new Date(),
         };
-        auditDetail = 'Tier 2 started repair';
+        auditDetail = 'Repair started';
         break;
 
       case 'RESOLVE':
@@ -150,6 +180,7 @@ export async function PUT(request, { params }) {
         reporter: { select: { user_id: true, full_name: true, email: true } },
         tier1: { select: { user_id: true, full_name: true } },
         tier2: { select: { user_id: true, full_name: true } },
+        tier3: { select: { user_id: true, full_name: true } },
         bu: true,
       },
     });
@@ -192,6 +223,21 @@ export async function PUT(request, { params }) {
           emailSubject = `[IT Helpdesk] ส่งเรื่องต่อไปยัง Tier 2 - ${ticket.ticket_no}`;
           updateTitle = 'ส่งเรื่องต่อให้ผู้เชี่ยวชาญ Tier 2 (Escalated)';
           updateDetails = `ปัญหาของท่านมีความจำเป็นต้องได้รับการตรวจสอบโดยทีมผู้เชี่ยวชาญ Tier 2\n\nเหตุผลการส่งต่อ: ${ticket.escalate_reason || '-'}`;
+          break;
+        case 'ESCALATE_TIER3':
+          emailSubject = `[IT Helpdesk] ส่งเรื่องต่อไปยัง Tier 3 - ${ticket.ticket_no}`;
+          updateTitle = 'ส่งเรื่องต่อให้ผู้เชี่ยวชาญ Tier 3 (Escalated to Tier 3)';
+          updateDetails = `ปัญหาของท่านได้รับการส่งต่อไปยังผู้เชี่ยวชาญ Tier 3 เพื่อดำเนินการแก้ไขเชิงลึก\n\nประมาณการเวลาเสร็จ: ${ticket.estimated_resolve_time ? new Date(ticket.estimated_resolve_time).toLocaleString('th-TH') : '-'}\nสมมติฐาน/ข้อสันนิษฐาน: ${ticket.assumption || '-'}`;
+          break;
+        case 'TIER3_ACCEPT':
+          emailSubject = `[IT Helpdesk] เจ้าหน้าที่ Tier 3 รับเรื่องแล้ว - ${ticket.ticket_no}`;
+          updateTitle = 'เจ้าหน้าที่ Tier 3 รับเรื่องดำเนินการแล้ว';
+          updateDetails = `ผู้เชี่ยวชาญ Tier 3 ได้รับเรื่องและกำลังดำเนินการตรวจเช็คเครื่องเซิร์ฟเวอร์/ระบบของท่านครับ`;
+          break;
+        case 'UPDATE_ESTIMATION':
+          emailSubject = `[IT Helpdesk] อัปเดตเวลาประเมินแก้ไข - ${ticket.ticket_no}`;
+          updateTitle = 'อัปเดตระยะเวลาประเมินและสมมติฐาน';
+          updateDetails = `มีการปรับปรุงข้อมูลการประเมิน:\n\nประมาณการเวลาเสร็จ: ${ticket.estimated_resolve_time ? new Date(ticket.estimated_resolve_time).toLocaleString('th-TH') : '-'}\nสมมติฐาน/ข้อสันนิษฐาน: ${ticket.assumption || '-'}\nสาเหตุที่พบ (ถ้ามี): ${ticket.root_cause || '-'}`;
           break;
         case 'RESOLVE':
           emailSubject = `[IT Helpdesk] แก้ไขปัญหาเสร็จสิ้น - ${ticket.ticket_no}`;

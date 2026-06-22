@@ -68,6 +68,7 @@ model User {
   reported_tickets Ticket[]      @relation("Reporter")
   tier1_tickets    Ticket[]      @relation("Tier1Assigned")
   tier2_tickets    Ticket[]      @relation("Tier2Assigned")
+  tier3_tickets    Ticket[]      @relation("Tier3Assigned")
   owner_tickets    Ticket[]      @relation("OwnerAssigned")
   owned_systems    SystemGroup[] @relation("SystemOwner")
 }
@@ -105,6 +106,7 @@ model Ticket {
   bu_id               Int
   tier1_id            Int?
   tier2_id            Int?
+  tier3_id            Int?
   owner_id            Int?
   status              String   @default("NEW") @db.VarChar(30)
   priority            String   @db.VarChar(20)
@@ -131,6 +133,10 @@ model Ticket {
   tier1_assessed_at   DateTime?
   escalated_at        DateTime?
   tier2_accepted_at   DateTime?
+  tier3_assigned_at   DateTime?
+  tier3_accepted_at   DateTime?
+  estimated_resolve_time DateTime?
+  assumption          String?  @db.Text
   repair_started_at   DateTime?
   resolved_at         DateTime?
   user_confirmed_at   DateTime?
@@ -143,6 +149,7 @@ model Ticket {
   reporter            User?        @relation("Reporter", fields: [reporter_id], references: [user_id])
   tier1               User?        @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
   tier2               User?        @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
+  tier3               User?        @relation("Tier3Assigned", fields: [tier3_id], references: [user_id])
   owner               User?        @relation("OwnerAssigned", fields: [owner_id], references: [user_id])
   bu                  BusinessUnit @relation(fields: [bu_id], references: [bu_id])
   hardware_id         Int?

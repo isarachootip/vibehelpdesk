@@ -33,6 +33,7 @@ export async function GET(request) {
         reporter: { select: { user_id: true, full_name: true, email: true } },
         tier1: { select: { user_id: true, full_name: true } },
         tier2: { select: { user_id: true, full_name: true } },
+        tier3: { select: { user_id: true, full_name: true } },
         owner: { select: { user_id: true, full_name: true } },
         bu: true,
       },

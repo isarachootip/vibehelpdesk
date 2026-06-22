@@ -15,6 +15,8 @@ export default function Tier1TicketDetail() {
   const [preliminaryCause, setPreliminaryCause] = useState("");
   const [tier1Action, setTier1Action] = useState("");
   const [escalateReason, setEscalateReason] = useState("");
+  const [rootCause, setRootCause] = useState("");
+  const [resolution, setResolution] = useState("");
 
   const fetchData = async () => {
     try {
@@ -25,6 +27,8 @@ export default function Tier1TicketDetail() {
         setInitialAssessment(data.initial_assessment || "");
         setPreliminaryCause(data.preliminary_cause || "");
         setTier1Action(data.tier1_action || "");
+        setRootCause(data.root_cause || "");
+        setResolution(data.resolution || "");
       }
     } catch (e) {
       console.error(e);
@@ -48,6 +52,8 @@ export default function Tier1TicketDetail() {
       preliminary_cause: preliminaryCause,
       tier1_action: tier1Action,
       escalate_reason: escalateReason,
+      root_cause: rootCause,
+      resolution: resolution,
     };
 
     setSubmitting(true);
@@ -59,7 +65,7 @@ export default function Tier1TicketDetail() {
       });
 
       if (res.ok) {
-        if (actionType === 'ESCALATE' || actionType === 'TIER1_ASSESS') {
+        if (actionType === 'ESCALATE' || actionType === 'TIER1_ASSESS' || actionType === 'RESOLVE') {
           router.push('/tier1');
         } else {
           fetchData();
@@ -165,8 +171,23 @@ export default function Tier1TicketDetail() {
                   <label>เหตุผลที่ต้องส่งต่อ</label>
                   <input type="text" className="form-control" placeholder="เช่น จำเป็นต้องเปลี่ยนอะไหล่ หรือแก้ไข Database" value={escalateReason} onChange={e => setEscalateReason(e.target.value)} />
                 </div>
-                <button className="btn btn-warning" onClick={() => handleAction('ESCALATE')} disabled={submitting || !escalateReason}>
+                <button className="btn btn-warning" style={{ marginBottom: "20px" }} onClick={() => handleAction('ESCALATE')} disabled={submitting || !escalateReason}>
                   <i className="fa-solid fa-arrow-up-right-dots"></i> โอนงานให้ Tier 2
+                </button>
+
+                <hr style={{ margin: "20px 0", borderTop: "1px solid var(--border)" }} />
+                
+                <h4 style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: "10px", color: "var(--success)" }}>ปิดงานด้วย Tier 1 (Resolve Ticket)</h4>
+                <div className="form-group">
+                  <label>สาเหตุที่แท้จริง (Root Cause)</label>
+                  <textarea className="form-control" rows="2" placeholder="ระบุสาเหตุที่ตรวจพบ..." value={rootCause} onChange={e => setRootCause(e.target.value)}></textarea>
+                </div>
+                <div className="form-group">
+                  <label>วิธีแก้ไขปัญหา (Resolution/Solution)</label>
+                  <textarea className="form-control" rows="2" placeholder="ระบุวิธีการแก้ไขปัญหา..." value={resolution} onChange={e => setResolution(e.target.value)}></textarea>
+                </div>
+                <button className="btn btn-success" onClick={() => handleAction('RESOLVE')} disabled={submitting || !rootCause || !resolution}>
+                  <i className="fa-solid fa-circle-check"></i> แก้ไขเสร็จสิ้นและปิดงาน (Resolve)
                 </button>
               </div>
             </div>

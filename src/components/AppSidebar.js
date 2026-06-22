@@ -5,12 +5,14 @@ export default function AppSidebar({ user, onLogout }) {
 
   const canSeeTier1 = ["ADMIN", "TIER1"].includes(role);
   const canSeeTier2 = ["ADMIN", "TIER2", "OWNER"].includes(role);
+  const canSeeTier3 = ["ADMIN", "TIER3"].includes(role);
   const canSeeMaster = ["ADMIN"].includes(role);
 
   const roleLabels = {
     ADMIN: "Administrator",
     TIER1: "IT Support (Tier 1)",
     TIER2: "Specialist (Tier 2)",
+    TIER3: "Specialist (Tier 3)",
     USER: "General User",
     END_USER: "General User",
   };
@@ -68,6 +70,16 @@ export default function AppSidebar({ user, onLogout }) {
             <a href="/tier2" className="nav-item" id="nav-tier2">
               <i className="fa-solid fa-wrench nav-icon"></i>
               <span className="nav-label">แก้ไขปัญหา</span>
+            </a>
+          </>
+        )}
+
+        {canSeeTier3 && (
+          <>
+            <div className="sidebar-section" style={{ marginTop: "16px" }}>Tier 3 Support</div>
+            <a href="/tier3" className="nav-item" id="nav-tier3">
+              <i className="fa-solid fa-screwdriver-wrench nav-icon"></i>
+              <span className="nav-label">แก้ไขเคสเชิงลึก (Tier 3)</span>
             </a>
           </>
         )}

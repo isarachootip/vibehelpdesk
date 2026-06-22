@@ -1,0 +1,66 @@
+export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { cookies } from 'next/headers';
+import * as jose from 'jose';
+
+const prisma = new PrismaClient();
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'super-secret-key-12345'
+);
+
+export async function GET() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('hd_token')?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    let payload;
+    try {
+      const verified = await jose.jwtVerify(token, JWT_SECRET);
+      payload = verified.payload;
+    } catch (e) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    const userId = payload.userId;
+    const role = payload.role?.toUpperCase();
+
+    // Default filter for Tier 3: tickets assigned to them or owned by them
+    let whereCondition = {
+      OR: [
+        { tier3_id: userId },
+        { owner_id: userId }
+      ]
+    };
+
+    // If Admin, they see all escalated or Tier 3 relevant tickets
+    if (role === 'ADMIN') {
+      whereCondition = {
+        OR: [
+          { status: 'ESCALATED_TIER3' },
+          { tier3_id: { not: null } }
+        ]
+      };
+    }
+
+    const tickets = await prisma.ticket.findMany({
+      where: whereCondition,
+      include: {
+        system: true,
+        location: true,
+        reporter: true,
+        bu: true,
+      },
+      orderBy: { created_at: 'desc' }
+    });
+
+    return NextResponse.json(tickets);
+  } catch (error) {
+    console.error('GET /api/tickets/tier3 error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

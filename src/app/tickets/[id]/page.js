@@ -30,8 +30,8 @@ export default function TicketDetail({ params }) {
   if (!ticket) return <div className="empty-state"><h3>Ticket not found</h3></div>;
 
   const priorityColor = p => ({ Critical:"badge-danger", High:"badge-warning", Medium:"badge-primary", Low:"badge-gray" }[p] || "badge-gray");
-  const statusColor = s => ({ NEW:"badge-primary", IN_PROGRESS:"badge-warning", ESCALATED:"badge-danger", RESOLVED:"badge-success", CLOSED:"badge-gray", REOPENED:"badge-danger" }[s] || "badge-gray");
-  const statusLabel = s => ({ NEW:"รอรับเรื่อง", IN_PROGRESS:"กำลังดำเนินการ", ESCALATED:"ส่งต่อ Tier 2", RESOLVED:"แก้ไขแล้ว", CLOSED:"ปิดงาน", REOPENED:"เปิดใหม่", CANCELLED:"ยกเลิก" }[s] || s);
+  const statusColor = s => ({ NEW:"badge-primary", IN_PROGRESS:"badge-warning", ESCALATED:"badge-danger", ESCALATED_TIER3:"badge-danger", RESOLVED:"badge-success", CLOSED:"badge-gray", REOPENED:"badge-danger" }[s] || "badge-gray");
+  const statusLabel = s => ({ NEW:"รอรับเรื่อง", IN_PROGRESS:"กำลังดำเนินการ", ESCALATED:"ส่งต่อ Tier 2", ESCALATED_TIER3:"ส่งต่อ Tier 3", RESOLVED:"แก้ไขแล้ว", CLOSED:"ปิดงาน", REOPENED:"เปิดใหม่", CANCELLED:"ยกเลิก" }[s] || s);
   const fmt = d => d ? new Date(d).toLocaleString("th-TH") : null;
 
   const timestamps = [
@@ -40,7 +40,9 @@ export default function TicketDetail({ params }) {
     { label: "ประเมินเบื้องต้น", field: "tier1_assessed_at", icon: "fa-clipboard-check", color: "#6366f1" },
     { label: "Escalate → Tier 2", field: "escalated_at", icon: "fa-arrow-up-right-from-square", color: "#f59e0b" },
     { label: "Tier 2 รับเรื่อง", field: "tier2_accepted_at", icon: "fa-hand", color: "#a855f7" },
-    { label: "เริ่มแก้ไข", field: "repair_started_at", icon: "fa-wrench", color: "#ec4899" },
+    { label: "Escalate → Tier 3", field: "tier3_assigned_at", icon: "fa-arrow-up-right-from-square", color: "#ec4899" },
+    { label: "Tier 3 รับเรื่อง", field: "tier3_accepted_at", icon: "fa-hand", color: "#f43f5e" },
+    { label: "เริ่มแก้ไข", field: "repair_started_at", icon: "fa-wrench", color: "#10b981" },
     { label: "แก้ไขเสร็จ", field: "resolved_at", icon: "fa-check", color: "#22c55e" },
     { label: "ผู้ใช้ยืนยัน", field: "user_confirmed_at", icon: "fa-thumbs-up", color: "#14b8a6" },
     { label: "ปิด Ticket", field: "closed_at", icon: "fa-lock", color: "#6b7280" },
@@ -104,6 +106,17 @@ export default function TicketDetail({ params }) {
                 {ticket.initial_assessment && <div style={{marginBottom:"8px"}}><label style={{fontSize:".75rem",fontWeight:600,color:"var(--text-secondary)"}}>ความเห็นเบื้องต้น</label><p style={{fontSize:".88rem"}}>{ticket.initial_assessment}</p></div>}
                 {ticket.preliminary_cause && <div style={{marginBottom:"8px"}}><label style={{fontSize:".75rem",fontWeight:600,color:"var(--text-secondary)"}}>สันนิษฐานสาเหตุ</label><p style={{fontSize:".88rem"}}>{ticket.preliminary_cause}</p></div>}
                 {ticket.escalate_reason && <div><label style={{fontSize:".75rem",fontWeight:600,color:"var(--text-secondary)"}}>เหตุผลส่งต่อ Tier 2</label><p style={{fontSize:".88rem"}}>{ticket.escalate_reason}</p></div>}
+              </div>
+            </div>
+          )}
+
+          {/* Tier 2 & 3 Estimation & Assumptions */}
+          {(ticket.estimated_resolve_time || ticket.assumption) && (
+            <div className="card">
+              <div className="card-header"><h3 className="card-title"><i className="fa-solid fa-clock" style={{marginRight:"8px",color:"var(--primary-light)"}}></i>ประมาณการและสมมติฐาน</h3></div>
+              <div className="card-body">
+                {ticket.estimated_resolve_time && <div style={{marginBottom:"8px"}}><label style={{fontSize:".75rem",fontWeight:600,color:"var(--text-secondary)"}}>เวลาประมาณการแก้ไขเสร็จ</label><p style={{fontSize:".88rem",fontWeight:"bold"}}>{new Date(ticket.estimated_resolve_time).toLocaleString('th-TH')}</p></div>}
+                {ticket.assumption && <div><label style={{fontSize:".75rem",fontWeight:600,color:"var(--text-secondary)"}}>สมมติฐาน/วิเคราะห์ (Assumption)</label><p style={{fontSize:".88rem",whiteSpace:"pre-wrap"}}>{ticket.assumption}</p></div>}
               </div>
             </div>
           )}
@@ -174,6 +187,7 @@ export default function TicketDetail({ params }) {
             <div className="card-body" style={{fontSize:".85rem"}}>
               <div style={{marginBottom:"8px"}}><span className="text-muted">Tier 1:</span> <strong>{ticket.tier1?.full_name || "ยังไม่ assign"}</strong></div>
               <div style={{marginBottom:"8px"}}><span className="text-muted">Tier 2:</span> <strong>{ticket.tier2?.full_name || "ยังไม่ assign"}</strong></div>
+              <div style={{marginBottom:"8px"}}><span className="text-muted">Tier 3:</span> <strong>{ticket.tier3?.full_name || "ยังไม่ assign"}</strong></div>
               <div><span className="text-muted">Owner:</span> <strong>{ticket.owner?.full_name || "-"}</strong></div>
             </div>
           </div>

@@ -3,16 +3,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-export default function Tier2TicketDetail() {
+export default function Tier3TicketDetail() {
   const { id } = useParams();
   const router = useRouter();
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [users, setUsers] = useState([]);
 
   // Modals visibility
-  const [showEscalateModal, setShowEscalateModal] = useState(false);
   const [showEstimationModal, setShowEstimationModal] = useState(false);
 
   // Form states
@@ -22,11 +20,9 @@ export default function Tier2TicketDetail() {
   const [resolutionDetail, setResolutionDetail] = useState("");
   const [preventiveAction, setPreventiveAction] = useState("");
 
-  // Escalation form states
-  const [selectedTier3Id, setSelectedTier3Id] = useState("");
+  // Estimation form states
   const [estDate, setEstDate] = useState("");
   const [estTime, setEstTime] = useState("");
-  const [escalateReason, setEscalateReason] = useState("");
   const [escalateAssumption, setEscalateAssumption] = useState("");
 
   const fetchData = async () => {
@@ -54,31 +50,12 @@ export default function Tier2TicketDetail() {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch("/api/master/users");
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        // Filter users who can be Tier 3 (Tier 3, Tier 2, Admin)
-        const filtered = data.filter(u => 
-          ["TIER3", "TIER2", "ADMIN"].includes(u.role?.toUpperCase())
-        );
-        setUsers(filtered);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   useEffect(() => {
     fetchData();
-    fetchUsers();
   }, [id]);
 
   const handleAction = async (actionType, extraData = {}) => {
-    // Current user mock: we pretend we are user_id: 1 (Helpdesk) or similar.
-    // In production, the session will check cookie.
-    const currentUserId = 1; 
+    const currentUserId = 1; // Simulated user (reconstructed at API from cookie)
 
     const payload = {
       action: actionType,
@@ -95,10 +72,9 @@ export default function Tier2TicketDetail() {
       });
 
       if (res.ok) {
-        setShowEscalateModal(false);
         setShowEstimationModal(false);
-        if (actionType === 'ESCALATE_TIER3' || actionType === 'RESOLVE') {
-          router.push('/tier2');
+        if (actionType === 'RESOLVE') {
+          router.push('/tier3');
         } else {
           fetchData();
         }
@@ -111,26 +87,6 @@ export default function Tier2TicketDetail() {
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const handleEscalateSubmit = (e) => {
-    e.preventDefault();
-    if (!selectedTier3Id) {
-      alert("กรุณาเลือกผู้เชี่ยวชาญ Tier 3");
-      return;
-    }
-
-    let estimated_resolve_time = null;
-    if (estDate && estTime) {
-      estimated_resolve_time = new Date(`${estDate}T${estTime}:00`);
-    }
-
-    handleAction("ESCALATE_TIER3", {
-      tier3_id: selectedTier3Id,
-      estimated_resolve_time,
-      assumption: escalateAssumption,
-      escalate_reason: escalateReason,
-    });
   };
 
   const handleUpdateEstimationSubmit = (e) => {
@@ -176,13 +132,13 @@ export default function Tier2TicketDetail() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Link href="/tier2" className="btn btn-ghost btn-sm">
+          <Link href="/tier3" className="btn btn-ghost btn-sm">
             <i className="fa-solid fa-arrow-left"></i> กลับ
           </Link>
           <h2 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>
             {ticket.ticket_no}
           </h2>
-          <span className={`badge ${ticket.status === 'ESCALATED' ? 'badge-warning' : 'badge-primary'}`}>
+          <span className={`badge ${ticket.status === 'ESCALATED_TIER3' ? 'badge-error' : 'badge-primary'}`}>
             {ticket.status}
           </span>
         </div>
@@ -206,51 +162,45 @@ export default function Tier2TicketDetail() {
             </div>
           </div>
 
-          {/* Tier 1 Assessment */}
-          {ticket.initial_assessment && (
-            <div className="card glass-panel" style={{ borderLeft: "4px solid var(--warning)" }}>
+          {/* Tier 1 & 2 Assessments */}
+          <div className="card glass-panel" style={{ borderLeft: "4px solid var(--warning)" }}>
+            <div className="card-header">
+              <h3 className="card-title"><i className="fa-solid fa-clipboard-check"></i> บันทึกประเมินอาการก่อนหน้า</h3>
+            </div>
+            <div className="card-body">
+              {ticket.initial_assessment && (
+                <div>
+                  <strong>Tier 1 Comment:</strong>
+                  <p style={{ color: "var(--text-muted)" }}>{ticket.initial_assessment}</p>
+                </div>
+              )}
+              {ticket.escalate_reason && (
+                <div style={{ marginTop: "10px" }}>
+                  <strong>เหตุผลส่งต่อ Tier 2:</strong>
+                  <p style={{ color: "var(--text-muted)" }}>{ticket.escalate_reason}</p>
+                </div>
+              )}
+              {ticket.assumption && (
+                <div style={{ marginTop: "10px" }}>
+                  <strong>สมมติฐาน/วิเคราะห์จาก Tier 2:</strong>
+                  <p style={{ color: "var(--text-muted)", whiteSpace: "pre-wrap" }}>{ticket.assumption}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Target Resolve Time & Assumptions Details */}
+          {(ticket.estimated_resolve_time) && (
+            <div className="card glass-panel" style={{ borderLeft: "4px solid var(--primary-light)" }}>
               <div className="card-header">
-                <h3 className="card-title"><i className="fa-solid fa-clipboard-check"></i> บันทึกประเมินอาการจาก Tier 1</h3>
+                <h3 className="card-title"><i className="fa-solid fa-clock"></i> การประเมินระยะเวลาแก้ไข</h3>
               </div>
               <div className="card-body">
                 <div>
-                  <strong>ความเห็นเบื้องต้น:</strong>
-                  <p style={{ color: "var(--text-muted)" }}>{ticket.initial_assessment}</p>
-                </div>
-                {ticket.preliminary_cause && (
-                  <div style={{ marginTop: "10px" }}>
-                    <strong>ข้อสันนิษฐานสาเหตุเบื้องต้น:</strong>
-                    <p style={{ color: "var(--text-muted)" }}>{ticket.preliminary_cause}</p>
-                  </div>
-                )}
-                {ticket.escalate_reason && (
-                  <div style={{ marginTop: "10px" }}>
-                    <strong>เหตุผลส่งต่อ Tier 2:</strong>
-                    <p style={{ color: "var(--text-muted)" }}>{ticket.escalate_reason}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Target Resolve Time & Assumptions Details */}
-          {(ticket.estimated_resolve_time || ticket.assumption) && (
-            <div className="card glass-panel" style={{ borderLeft: "4px solid var(--primary-light)" }}>
-              <div className="card-header">
-                <h3 className="card-title"><i className="fa-solid fa-clock"></i> การประเมินระยะเวลาและข้อสันนิษฐาน</h3>
-              </div>
-              <div className="card-body">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <div>
-                    <strong>ระยะเวลาประเมินแก้ไขเสร็จ:</strong>
-                    <p style={{ color: "var(--text-muted)", fontSize: "1.05rem", fontWeight: "bold" }}>
-                      {new Date(ticket.estimated_resolve_time).toLocaleString('th-TH')}
-                    </p>
-                  </div>
-                  <div>
-                    <strong>ข้อสมมติฐาน/Assumption:</strong>
-                    <p style={{ color: "var(--text-muted)", whiteSpace: "pre-wrap" }}>{ticket.assumption || "-"}</p>
-                  </div>
+                  <strong>ระยะเวลาประเมินแก้ไขเสร็จ:</strong>
+                  <p style={{ color: "var(--text-muted)", fontSize: "1.05rem", fontWeight: "bold" }}>
+                    {new Date(ticket.estimated_resolve_time).toLocaleString('th-TH')}
+                  </p>
                 </div>
               </div>
             </div>
@@ -260,17 +210,17 @@ export default function Tier2TicketDetail() {
           {ticket.status === 'IN_PROGRESS' && (
             <div className="card glass-panel" style={{ borderLeft: "4px solid var(--success)" }}>
               <div className="card-header">
-                <h3 className="card-title"><i className="fa-solid fa-wrench"></i> บันทึกการแก้ไขปัญหาและปิดงาน (Tier 2 Resolution)</h3>
+                <h3 className="card-title"><i className="fa-solid fa-wrench"></i> บันทึกการแก้ไขปัญหาและปิดงาน (Tier 3 Resolution)</h3>
               </div>
               <div className="card-body">
                 <form onSubmit={handleResolveSubmit}>
                   <div className="form-group">
-                    <label>สาเหตุที่แท้จริง (Root Cause) *</label>
+                    <label>สาเหตุหลักเชิงเทคนิคที่พบ (Root Cause) *</label>
                     <textarea 
                       className="form-control" 
                       rows="2" 
                       required 
-                      placeholder="อธิบายสาเหตุหลักที่ทำเกิดปัญหานี้..."
+                      placeholder="ระบุสาเหตุเชิงระบบระดับลึกที่ตรวจพบ..."
                       value={rootCause}
                       onChange={e => setRootCause(e.target.value)}
                     ></textarea>
@@ -293,34 +243,34 @@ export default function Tier2TicketDetail() {
                   </div>
 
                   <div className="form-group" style={{ marginTop: "12px" }}>
-                    <label>วิธีแก้ไขปัญหา (Resolution/Solution) *</label>
+                    <label>วิธีแก้ปัญหา / ซ่อมแซมระบบ (Resolution/Solution) *</label>
                     <textarea 
                       className="form-control" 
                       rows="2" 
                       required 
-                      placeholder="อธิบายวิธีการแก้ปัญหาเพื่อให้ระบบทำงานต่อได้..."
+                      placeholder="อธิบายขั้นตอนการกู้คืนระบบหรือแก้ไขซอฟต์แวร์..."
                       value={resolution}
                       onChange={e => setResolution(e.target.value)}
                     ></textarea>
                   </div>
 
                   <div className="form-group" style={{ marginTop: "12px" }}>
-                    <label>รายละเอียดการแก้ไขเพิ่มเติม (Optional)</label>
+                    <label>รายละเอียดเพิ่มเติมย่อยๆ (Optional)</label>
                     <textarea 
                       className="form-control" 
                       rows="2" 
-                      placeholder="ขั้นตอนย่อยๆ หรือจุดที่เปลี่ยน..."
+                      placeholder="จุดที่ทำการแพตช์ หรือเปลี่ยน Config..."
                       value={resolutionDetail}
                       onChange={e => setResolutionDetail(e.target.value)}
                     ></textarea>
                   </div>
 
                   <div className="form-group" style={{ marginTop: "12px" }}>
-                    <label>แนวทางป้องกันการเกิดซ้ำ (Preventive Action - Optional)</label>
+                    <label>แนวทางป้องกันเชิงลึกในระยะยาว (Preventive Action - Optional)</label>
                     <textarea 
                       className="form-control" 
                       rows="2" 
-                      placeholder="ควรบำรุงรักษา หรือตรวจสอบส่วนใดเพิ่มเติม..."
+                      placeholder="แนะนำการมอนิเตอร์ บำรุงรักษา หรือแก้ไขจุดโหว่เพิ่มเติม..."
                       value={preventiveAction}
                       onChange={e => setPreventiveAction(e.target.value)}
                     ></textarea>
@@ -331,10 +281,7 @@ export default function Tier2TicketDetail() {
                       <i className="fa-solid fa-circle-check"></i> แก้ไขเสร็จสิ้น (Resolve Ticket)
                     </button>
                     <button type="button" className="btn btn-outline" onClick={() => setShowEstimationModal(true)}>
-                      <i className="fa-solid fa-clock"></i> ปรับปรุงเวลาแก้ไข/สมมติฐาน
-                    </button>
-                    <button type="button" className="btn btn-warning" onClick={() => setShowEscalateModal(true)}>
-                      <i className="fa-solid fa-share-from-square"></i> ส่งต่อผู้เชี่ยวชาญ Tier 3
+                      <i className="fa-solid fa-clock"></i> ปรับปรุงเวลาแก้ไข/วิเคราะห์เพิ่มเติม
                     </button>
                   </div>
                 </form>
@@ -342,16 +289,16 @@ export default function Tier2TicketDetail() {
             </div>
           )}
 
-          {/* If escalated but not accepted by Tier 2 yet */}
-          {ticket.status === 'ESCALATED' && (
+          {/* If escalated to Tier 3 but not accepted by them yet */}
+          {ticket.status === 'ESCALATED_TIER3' && (
             <div className="card glass-panel" style={{ borderLeft: "4px solid var(--danger)" }}>
               <div className="card-header">
-                <h3 className="card-title">รับเรื่องแก้ไขปัญหา (Accept Ticket)</h3>
+                <h3 className="card-title">รับงานวิเคราะห์แก้ปัญหา (Accept Ticket)</h3>
               </div>
               <div className="card-body">
-                <p style={{ marginBottom: "15px" }}>ทิคเก็ตนี้ถูกส่งต่อมาให้ผู้เชี่ยวชาญ Tier 2 กรุณากด "รับเรื่อง" เพื่อดำเนินการตรวจสอบ</p>
-                <button className="btn btn-primary" onClick={() => handleAction('TIER2_ACCEPT')} disabled={submitting}>
-                  <i className="fa-solid fa-hand-pointer"></i> รับงานแก้ไข (Accept)
+                <p style={{ marginBottom: "15px" }}>ทิคเก็ตนี้ถูกส่งต่อมาให้ผู้เชี่ยวชาญ Tier 3 กรุณากด "รับเรื่อง" เพื่อเริ่มขั้นตอนวิเคราะห์ระบบเชิงลึก</p>
+                <button className="btn btn-primary" onClick={() => handleAction('TIER3_ACCEPT')} disabled={submitting}>
+                  <i className="fa-solid fa-hand-pointer"></i> รับงานแก้ (Accept)
                 </button>
               </div>
             </div>
@@ -407,93 +354,6 @@ export default function Tier2TicketDetail() {
         </div>
       </div>
 
-      {/* Escalate to Tier 3 Modal */}
-      {showEscalateModal && (
-        <div style={{
-          position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-          backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)",
-          display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000
-        }}>
-          <div className="card glass-panel" style={{ width: "90%", maxWidth: "500px", padding: "20px", color: "#fff" }}>
-            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: "10px" }}>
-              <h3 className="card-title" style={{ margin: 0 }}><i className="fa-solid fa-share-from-square"></i> ส่งต่อเคสไป Tier 3 (Escalate to Tier 3)</h3>
-              <button className="btn btn-ghost btn-sm" onClick={() => setShowEscalateModal(false)}>✕</button>
-            </div>
-            <form onSubmit={handleEscalateSubmit}>
-              <div className="card-body" style={{ padding: "10px 0 0 0" }}>
-                <div className="form-group">
-                  <label>เลือกผู้เชี่ยวชาญ Tier 3 *</label>
-                  <select 
-                    className="form-control"
-                    required
-                    value={selectedTier3Id}
-                    onChange={e => setSelectedTier3Id(e.target.value)}
-                  >
-                    <option value="">-- กรุณาเลือกผู้รับผิดชอบ --</option>
-                    {users.map(u => (
-                      <option key={u.user_id} value={u.user_id}>
-                        {u.full_name} ({u.role})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "12px" }}>
-                  <div className="form-group">
-                    <label>ประมาณการวันที่เสร็จ</label>
-                    <input 
-                      type="date" 
-                      className="form-control"
-                      value={estDate}
-                      onChange={e => setEstDate(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>ประมาณการเวลาเสร็จ</label>
-                    <input 
-                      type="time" 
-                      className="form-control"
-                      value={estTime}
-                      onChange={e => setEstTime(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group" style={{ marginTop: "12px" }}>
-                  <label>สมมติฐาน/วิเคราะห์เชิงลึกเบื้องต้น (Assumption)</label>
-                  <textarea 
-                    className="form-control" 
-                    rows="2"
-                    placeholder="ระบุข้อวิเคราะห์หรือสมมติฐานเพื่อช่วยให้ทีม Tier 3 ตรวจแก้ได้ไวขึ้น..."
-                    value={escalateAssumption}
-                    onChange={e => setEscalateAssumption(e.target.value)}
-                  ></textarea>
-                </div>
-
-                <div className="form-group" style={{ marginTop: "12px" }}>
-                  <label>เหตุผลที่ต้องส่งต่อให้ Tier 3 *</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    required
-                    placeholder="เช่น ปัญหาทางเทคนิคระดับลึก, ต้องการสิทธิ์ db admin..."
-                    value={escalateReason}
-                    onChange={e => setEscalateReason(e.target.value)}
-                  />
-                </div>
-
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "20px" }}>
-                  <button type="button" className="btn btn-outline" onClick={() => setShowEscalateModal(false)}>ยกเลิก</button>
-                  <button type="submit" className="btn btn-warning" disabled={submitting}>
-                    <i className="fa-solid fa-arrow-up-right-dots"></i> ส่งมอบงานต่อ
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* Update Estimation Modal */}
       {showEstimationModal && (
         <div style={{
@@ -503,7 +363,7 @@ export default function Tier2TicketDetail() {
         }}>
           <div className="card glass-panel" style={{ width: "90%", maxWidth: "500px", padding: "20px", color: "#fff" }}>
             <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: "10px" }}>
-              <h3 className="card-title" style={{ margin: 0 }}><i className="fa-solid fa-clock"></i> ปรับปรุงเวลาแก้ไขและสมมติฐาน</h3>
+              <h3 className="card-title" style={{ margin: 0 }}><i className="fa-solid fa-clock"></i> ปรับปรุงเวลาแก้ไขและวิเคราะห์เพิ่มเติม</h3>
               <button className="btn btn-ghost btn-sm" onClick={() => setShowEstimationModal(false)}>✕</button>
             </div>
             <form onSubmit={handleUpdateEstimationSubmit}>
@@ -534,7 +394,7 @@ export default function Tier2TicketDetail() {
                   <textarea 
                     className="form-control" 
                     rows="4"
-                    placeholder="ระบุข้อสมมติฐานหรือแนวทางการแก้ไขที่ได้ทดสอบแล้ว..."
+                    placeholder="ระบุข้อสมมติฐานหลัก หรือความคืบหน้าการวิเคราะห์ระบบ..."
                     value={escalateAssumption}
                     onChange={e => setEscalateAssumption(e.target.value)}
                   ></textarea>
