@@ -33,15 +33,28 @@ export default function TicketList() {
 
   const statusColor = (s) => {
     switch (s) {
-      case "NEW": return "badge-primary"; case "IN_PROGRESS": return "badge-warning"; case "ESCALATED": return "badge-danger";
-      case "RESOLVED": return "badge-success"; case "CLOSED": return "badge-gray"; case "REOPENED": return "badge-danger"; default: return "badge-gray";
+      case "NEW": return "badge-primary"; 
+      case "IN_PROGRESS": return "badge-warning"; 
+      case "ESCALATED": return "badge-danger";
+      case "ESCALATED_TIER3": return "badge-danger";
+      case "RESOLVED": return "badge-success"; 
+      case "CLOSED": return "badge-gray"; 
+      case "REOPENED": return "badge-danger"; 
+      default: return "badge-gray";
     }
   };
 
   const statusLabel = (s) => {
     switch (s) {
-      case "NEW": return "รอรับเรื่อง"; case "IN_PROGRESS": return "กำลังดำเนินการ"; case "ESCALATED": return "ส่งต่อ Tier 2";
-      case "RESOLVED": return "แก้ไขแล้ว"; case "CLOSED": return "ปิดงาน"; case "REOPENED": return "เปิดใหม่"; case "CANCELLED": return "ยกเลิก"; default: return s;
+      case "NEW": return "รอรับเรื่อง"; 
+      case "IN_PROGRESS": return "กำลังดำเนินการ"; 
+      case "ESCALATED": return "ส่งต่อ Tier 2";
+      case "ESCALATED_TIER3": return "ส่งต่อ Tier 3";
+      case "RESOLVED": return "แก้ไขแล้ว"; 
+      case "CLOSED": return "ปิดงาน"; 
+      case "REOPENED": return "เปิดใหม่"; 
+      case "CANCELLED": return "ยกเลิก"; 
+      default: return s;
     }
   };
 
@@ -123,6 +136,7 @@ export default function TicketList() {
                     <th>ผู้แจ้ง</th>
                     <th>Tier 1</th>
                     <th>Tier 2</th>
+                    <th>Tier 3</th>
                     <th>วันที่สร้าง</th>
                     <th></th>
                   </tr>
@@ -152,6 +166,7 @@ export default function TicketList() {
                       </td>
                       <td style={{ fontSize: ".8rem" }}>{t.tier1?.full_name || "-"}</td>
                       <td style={{ fontSize: ".8rem" }}>{t.tier2?.full_name || "-"}</td>
+                      <td style={{ fontSize: ".8rem" }}>{t.tier3?.full_name || "-"}</td>
                       <td style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>
                         {new Date(t.created_at).toLocaleDateString("th-TH", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </td>

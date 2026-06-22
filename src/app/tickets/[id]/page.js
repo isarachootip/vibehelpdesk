@@ -7,6 +7,11 @@ export default function TicketDetail({ params }) {
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [users, setUsers] = useState([]);
+  const [showEscalateForm, setShowEscalateForm] = useState(false);
+  const [escalateReason, setEscalateReason] = useState("");
+  const [selectedTier2Id, setSelectedTier2Id] = useState("");
+
   const fetchTicket = () => {
     fetch(`/api/tickets/${id}`)
       .then(r => r.json())
@@ -14,7 +19,25 @@ export default function TicketDetail({ params }) {
       .catch(() => setLoading(false));
   };
 
-  useEffect(() => { fetchTicket(); }, [id]);
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("/api/master/users");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        const filtered = data.filter(u => 
+          ["TIER2", "ADMIN"].includes(u.role?.toUpperCase())
+        );
+        setUsers(filtered);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => { 
+    fetchTicket(); 
+    fetchUsers();
+  }, [id]);
 
   const doAction = async (action, extra = {}) => {
     const res = await fetch(`/api/tickets/${id}`, {
@@ -162,7 +185,50 @@ export default function TicketDetail({ params }) {
               {ticket.status === "IN_PROGRESS" && !ticket.is_escalated && (
                 <>
                   <button className="btn btn-primary" onClick={() => doAction("TIER1_ASSESS", { initial_assessment: prompt("ความเห็นเบื้องต้น:"), preliminary_cause: prompt("สันนิษฐานสาเหตุ:") })}><i className="fa-solid fa-clipboard-check"></i> บันทึก Assessment</button>
-                  <button className="btn btn-warning" onClick={() => doAction("ESCALATE", { escalate_reason: prompt("เหตุผล Escalate:") })}><i className="fa-solid fa-arrow-up"></i> Escalate → Tier 2</button>
+                  {showEscalateForm ? (
+                    <div style={{ marginTop: "8px", padding: "12px", background: "rgba(0,0,0,0.02)", borderRadius: "8px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                      <div>
+                        <label style={{ fontSize: "0.8rem", fontWeight: "bold", display: "block", marginBottom: "4px" }}>เลือกผู้เชี่ยวชาญ Tier 2</label>
+                        <select 
+                          className="form-control" 
+                          value={selectedTier2Id} 
+                          onChange={e => setSelectedTier2Id(e.target.value)}
+                          style={{ fontSize: "0.85rem", padding: "6px" }}
+                        >
+                          <option value="">-- เลือกผู้รับผิดชอบ Tier 2 --</option>
+                          {users.map(u => (
+                            <option key={u.user_id} value={u.user_id}>{u.full_name} ({u.role})</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ fontSize: "0.8rem", fontWeight: "bold", display: "block", marginBottom: "4px" }}>เหตุผลที่ต้องส่งต่อ</label>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          value={escalateReason} 
+                          onChange={e => setEscalateReason(e.target.value)}
+                          placeholder="เช่น ตรวจสอบ Database หรือเซิร์ฟเวอร์"
+                          style={{ fontSize: "0.85rem", padding: "6px" }}
+                        />
+                      </div>
+                      <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+                        <button 
+                          className="btn btn-warning btn-sm" 
+                          onClick={() => {
+                            if (!selectedTier2Id || !escalateReason) return alert("กรุณาเลือกผู้เชี่ยวชาญและระบุเหตุผล");
+                            doAction("ESCALATE", { escalate_reason: escalateReason, tier2_id: parseInt(selectedTier2Id) });
+                            setShowEscalateForm(false);
+                          }}
+                        >
+                          ยืนยัน Escalate
+                        </button>
+                        <button className="btn btn-outline btn-sm" onClick={() => setShowEscalateForm(false)}>ยกเลิก</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button className="btn btn-warning" onClick={() => setShowEscalateForm(true)}><i className="fa-solid fa-arrow-up"></i> Escalate → Tier 2</button>
+                  )}
                   <button className="btn btn-success" onClick={() => doAction("RESOLVE", { resolution: prompt("วิธีแก้ไข:"), root_cause: prompt("Root Cause:"), root_cause_category: "Other" })}><i className="fa-solid fa-check"></i> แก้ไขเสร็จ (Tier 1)</button>
                 </>
               )}

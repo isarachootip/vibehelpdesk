@@ -20,12 +20,32 @@ export default function Tier2Dashboard() {
 
   useEffect(() => { fetchData(); }, []);
 
-  const getStatusBadge = (status) => {
-    switch(status) {
-      case 'ESCALATED': return <span className="badge badge-warning">Escalated</span>;
-      case 'IN_PROGRESS_TIER2': return <span className="badge badge-primary">In Progress</span>;
+  const getStatusBadge = (ticket) => {
+    switch(ticket.status) {
+      case 'ESCALATED': 
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span className="badge badge-warning">Escalated</span>
+            {ticket.tier2?.full_name && <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>({ticket.tier2.full_name})</span>}
+          </div>
+        );
+      case 'IN_PROGRESS_TIER2': 
+      case 'IN_PROGRESS': 
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span className="badge badge-primary">In Progress</span>
+            {ticket.tier2?.full_name && <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>({ticket.tier2.full_name})</span>}
+          </div>
+        );
+      case 'ESCALATED_TIER3':
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span className="badge" style={{ backgroundColor: "#ef4444", color: "white", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", fontWeight: "bold" }}>Escalated to Tier 3</span>
+            {ticket.tier3?.full_name && <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>({ticket.tier3.full_name})</span>}
+          </div>
+        );
       case 'RESOLVED': return <span className="badge badge-success">Resolved</span>;
-      default: return <span className="badge badge-gray">{status}</span>;
+      default: return <span className="badge badge-gray">{ticket.status}</span>;
     }
   };
 
@@ -88,7 +108,7 @@ export default function Tier2Dashboard() {
                         <div>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</div>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{ticket.bu?.bu_code || "-"}</div>
                       </td>
-                      <td>{getStatusBadge(ticket.status)}</td>
+                      <td>{getStatusBadge(ticket)}</td>
                       <td>
                         <Link href={`/tier2/ticket/${ticket.ticket_id}`} className="btn btn-primary btn-sm">
                           <i className="fa-solid fa-arrow-right"></i> เปิดดู

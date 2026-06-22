@@ -22,12 +22,24 @@ export default function Tier3Dashboard() {
     fetchData();
   }, []);
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'ESCALATED_TIER3': return <span className="badge badge-error">Escalated to Tier 3</span>;
-      case 'IN_PROGRESS': return <span className="badge badge-warning">In Progress</span>;
+  const getStatusBadge = (ticket) => {
+    switch (ticket.status) {
+      case 'ESCALATED_TIER3': 
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span className="badge badge-error">Escalated to Tier 3</span>
+            {ticket.tier3?.full_name && <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>({ticket.tier3.full_name})</span>}
+          </div>
+        );
+      case 'IN_PROGRESS': 
+        return (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span className="badge badge-warning">In Progress</span>
+            {ticket.tier3?.full_name && <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "600" }}>({ticket.tier3.full_name})</span>}
+          </div>
+        );
       case 'RESOLVED': return <span className="badge badge-success">Resolved</span>;
-      default: return <span className="badge badge-gray">{status}</span>;
+      default: return <span className="badge badge-gray">{ticket.status}</span>;
     }
   };
 
@@ -90,7 +102,7 @@ export default function Tier3Dashboard() {
                         <div>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</div>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{ticket.bu?.bu_code || "-"}</div>
                       </td>
-                      <td>{getStatusBadge(ticket.status)}</td>
+                      <td>{getStatusBadge(ticket)}</td>
                       <td>
                         <Link href={`/tier3/ticket/${ticket.ticket_id}`} className="btn btn-primary btn-sm">
                           <i className="fa-solid fa-arrow-right"></i> เปิดดู

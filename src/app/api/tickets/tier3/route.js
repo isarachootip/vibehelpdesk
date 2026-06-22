@@ -54,6 +54,8 @@ export async function GET() {
         location: true,
         reporter: true,
         bu: true,
+        tier2: { select: { user_id: true, full_name: true } },
+        tier3: { select: { user_id: true, full_name: true } },
       },
       orderBy: { created_at: 'desc' }
     });

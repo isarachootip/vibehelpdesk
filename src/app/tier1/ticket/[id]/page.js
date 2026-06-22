@@ -37,8 +37,28 @@ export default function Tier1TicketDetail() {
     }
   };
 
+  const [users, setUsers] = useState([]);
+  const [selectedTier2Id, setSelectedTier2Id] = useState("");
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("/api/master/users");
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        // Filter users who can be Tier 2 (TIER2, ADMIN)
+        const filtered = data.filter(u => 
+          ["TIER2", "ADMIN"].includes(u.role?.toUpperCase())
+        );
+        setUsers(filtered);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchUsers();
   }, [id]);
 
   const handleAction = async (actionType) => {
@@ -52,6 +72,7 @@ export default function Tier1TicketDetail() {
       preliminary_cause: preliminaryCause,
       tier1_action: tier1Action,
       escalate_reason: escalateReason,
+      tier2_id: selectedTier2Id ? parseInt(selectedTier2Id) : null,
       root_cause: rootCause,
       resolution: resolution,
     };
@@ -168,10 +189,26 @@ export default function Tier1TicketDetail() {
                 
                 <h4 style={{ fontSize: "1rem", fontWeight: "bold", marginBottom: "10px", color: "var(--warning)" }}>ส่งต่อให้ Tier 2 (Escalate)</h4>
                 <div className="form-group">
+                  <label>เลือกผู้เชี่ยวชาญ Tier 2</label>
+                  <select 
+                    className="form-control" 
+                    value={selectedTier2Id} 
+                    onChange={e => setSelectedTier2Id(e.target.value)}
+                    style={{ marginBottom: "12px" }}
+                  >
+                    <option value="">-- เลือกผู้รับผิดชอบ Tier 2 --</option>
+                    {users.map(u => (
+                      <option key={u.user_id} value={u.user_id}>
+                        {u.full_name} ({u.role})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
                   <label>เหตุผลที่ต้องส่งต่อ</label>
                   <input type="text" className="form-control" placeholder="เช่น จำเป็นต้องเปลี่ยนอะไหล่ หรือแก้ไข Database" value={escalateReason} onChange={e => setEscalateReason(e.target.value)} />
                 </div>
-                <button className="btn btn-warning" style={{ marginBottom: "20px" }} onClick={() => handleAction('ESCALATE')} disabled={submitting || !escalateReason}>
+                <button className="btn btn-warning" style={{ marginBottom: "20px" }} onClick={() => handleAction('ESCALATE')} disabled={submitting || !escalateReason || !selectedTier2Id}>
                   <i className="fa-solid fa-arrow-up-right-dots"></i> โอนงานให้ Tier 2
                 </button>
 
