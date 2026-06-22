@@ -258,39 +258,83 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Demo Credentials Tip */}
+        {/* LINE Official Account QR & Link */}
         <div
           style={{
             marginTop: "28px",
             background: "rgba(255, 255, 255, 0.03)",
-            borderRadius: "8px",
-            padding: "12px 16px",
+            borderRadius: "12px",
+            padding: "20px 16px",
             border: "1px solid rgba(255,255,255,0.05)",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "12px",
           }}
         >
           <span
             style={{
               display: "block",
-              fontSize: "0.78rem",
+              fontSize: "0.84rem",
               fontWeight: 600,
-              color: "#818cf8",
-              marginBottom: "4px",
+              color: "#06c755", // LINE Green
             }}
           >
-            <i className="fa-solid fa-lightbulb" style={{ marginRight: "4px" }}></i>
-            ข้อมูลทดสอบสำหรับเข้าสู่ระบบ (Demo):
+            <i className="fa-brands fa-line" style={{ marginRight: "6px", fontSize: "1rem" }}></i>
+            แจ้งปัญหาด่วนผ่าน LINE Official
           </span>
-          <div style={{ fontSize: "0.76rem", color: "#cbd5e1", lineHeight: "1.4" }}>
-            <div>
-              <strong>Admin:</strong> admin@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>password123</code>)</span>
-            </div>
-            <div>
-              <strong>Tier 1:</strong> tier1.support@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
-            </div>
-            <div>
-              <strong>Tier 2:</strong> isara@chg.co.th <span style={{ color: "#a1a5b7" }}>(password: <code>changeme123</code>)</span>
-            </div>
-          </div>
+          
+          <a 
+            href="https://lin.ee/8KGPahF" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              display: "block",
+              transition: "transform 0.2s" 
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.04)"}
+            onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+          >
+            <img 
+              src="/line-qr.png" 
+              alt="LINE QR Code" 
+              style={{ 
+                width: "120px", 
+                height: "120px", 
+                borderRadius: "8px",
+                border: "2px solid rgba(6, 199, 85, 0.25)",
+                background: "#ffffff",
+                padding: "4px"
+              }}
+            />
+          </a>
+
+          <a
+            href="https://lin.ee/8KGPahF"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: "#06c755",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "20px",
+              padding: "6px 20px",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              textDecoration: "none",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "opacity 0.2s, transform 0.1s",
+            }}
+            onMouseOver={(e) => e.currentTarget.style.opacity = 0.9}
+            onMouseOut={(e) => e.currentTarget.style.opacity = 1}
+          >
+            <i className="fa-brands fa-line"></i>
+            คลิกเพื่อแอดไลน์
+          </a>
         </div>
       </div>
 
