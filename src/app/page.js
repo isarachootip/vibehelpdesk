@@ -25,6 +25,7 @@ export default function Dashboard() {
   const [trendPeriod, setTrendPeriod] = useState("mtd");
   const [trendData, setTrendData] = useState(null);
   const [trendLoading, setTrendLoading] = useState(true);
+  const [agingTab, setAgingTab] = useState("summary");
 
   useEffect(() => {
     fetch("/api/dashboard")
@@ -323,6 +324,158 @@ export default function Dashboard() {
           <div className="card-body" style={{ height:"260px" }}>
             {ticketsBySystem.length > 0 ? <Bar data={sysChartData} options={barOpts} /> : <p className="text-muted">No data</p>}
           </div>
+        </div>
+      </div>
+
+      {/* Aging Report Card */}
+      <div className="card" style={{ marginBottom: "16px" }}>
+        <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+          <h2 className="card-title">
+            <i className="fa-solid fa-hourglass-half" style={{ marginRight: "8px", color: "var(--warning)" }}></i>
+            Aging Report (รายงานสรุปงานค้างแยกตาม Tier)
+          </h2>
+          <div style={{ display: "flex", gap: "6px" }}>
+            {[
+              { id: "summary", label: "สรุปทุก Tier" },
+              { id: "tier1", label: "งานค้าง Tier 1" },
+              { id: "tier2", label: "งานค้าง Tier 2" },
+              { id: "tier3", label: "งานค้าง Tier 3" },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setAgingTab(tab.id)}
+                style={{
+                  padding: "4px 10px",
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                  borderRadius: "6px",
+                  border: "1px solid",
+                  borderColor: agingTab === tab.id ? "var(--primary)" : "var(--border)",
+                  backgroundColor: agingTab === tab.id ? "var(--primary)" : "transparent",
+                  color: agingTab === tab.id ? "#fff" : "var(--text-secondary)",
+                  cursor: "pointer",
+                  transition: "all 0.15s"
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="card-body" style={{ padding: agingTab === "summary" ? "20px" : "0" }}>
+          {agingTab === "summary" ? (
+            <div className="table-wrap">
+              <table className="data-table" style={{ margin: 0 }}>
+                <thead>
+                  <tr>
+                    <th>Support Level</th>
+                    <th style={{ textAlign: "center" }}>&lt; 24 ชั่วโมง</th>
+                    <th style={{ textAlign: "center" }}>1-3 วัน</th>
+                    <th style={{ textAlign: "center" }}>3-7 วัน</th>
+                    <th style={{ textAlign: "center" }}>&gt; 7 วัน</th>
+                    <th style={{ textAlign: "center" }}>รวมงานค้างทั้งหมด</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { key: "tier1", label: "Tier 1 Helpdesk Support", color: "var(--primary)" },
+                    { key: "tier2", label: "Tier 2 Specialist Support", color: "var(--warning)" },
+                    { key: "tier3", label: "Tier 3 Deep Resolution Support", color: "var(--danger)" },
+                  ].map(row => {
+                    const rowData = data.agingReport?.[row.key] || { '< 24h': 0, '1-3d': 0, '3-7d': 0, '> 7d': 0, tickets: [] };
+                    const totalOpen = rowData.tickets.length;
+                    return (
+                      <tr key={row.key}>
+                        <td style={{ fontWeight: 600 }}>
+                          <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", backgroundColor: row.color, marginRight: "8px" }}></span>
+                          {row.label}
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={rowData['< 24h'] > 0 ? "badge badge-success" : ""} style={{ fontSize: "0.85rem", padding: "4px 8px" }}>
+                            {rowData['< 24h']}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={rowData['1-3d'] > 0 ? "badge badge-warning" : ""} style={{ fontSize: "0.85rem", padding: "4px 8px" }}>
+                            {rowData['1-3d']}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={rowData['3-7d'] > 0 ? "badge badge-danger" : ""} style={{ fontSize: "0.85rem", padding: "4px 8px", backgroundColor: "#f97316", color: "white" }}>
+                            {rowData['3-7d']}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={rowData['> 7d'] > 0 ? "badge badge-danger" : ""} style={{ fontSize: "0.85rem", padding: "4px 8px" }}>
+                            {rowData['> 7d']}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "center", fontWeight: "bold", fontSize: "0.95rem" }}>
+                          <span className="chip" style={{ backgroundColor: totalOpen > 0 ? "rgba(79, 70, 229, 0.1)" : "rgba(0,0,0,0.05)", color: totalOpen > 0 ? "var(--primary)" : "var(--text-muted)" }}>
+                            {totalOpen} เคส
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="table-wrap">
+              <table className="data-table" style={{ margin: 0 }}>
+                <thead>
+                  <tr>
+                    <th>Job No.</th>
+                    <th>Subject</th>
+                    <th>System</th>
+                    <th>ผู้รับผิดชอบ</th>
+                    <th>สถานะ</th>
+                    <th>ระยะเวลาค้างสะสม (Aging)</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(data.agingReport?.[agingTab]?.tickets || []).length > 0 ? (
+                    (data.agingReport[agingTab].tickets).map(t => {
+                      let ageColor = "var(--success)";
+                      if (t.ageDays > 7) ageColor = "var(--danger)";
+                      else if (t.ageDays > 3) ageColor = "#f97316";
+                      else if (t.ageDays > 1) ageColor = "var(--warning)";
+
+                      return (
+                        <tr key={t.ticket_id}>
+                          <td className="font-mono" style={{ fontSize: "0.8rem", fontWeight: 600 }}>{t.ticket_no}</td>
+                          <td style={{ maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</td>
+                          <td><span className="chip">{t.system_name || "-"}</span></td>
+                          <td style={{ fontSize: "0.85rem" }}>{t.assigneeName}</td>
+                          <td>
+                            <span className="badge" style={{ fontSize: "0.75rem", textTransform: "uppercase" }}>
+                              {t.status}
+                            </span>
+                          </td>
+                          <td style={{ fontWeight: 600 }}>
+                            <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", backgroundColor: ageColor, marginRight: "8px" }}></span>
+                            {t.ageDays >= 1 ? `${t.ageDays} วัน` : `${t.ageHours} ชั่วโมง`}
+                          </td>
+                          <td>
+                            <a href={`/tickets/${t.ticket_id}`} className="btn btn-outline btn-sm">View</a>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="7" style={{ textAlign: "center", padding: "30px", color: "var(--text-muted)" }}>
+                        <i className="fa-solid fa-circle-check fa-2x" style={{ color: "var(--success)", marginBottom: "8px", display: "block" }}></i>
+                        ไม่มีงานค้างสะสมใน Tier นี้
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 

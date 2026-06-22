@@ -78,6 +78,72 @@ export async function GET() {
       system_name: sysMap[t.system_id]?.system_name,
     }));
 
+    // Calculate Aging Report
+    const activeTickets = await prisma.ticket.findMany({
+      where: {
+        status: {
+          notIn: ['RESOLVED', 'CLOSED', 'CANCELLED']
+        }
+      },
+      include: {
+        tier1: { select: { full_name: true } },
+        tier2: { select: { full_name: true } },
+        tier3: { select: { full_name: true } },
+        system: { select: { system_name: true } },
+      }
+    });
+
+    const agingReport = {
+      tier1: { '< 24h': 0, '1-3d': 0, '3-7d': 0, '> 7d': 0, tickets: [] },
+      tier2: { '< 24h': 0, '1-3d': 0, '3-7d': 0, '> 7d': 0, tickets: [] },
+      tier3: { '< 24h': 0, '1-3d': 0, '3-7d': 0, '> 7d': 0, tickets: [] }
+    };
+
+    const now = new Date();
+
+    for (const ticket of activeTickets) {
+      let tier = 'tier1';
+      let startTime = ticket.created_at;
+
+      if (ticket.status === 'ESCALATED_TIER3' || ticket.tier3_id !== null) {
+        tier = 'tier3';
+        startTime = ticket.tier3_assigned_at || ticket.tier3_accepted_at || ticket.escalated_at || ticket.created_at;
+      } else if (ticket.status === 'ESCALATED' || ticket.tier2_id !== null || ticket.is_escalated) {
+        tier = 'tier2';
+        startTime = ticket.escalated_at || ticket.tier2_accepted_at || ticket.created_at;
+      }
+
+      const diffMs = now - new Date(startTime);
+      const diffHours = diffMs / (1000 * 60 * 60);
+      const diffDays = diffHours / 24;
+
+      let bracket = '> 7d';
+      if (diffHours < 24) {
+        bracket = '< 24h';
+      } else if (diffDays <= 3) {
+        bracket = '1-3d';
+      } else if (diffDays <= 7) {
+        bracket = '3-7d';
+      }
+
+      agingReport[tier][bracket]++;
+      agingReport[tier].tickets.push({
+        ticket_id: ticket.ticket_id,
+        ticket_no: ticket.ticket_no,
+        subject: ticket.subject,
+        system_name: ticket.system?.system_name,
+        status: ticket.status,
+        startTime: startTime,
+        ageHours: Math.round(diffHours * 10) / 10,
+        ageDays: Math.round(diffDays * 10) / 10,
+        assigneeName: (tier === 'tier3' ? ticket.tier3?.full_name : (tier === 'tier2' ? ticket.tier2?.full_name : ticket.tier1?.full_name)) || 'ยังไม่ได้มอบหมาย'
+      });
+    }
+
+    agingReport.tier1.tickets.sort((a, b) => b.ageHours - a.ageHours);
+    agingReport.tier2.tickets.sort((a, b) => b.ageHours - a.ageHours);
+    agingReport.tier3.tickets.sort((a, b) => b.ageHours - a.ageHours);
+
     return NextResponse.json({
       stats: {
         total: totalTickets,
@@ -94,6 +160,7 @@ export async function GET() {
       ticketsBySystem: enrichedBySystem,
       ticketsByPriority,
       ticketsByStatus,
+      agingReport,
     });
   } catch (error) {
     console.error('GET /api/dashboard error:', error);
