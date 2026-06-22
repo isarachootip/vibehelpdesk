@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
@@ -96,12 +97,18 @@ async function main() {
     { email: 'sutarat@company.com', full_name: 'Sutarat', role: 'end_user' },
   ];
 
+  const defaultPassword = 'changeme123';
+  const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
   const userMap = {};
   for (const u of userData) {
     const user = await prisma.user.upsert({
       where: { email: u.email },
       update: { full_name: u.full_name, role: u.role },
-      create: u,
+      create: {
+        ...u,
+        password: hashedPassword,
+      },
     });
     userMap[u.email] = user.user_id;
   }

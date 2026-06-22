@@ -1,6 +1,6 @@
 import "./globals.css";
 import ChatWidget from "@/components/ChatWidget";
-import AppSidebar from "@/components/AppSidebar";
+import AppLayout from "@/components/AppLayout";
 
 export const metadata = {
   title: "IT Helpdesk",
@@ -23,31 +23,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <div id="app">
-          {/* Sidebar */}
-          <AppSidebar />
-
-          {/* Main Content */}
-          <main className="main-content">
-            {/* Topbar */}
-            <header className="topbar">
-              <div>
-                <h1 className="topbar-title">IT Helpdesk</h1>
-                <div className="topbar-breadcrumb">Helpdesk Support System</div>
-              </div>
-              <div className="flex gap-2">
-                <button className="btn btn-outline btn-icon" id="btn-notifications">
-                  <i className="fa-solid fa-bell"></i>
-                </button>
-              </div>
-            </header>
-
-            {/* Page Body */}
-            <div className="page-body">
-              {children}
-            </div>
-          </main>
-        </div>
+        <AppLayout>{children}</AppLayout>
         <ChatWidget />
       </body>
     </html>

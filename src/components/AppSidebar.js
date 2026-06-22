@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-export default function AppSidebar() {
-  const [role, setRole] = useState("ADMIN"); // Default to ADMIN for testing
+export default function AppSidebar({ user, onLogout }) {
+  const role = user?.role?.toUpperCase() || "USER";
 
   const canSeeTier1 = ["ADMIN", "TIER1"].includes(role);
   const canSeeTier2 = ["ADMIN", "TIER2", "OWNER"].includes(role);
@@ -13,11 +11,18 @@ export default function AppSidebar() {
     ADMIN: "Administrator",
     TIER1: "IT Support (Tier 1)",
     TIER2: "Specialist (Tier 2)",
-    USER: "General User"
+    USER: "General User",
+    END_USER: "General User",
   };
 
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
+  const getInitials = (name) => {
+    if (!name) return "US";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
   };
 
   return (
@@ -49,7 +54,7 @@ export default function AppSidebar() {
 
         {canSeeTier1 && (
           <>
-            <div className="sidebar-section" style={{ marginTop: '16px' }}>Tier 1 Support</div>
+            <div className="sidebar-section" style={{ marginTop: "16px" }}>Tier 1 Support</div>
             <a href="/tier1" className="nav-item" id="nav-tier1">
               <i className="fa-solid fa-inbox nav-icon"></i>
               <span className="nav-label">รับเรื่อง / ประเมิน</span>
@@ -59,7 +64,7 @@ export default function AppSidebar() {
 
         {canSeeTier2 && (
           <>
-            <div className="sidebar-section" style={{ marginTop: '16px' }}>Tier 2 Support</div>
+            <div className="sidebar-section" style={{ marginTop: "16px" }}>Tier 2 Support</div>
             <a href="/tier2" className="nav-item" id="nav-tier2">
               <i className="fa-solid fa-wrench nav-icon"></i>
               <span className="nav-label">แก้ไขปัญหา</span>
@@ -69,7 +74,7 @@ export default function AppSidebar() {
 
         {canSeeMaster && (
           <>
-            <div className="sidebar-section" style={{ marginTop: '16px' }}>Master Data</div>
+            <div className="sidebar-section" style={{ marginTop: "16px" }}>Master Data</div>
             <a href="/master/bu" className="nav-item" id="nav-master-bu">
               <i className="fa-solid fa-building nav-icon"></i>
               <span className="nav-label">Business Units</span>
@@ -98,29 +103,54 @@ export default function AppSidebar() {
         )}
       </nav>
 
-      <div className="sidebar-footer" style={{ padding: "16px" }}>
-        {/* Role Switcher for Testing PoC */}
-        <div style={{ marginBottom: "12px", background: "rgba(255,255,255,0.05)", padding: "8px", borderRadius: "8px" }}>
-          <label style={{ display: "block", fontSize: "0.7rem", color: "var(--text-muted)", marginBottom: "4px" }}>Test Role Switcher:</label>
-          <select 
-            value={role} 
-            onChange={handleRoleChange} 
-            style={{ width: "100%", background: "var(--bg)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: "4px", padding: "4px", fontSize: "0.8rem" }}
-          >
-            <option value="ADMIN">Admin</option>
-            <option value="TIER1">Tier 1 Support</option>
-            <option value="TIER2">Tier 2 Support</option>
-            <option value="USER">User</option>
-          </select>
-        </div>
+      {/* Sidebar Footer with Logout */}
+      <div className="sidebar-footer" style={{ padding: "16px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        {user && (
+          <>
+            <div className="user-info" style={{ padding: 0, marginBottom: "12px" }}>
+              <div className="user-avatar" style={{ background: "var(--primary)" }}>
+                {getInitials(user.full_name)}
+              </div>
+              <div className="user-details">
+                <div className="user-name" style={{ fontSize: "0.85rem", fontWeight: 600, color: "#fff" }}>
+                  {user.full_name}
+                </div>
+                <div className="user-role" style={{ fontSize: "0.7rem", color: "var(--sidebar-text)" }}>
+                  {roleLabels[role] || role}
+                </div>
+              </div>
+            </div>
 
-        <div className="user-info" style={{ padding: 0 }}>
-          <div className="user-avatar">{role.substring(0, 2)}</div>
-          <div className="user-details">
-            <div className="user-name">Demo {role}</div>
-            <div className="user-role" style={{ fontSize: "0.7rem" }}>{roleLabels[role]}</div>
-          </div>
-        </div>
+            <button
+              onClick={onLogout}
+              style={{
+                width: "100%",
+                padding: "8px 12px",
+                background: "rgba(239, 68, 68, 0.1)",
+                color: "#f87171",
+                border: "1px solid rgba(239, 68, 68, 0.2)",
+                borderRadius: "6px",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                transition: "all 0.2s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "rgba(239, 68, 68, 0.2)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)";
+              }}
+            >
+              <i className="fa-solid fa-arrow-right-from-bracket"></i>
+              ออกจากระบบ (Logout)
+            </button>
+          </>
+        )}
       </div>
     </aside>
   );
