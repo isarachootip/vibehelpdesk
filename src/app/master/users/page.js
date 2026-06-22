@@ -84,54 +84,66 @@ export default function MasterUsers() {
       </div>
 
       {showForm && (
-        <div className="card" style={{ marginBottom: "16px" }}>
-          <div className="card-header"><h3 className="card-title">{editItem ? "แก้ไข User" : "เพิ่ม User ใหม่"}</h3></div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Email <span className="req">*</span></label>
-                  <input type="email" className="form-control" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="เช่น user@example.com" required disabled={!!editItem} />
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }}>
+          <div className="card" style={{ width: "100%", maxWidth: "700px", margin: 0, maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 className="card-title">{editItem ? "แก้ไข User" : "เพิ่ม User ใหม่"}</h3>
+              <button className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); setForm(initialForm); }} style={{ padding: "4px 8px" }}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Email <span className="req">*</span></label>
+                    <input type="email" className="form-control" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="เช่น user@example.com" required disabled={!!editItem} />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Full Name <span className="req">*</span></label>
+                    <input className="form-control" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="เช่น สมชาย ใจดี" required />
+                  </div>
+                  <div className="form-group" style={{ maxWidth: "150px" }}>
+                    <label>Role <span className="req">*</span></label>
+                    <select className="form-control" value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}>
+                      <option value="end_user">End User</option>
+                      <option value="tier1">Tier 1 (Helpdesk)</option>
+                      <option value="tier2">Tier 2 (IT Support)</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Full Name <span className="req">*</span></label>
-                  <input className="form-control" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="เช่น สมชาย ใจดี" required />
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Phone</label>
+                    <input className="form-control" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="เช่น 0812345678" />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Business Unit (BU)</label>
+                    <select className="form-control" value={form.bu_id} onChange={e => setForm(f => ({ ...f, bu_id: e.target.value }))}>
+                      <option value="">-- ไม่ระบุ --</option>
+                      {bus.map(b => <option key={b.bu_id} value={b.bu_id}>{b.bu_code} - {b.bu_name}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Location</label>
+                    <select className="form-control" value={form.location_id} onChange={e => setForm(f => ({ ...f, location_id: e.target.value }))}>
+                      <option value="">-- ไม่ระบุ --</option>
+                      {locations.map(l => <option key={l.location_id} value={l.location_id}>{l.location_code} - {l.location_name}</option>)}
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group" style={{ maxWidth: "150px" }}>
-                  <label>Role <span className="req">*</span></label>
-                  <select className="form-control" value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}>
-                    <option value="end_user">End User</option>
-                    <option value="tier1">Tier 1 (Helpdesk)</option>
-                    <option value="tier2">Tier 2 (IT Support)</option>
-                    <option value="admin">Admin</option>
-                  </select>
+                <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "20px" }}>
+                  <button type="button" className="btn btn-ghost" onClick={() => { setShowForm(false); setEditItem(null); setForm(initialForm); }}>ยกเลิก</button>
+                  <button type="submit" className="btn btn-primary"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
                 </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input className="form-control" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="เช่น 0812345678" />
-                </div>
-                <div className="form-group">
-                  <label>Business Unit (BU)</label>
-                  <select className="form-control" value={form.bu_id} onChange={e => setForm(f => ({ ...f, bu_id: e.target.value }))}>
-                    <option value="">-- ไม่ระบุ --</option>
-                    {bus.map(b => <option key={b.bu_id} value={b.bu_id}>{b.bu_code} - {b.bu_name}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Location</label>
-                  <select className="form-control" value={form.location_id} onChange={e => setForm(f => ({ ...f, location_id: e.target.value }))}>
-                    <option value="">-- ไม่ระบุ --</option>
-                    {locations.map(l => <option key={l.location_id} value={l.location_id}>{l.location_code} - {l.location_name}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
-                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}

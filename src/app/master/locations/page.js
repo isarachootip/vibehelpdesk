@@ -122,62 +122,68 @@ export default function MasterLocations() {
       </div>
 
       {showForm && (
-        <div className="card" style={{ marginBottom: "16px" }}>
-          <div className="card-header">
-            <h3 className="card-title">{editItem ? "แก้ไขสถานที่" : "เพิ่มสถานที่ใหม่"}</h3>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group" style={{ maxWidth: "200px" }}>
-                  <label>Location Code <span className="req">*</span></label>
-                  <input className="form-control" value={form.location_code} onChange={e => setForm(f => ({ ...f, location_code: e.target.value }))} placeholder="เช่น STR-001" required />
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }}>
+          <div className="card" style={{ width: "100%", maxWidth: "700px", margin: 0, maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 className="card-title">{editItem ? "แก้ไขสถานที่" : "เพิ่มสถานที่ใหม่"}</h3>
+              <button className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }} style={{ padding: "4px 8px" }}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Location Code <span className="req">*</span></label>
+                    <input className="form-control" value={form.location_code} onChange={e => setForm(f => ({ ...f, location_code: e.target.value }))} placeholder="เช่น STR-001" required />
+                  </div>
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label>Location Name <span className="req">*</span></label>
+                    <input className="form-control" value={form.location_name} onChange={e => setForm(f => ({ ...f, location_name: e.target.value }))} placeholder="ชื่อสถานที่" required />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Type <span className="req">*</span></label>
+                    <select className="form-control" value={form.location_type} onChange={e => setForm(f => ({ ...f, location_type: e.target.value }))} required>
+                      <option value="store">Store (สาขา)</option>
+                      <option value="hq">HQ (สำนักงานใหญ่)</option>
+                      <option value="warehouse">Warehouse (คลัง)</option>
+                      <option value="dc">DC (ศูนย์กระจายสินค้า)</option>
+                      <option value="other">Other (อื่นๆ)</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Location Name <span className="req">*</span></label>
-                  <input className="form-control" value={form.location_name} onChange={e => setForm(f => ({ ...f, location_name: e.target.value }))} placeholder="ชื่อสถานที่" required />
+                
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Business Unit (BU)</label>
+                    <select className="form-control" value={form.bu_id} onChange={e => setForm(f => ({ ...f, bu_id: e.target.value }))}>
+                      <option value="">-- ไม่ระบุ (ส่วนกลาง) --</option>
+                      {buItems.map(bu => (
+                        <option key={bu.bu_id} value={bu.bu_id}>{bu.bu_code} - {bu.bu_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Floor (ชั้น)</label>
+                    <input className="form-control" value={form.floor} onChange={e => setForm(f => ({ ...f, floor: e.target.value }))} placeholder="เช่น 1, B1" />
+                  </div>
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label>Address (ที่อยู่ / รายละเอียด)</label>
+                    <input className="form-control" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} placeholder="รายละเอียดเพิ่มเติม" />
+                  </div>
                 </div>
-                <div className="form-group" style={{ maxWidth: "150px" }}>
-                  <label>Type <span className="req">*</span></label>
-                  <select className="form-control" value={form.location_type} onChange={e => setForm(f => ({ ...f, location_type: e.target.value }))} required>
-                    <option value="store">Store (สาขา)</option>
-                    <option value="hq">HQ (สำนักงานใหญ่)</option>
-                    <option value="warehouse">Warehouse (คลัง)</option>
-                    <option value="dc">DC (ศูนย์กระจายสินค้า)</option>
-                    <option value="other">Other (อื่นๆ)</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group" style={{ maxWidth: "200px" }}>
-                  <label>Business Unit (BU)</label>
-                  <select className="form-control" value={form.bu_id} onChange={e => setForm(f => ({ ...f, bu_id: e.target.value }))}>
-                    <option value="">-- ไม่ระบุ (ส่วนกลาง) --</option>
-                    {buItems.map(bu => (
-                      <option key={bu.bu_id} value={bu.bu_id}>{bu.bu_code} - {bu.bu_name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group" style={{ maxWidth: "150px" }}>
-                  <label>Floor (ชั้น)</label>
-                  <input className="form-control" value={form.floor} onChange={e => setForm(f => ({ ...f, floor: e.target.value }))} placeholder="เช่น 1, B1" />
-                </div>
-                <div className="form-group">
-                  <label>Address (ที่อยู่ / รายละเอียด)</label>
-                  <input className="form-control" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} placeholder="รายละเอียดเพิ่มเติม" />
-                </div>
-              </div>
 
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button type="submit" className="btn btn-primary btn-sm">
-                  <i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}
-                </button>
-                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }}>
-                  ยกเลิก
-                </button>
-              </div>
-            </form>
+                <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "20px" }}>
+                  <button type="button" className="btn btn-ghost" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
+                  <button type="submit" className="btn btn-primary"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

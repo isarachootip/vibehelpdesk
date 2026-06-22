@@ -96,35 +96,47 @@ export default function MasterHardware() {
       </div>
 
       {showForm && (
-        <div className="card" style={{ marginBottom: "16px" }}>
-          <div className="card-header"><h3 className="card-title">{editItem ? "แก้ไข Hardware" : "เพิ่ม Hardware ใหม่"}</h3></div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group" style={{ maxWidth: "200px" }}>
-                  <label>รหัส / Code <span className="req">*</span></label>
-                  <input className="form-control" value={form.hardware_code} onChange={e => setForm(f => ({ ...f, hardware_code: e.target.value }))} placeholder="เช่น PRN-001" required />
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }}>
+          <div className="card" style={{ width: "100%", maxWidth: "600px", margin: 0, maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 className="card-title">{editItem ? "แก้ไข Hardware" : "เพิ่ม Hardware ใหม่"}</h3>
+              <button className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }} style={{ padding: "4px 8px" }}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>รหัส / Code <span className="req">*</span></label>
+                    <input className="form-control" value={form.hardware_code} onChange={e => setForm(f => ({ ...f, hardware_code: e.target.value }))} placeholder="เช่น PRN-001" required />
+                  </div>
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label>ชื่ออุปกรณ์ / Product Name <span className="req">*</span></label>
+                    <input className="form-control" value={form.hardware_name} onChange={e => setForm(f => ({ ...f, hardware_name: e.target.value }))} placeholder="เช่น เครื่องพิมพ์ใบเสร็จ" required />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>ชื่ออุปกรณ์ / Product Name <span className="req">*</span></label>
-                  <input className="form-control" value={form.hardware_name} onChange={e => setForm(f => ({ ...f, hardware_name: e.target.value }))} placeholder="เช่น เครื่องพิมพ์ใบเสร็จ" required />
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>ยี่ห้อ / Brand</label>
+                    <input className="form-control" value={form.brand} onChange={e => setForm(f => ({ ...f, brand: e.target.value }))} placeholder="เช่น Epson" />
+                  </div>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>รุ่น / Model</label>
+                    <input className="form-control" value={form.model} onChange={e => setForm(f => ({ ...f, model: e.target.value }))} placeholder="เช่น TM-T82" />
+                  </div>
                 </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>ยี่ห้อ / Brand</label>
-                  <input className="form-control" value={form.brand} onChange={e => setForm(f => ({ ...f, brand: e.target.value }))} placeholder="เช่น Epson" />
+                <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "20px" }}>
+                  <button type="button" className="btn btn-ghost" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
+                  <button type="submit" className="btn btn-primary"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
                 </div>
-                <div className="form-group">
-                  <label>รุ่น / Model</label>
-                  <input className="form-control" value={form.model} onChange={e => setForm(f => ({ ...f, model: e.target.value }))} placeholder="เช่น TM-T82" />
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
-                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}

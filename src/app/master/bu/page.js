@@ -43,31 +43,44 @@ export default function MasterBU() {
         </button>
       </div>
 
-      {/* Add/Edit Form */}
       {showForm && (
-        <div className="card" style={{ marginBottom: "16px" }}>
-          <div className="card-header"><h3 className="card-title">{editItem ? "แก้ไข BU" : "เพิ่ม BU ใหม่"}</h3></div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group" style={{ maxWidth: "200px" }}>
-                  <label>BU Code <span className="req">*</span></label>
-                  <input className="form-control" value={form.bu_code} onChange={e => setForm(f => ({ ...f, bu_code: e.target.value }))} placeholder="เช่น TWD" required />
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "20px"
+        }}>
+          <div className="card" style={{ width: "100%", maxWidth: "600px", margin: 0, maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 className="card-title">{editItem ? "แก้ไข BU" : "เพิ่ม BU ใหม่"}</h3>
+              <button className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }} style={{ padding: "4px 8px" }}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>BU Code <span className="req">*</span></label>
+                    <input className="form-control" value={form.bu_code} onChange={e => setForm(f => ({ ...f, bu_code: e.target.value }))} placeholder="เช่น TWD" required />
+                  </div>
+                  <div className="form-group" style={{ flex: 2 }}>
+                    <label>BU Name <span className="req">*</span></label>
+                    <input className="form-control" value={form.bu_name} onChange={e => setForm(f => ({ ...f, bu_name: e.target.value }))} placeholder="เช่น Thaiwatsadu" required />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>BU Name <span className="req">*</span></label>
-                  <input className="form-control" value={form.bu_name} onChange={e => setForm(f => ({ ...f, bu_name: e.target.value }))} placeholder="เช่น Thaiwatsadu" required />
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>Description</label>
+                    <input className="form-control" value={form.bu_description} onChange={e => setForm(f => ({ ...f, bu_description: e.target.value }))} placeholder="คำอธิบาย (optional)" />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Description</label>
-                  <input className="form-control" value={form.bu_description} onChange={e => setForm(f => ({ ...f, bu_description: e.target.value }))} placeholder="คำอธิบาย (optional)" />
+                <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "20px" }}>
+                  <button type="button" className="btn btn-ghost" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
+                  <button type="submit" className="btn btn-primary"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
                 </div>
-              </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
-                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}
