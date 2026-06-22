@@ -59,7 +59,7 @@ export default function Tier1TicketDetail() {
       });
 
       if (res.ok) {
-        if (actionType === 'ESCALATE') {
+        if (actionType === 'ESCALATE' || actionType === 'TIER1_ASSESS') {
           router.push('/tier1');
         } else {
           fetchData();
