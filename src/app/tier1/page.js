@@ -94,11 +94,11 @@ export default function Tier1Dashboard() {
                           {ticket.system?.system_name || "-"}
                         </span>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                          <i className="fa-solid fa-location-dot"></i> {ticket.location?.location_name || "-"}
+                          <i className="fa-solid fa-location-dot"></i> {ticket.location?.location_name || ticket.location_text || "-"}
                         </div>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600 }}>{ticket.reporter?.full_name || "-"}</div>
+                        <div style={{ fontWeight: 600 }}>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</div>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{ticket.bu?.bu_code || "-"}</div>
                       </td>
                       <td>

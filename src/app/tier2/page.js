@@ -83,9 +83,9 @@ export default function Tier2Dashboard() {
                           {ticket.system?.system_name || "-"}
                         </span>
                       </td>
-                      <td>{ticket.location?.location_name || "-"}</td>
+                      <td>{ticket.location?.location_name || ticket.location_text || "-"}</td>
                       <td>
-                        <div>{ticket.reporter?.full_name || "-"}</div>
+                        <div>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</div>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{ticket.bu?.bu_code || "-"}</div>
                       </td>
                       <td>{getStatusBadge(ticket.status)}</td>

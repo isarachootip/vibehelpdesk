@@ -68,10 +68,18 @@ export default function TicketDetail({ params }) {
             <div className="card-header"><h3 className="card-title"><i className="fa-solid fa-info-circle" style={{marginRight:"8px",color:"var(--primary-light)"}}></i>ข้อมูล Ticket</h3></div>
             <div className="card-body">
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px"}}>
-                <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>ผู้แจ้ง</span><strong>{ticket.reporter?.full_name}</strong><br/><span style={{fontSize:".78rem",color:"var(--text-muted)"}}>{ticket.reporter_email}</span></div>
+                <div>
+                  <span className="text-muted" style={{fontSize:".75rem",display:"block"}}>ผู้แจ้ง</span>
+                  <strong>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</strong><br/>
+                  <span style={{fontSize:".78rem",color:"var(--text-muted)"}}>{ticket.reporter_email}</span><br/>
+                  <span style={{fontSize:".78rem",color:"var(--text-muted)"}}>
+                    <i className="fa-solid fa-phone" style={{marginRight:"4px"}}></i>{ticket.reporter_phone || "-"} &nbsp;
+                    <i className="fa-brands fa-line" style={{marginRight:"4px",color:"#06c755"}}></i>{ticket.reporter_line_id || "-"}
+                  </span>
+                </div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>BU</span><span className="chip">{ticket.bu?.bu_code}</span> {ticket.bu?.bu_name}</div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>ระบบ</span><span className="chip">{ticket.system?.system_code}</span> {ticket.system?.system_name}</div>
-                <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>จุดเกิดเหตุ</span>{ticket.location?.location_name}</div>
+                <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>จุดเกิดเหตุ</span>{ticket.location?.location_name || ticket.location_text || "-"}</div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>ประเภท</span>{ticket.problem_type === "hardware" ? "🔧 Hardware" : "💻 Software"}</div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>Owner</span>{ticket.owner?.full_name || "-"}</div>
               </div>

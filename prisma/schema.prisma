@@ -88,9 +88,13 @@ model Ticket {
   subject             String   @db.VarChar(255)
   problem_type        String   @db.VarChar(20)
   system_id           Int
-  location_id         Int
-  reporter_id         Int
-  reporter_email      String   @db.VarChar(255)
+  location_id         Int?
+  location_text       String?  @db.VarChar(200)
+  reporter_id         Int?
+  reporter_name       String?  @db.VarChar(100)
+  reporter_email      String?  @db.VarChar(255)
+  reporter_phone      String?  @db.VarChar(20)
+  reporter_line_id    String?  @db.VarChar(50)
   bu_id               Int
   tier1_id            Int?
   tier2_id            Int?
@@ -128,8 +132,8 @@ model Ticket {
   updated_at          DateTime @updatedAt
 
   system              SystemGroup  @relation(fields: [system_id], references: [system_id])
-  location            Location     @relation(fields: [location_id], references: [location_id])
-  reporter            User         @relation("Reporter", fields: [reporter_id], references: [user_id])
+  location            Location?    @relation(fields: [location_id], references: [location_id])
+  reporter            User?        @relation("Reporter", fields: [reporter_id], references: [user_id])
   tier1               User?        @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
   tier2               User?        @relation("Tier2Assigned", fields: [tier2_id], references: [user_id])
   owner               User?        @relation("OwnerAssigned", fields: [owner_id], references: [user_id])

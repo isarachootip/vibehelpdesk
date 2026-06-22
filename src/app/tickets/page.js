@@ -133,7 +133,10 @@ export default function TicketList() {
                       <td className="font-mono" style={{ fontSize: ".76rem", fontWeight: 600 }}>{t.ticket_no}</td>
                       <td style={{ maxWidth: "180px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</td>
                       <td><span className="chip">{t.bu?.bu_code}</span></td>
-                      <td><span className="chip">{t.system?.system_code}</span></td>
+                      <td>
+                        <span className="chip">{t.system?.system_code}</span><br/>
+                        <span style={{fontSize:".8rem",color:"var(--text-secondary)"}}>{t.system?.system_name}</span>
+                      </td>
                       <td style={{ fontSize: ".8rem" }}>
                         {t.problem_type === "hardware" ? (
                           <span style={{ color: "var(--warning)" }}><i className="fa-solid fa-microchip"></i> HW</span>
@@ -143,7 +146,10 @@ export default function TicketList() {
                       </td>
                       <td><span className={`badge ${priorityColor(t.priority)}`}>{t.priority}</span></td>
                       <td><span className={`badge ${statusColor(t.status)}`}>{statusLabel(t.status)}</span></td>
-                      <td style={{ fontSize: ".8rem" }}>{t.reporter?.full_name}</td>
+                      <td>
+                        {t.reporter?.full_name || t.reporter_name || "-"}<br/>
+                        <span style={{fontSize:".75rem",color:"var(--text-muted)"}}>{t.reporter?.email || t.reporter_email || "-"}</span>
+                      </td>
                       <td style={{ fontSize: ".8rem" }}>{t.tier1?.full_name || "-"}</td>
                       <td style={{ fontSize: ".8rem" }}>{t.tier2?.full_name || "-"}</td>
                       <td style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>

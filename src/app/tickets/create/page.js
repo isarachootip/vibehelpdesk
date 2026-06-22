@@ -14,9 +14,11 @@ export default function CreateTicket() {
     subject: "",
     problem_type: "software",
     system_id: "",
-    location_id: "",
-    reporter_id: "",
+    location_text: "",
+    reporter_name: "",
     reporter_email: "",
+    reporter_phone: "",
+    reporter_line_id: "",
     bu_id: "",
     priority: "Medium",
     description: "",
@@ -46,21 +48,11 @@ export default function CreateTicket() {
     setForm((prev) => {
       const updated = { ...prev, [name]: value };
 
-      // If BU changes, reset dependent fields
+      // If BU changes, do we need to reset? Maybe not for free text.
+      // But we can leave it as is or remove it.
       if (name === "bu_id") {
-        updated.reporter_id = "";
-        updated.reporter_email = "";
-        updated.location_id = "";
-      }
-
-      // Auto-fill reporter email when selecting user
-      if (name === "reporter_id") {
-        const user = masterData.users.find((u) => u.user_id === parseInt(value));
-        if (user) {
-          updated.reporter_email = user.email;
-        } else {
-          updated.reporter_email = "";
-        }
+        // We don't necessarily need to clear the free text when BU changes anymore,
+        // but it's okay to do so if you want strict enforcement.
       }
 
       return updated;
@@ -142,10 +134,6 @@ export default function CreateTicket() {
   }
 
   const selectedSystem = masterData.systems.find((s) => s.system_id === parseInt(form.system_id));
-  
-  // Filtering logic
-  const filteredUsers = form.bu_id ? masterData.users.filter(u => String(u.bu_id) === String(form.bu_id) && u.role === "end_user") : [];
-  const filteredLocations = form.bu_id ? masterData.locations.filter(loc => !loc.bu_id || String(loc.bu_id) === String(form.bu_id)) : masterData.locations;
 
   return (
     <>
@@ -180,29 +168,27 @@ export default function CreateTicket() {
               </div>
               <div className="form-group">
                 <label>จุดเกิดเหตุ (Location) <span className="req">*</span></label>
-                <select name="location_id" className="form-control" value={form.location_id} onChange={handleChange} required disabled={!form.bu_id && false}>
-                  <option value="">-- เลือกสถานที่ --</option>
-                  {filteredLocations.map((loc) => (
-                    <option key={loc.location_id} value={loc.location_id}>
-                      {loc.location_code} — {loc.location_name} {loc.floor ? `(ชั้น ${loc.floor})` : ""}
-                    </option>
-                  ))}
-                </select>
+                <input type="text" name="location_text" className="form-control" value={form.location_text} onChange={handleChange} placeholder="เช่น สาขา, ชั้น, แผนก" required disabled={!form.bu_id} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>ผู้แจ้ง (Reporter) <span className="req">*</span></label>
-                <select name="reporter_id" className="form-control" value={form.reporter_id} onChange={handleChange} required disabled={!form.bu_id}>
-                  <option value="">{form.bu_id ? "-- เลือกผู้แจ้ง --" : "-- กรุณาเลือก BU ก่อน --"}</option>
-                  {filteredUsers.map((u) => (
-                    <option key={u.user_id} value={u.user_id}>{u.full_name} ({u.email})</option>
-                  ))}
-                </select>
+                <label>ชื่อผู้แจ้ง (Reporter Name) <span className="req">*</span></label>
+                <input type="text" name="reporter_name" className="form-control" value={form.reporter_name} onChange={handleChange} placeholder="ระบุชื่อผู้แจ้งปัญหา" required disabled={!form.bu_id} />
               </div>
               <div className="form-group">
-                <label>Email (Outlook)</label>
-                <input type="email" name="reporter_email" className="form-control" value={form.reporter_email} onChange={handleChange} readOnly placeholder="Auto-fill from reporter" />
+                <label>Email (ถ้ามี)</label>
+                <input type="email" name="reporter_email" className="form-control" value={form.reporter_email} onChange={handleChange} placeholder="อีเมลสำหรับติดต่อกลับ" disabled={!form.bu_id} />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>เบอร์โทรติดต่อ (Phone) <span className="req">*</span></label>
+                <input type="text" name="reporter_phone" className="form-control" value={form.reporter_phone} onChange={handleChange} placeholder="เช่น 081-xxx-xxxx" required disabled={!form.bu_id} />
+              </div>
+              <div className="form-group">
+                <label>Line ID (ถ้ามี)</label>
+                <input type="text" name="reporter_line_id" className="form-control" value={form.reporter_line_id} onChange={handleChange} placeholder="Line ID หรือเบอร์ที่ผูกไลน์" disabled={!form.bu_id} />
               </div>
             </div>
           </div>

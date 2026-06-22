@@ -182,8 +182,14 @@ export default function Tier1TicketDetail() {
             <div className="card-body" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div>
                 <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>ผู้แจ้ง (Reporter)</div>
-                <div style={{ fontWeight: 600 }}>{ticket.reporter?.full_name}</div>
-                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{ticket.reporter?.email}</div>
+                <div style={{ fontWeight: 600 }}>{ticket.reporter?.full_name || ticket.reporter_name || "-"}</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{ticket.reporter_email || "-"}</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+                  <i className="fa-solid fa-phone" style={{marginRight:"4px"}}></i>{ticket.reporter_phone || "-"}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+                  <i className="fa-brands fa-line" style={{marginRight:"4px",color:"#06c755"}}></i>{ticket.reporter_line_id || "-"}
+                </div>
               </div>
               <hr style={{ margin: "5px 0", borderTop: "1px solid var(--border)" }} />
               <div>
@@ -193,7 +199,7 @@ export default function Tier1TicketDetail() {
               <hr style={{ margin: "5px 0", borderTop: "1px solid var(--border)" }} />
               <div>
                 <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>สถานที่ (Location)</div>
-                <div style={{ fontWeight: 600 }}>{ticket.location?.location_name}</div>
+                <div style={{ fontWeight: 600 }}>{ticket.location?.location_name || ticket.location_text || "-"}</div>
               </div>
               <hr style={{ margin: "5px 0", borderTop: "1px solid var(--border)" }} />
               <div>

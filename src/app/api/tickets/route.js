@@ -51,13 +51,13 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
-      subject, problem_type, system_id, location_id,
-      reporter_id, reporter_email, bu_id, priority,
-      description, symptom
+      subject, problem_type, system_id, location_id, location_text,
+      reporter_id, reporter_name, reporter_email, reporter_phone, reporter_line_id, 
+      bu_id, priority, description, symptom
     } = body;
 
     // Validate required fields
-    if (!subject || !problem_type || !system_id || !location_id || !reporter_id || !bu_id || !priority || !description || !symptom) {
+    if (!subject || !problem_type || !system_id || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !priority || !description || !symptom) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -79,9 +79,13 @@ export async function POST(request) {
         subject,
         problem_type,
         system_id: parseInt(system_id),
-        location_id: parseInt(location_id),
-        reporter_id: parseInt(reporter_id),
-        reporter_email: reporter_email || '',
+        location_id: location_id ? parseInt(location_id) : null,
+        location_text: location_text || null,
+        reporter_id: reporter_id ? parseInt(reporter_id) : null,
+        reporter_name: reporter_name || null,
+        reporter_email: reporter_email || null,
+        reporter_phone: reporter_phone || null,
+        reporter_line_id: reporter_line_id || null,
         bu_id: parseInt(bu_id),
         owner_id: system?.owner_user_id || null,
         priority,
@@ -101,7 +105,7 @@ export async function POST(request) {
     await prisma.auditLog.create({
       data: {
         ticket_id: ticket.ticket_id,
-        user_id: parseInt(reporter_id),
+        user_id: reporter_id ? parseInt(reporter_id) : 1, // Fallback to system admin (1) if guest
         action: 'CREATE',
         detail: `Ticket ${ticket_no} created`,
         new_value: JSON.stringify({ status: 'NEW', priority }),
