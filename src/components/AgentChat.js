@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 export default function AgentChat({ ticketId }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
   const messagesEndRef = useRef(null);
 
   const fetchMessages = async () => {
@@ -21,10 +22,22 @@ export default function AgentChat({ ticketId }) {
 
   useEffect(() => {
     fetchMessages();
-    // Optional: Setup polling every 10s for new messages
+    // Setup polling every 10s for new messages
     const interval = setInterval(fetchMessages, 10000);
     return () => clearInterval(interval);
   }, [ticketId]);
+
+  useEffect(() => {
+    // Fetch current user session
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setCurrentUser(data.user);
+        }
+      })
+      .catch(err => console.error("Failed to fetch user in chat:", err));
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,10 +47,13 @@ export default function AgentChat({ ticketId }) {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
+    // Check if the current user has a role that is general user or end_user
+    const isReporter = currentUser && ["USER", "END_USER"].includes(currentUser.role?.toUpperCase());
+
     const newMsg = {
-      sender_type: 'AGENT',
-      sender_id: 1, // Assume Admin Demo for now
-      sender_name: 'Admin Demo',
+      sender_type: isReporter ? 'REPORTER' : 'AGENT',
+      sender_id: currentUser ? currentUser.user_id : null,
+      sender_name: currentUser ? currentUser.full_name : 'IT Support',
       message_text: inputValue.trim(),
       source: 'WEB'
     };
@@ -70,29 +86,34 @@ export default function AgentChat({ ticketId }) {
           <div style={{ textAlign: "center", color: "var(--text-muted)", marginTop: "20px" }}>ยังไม่มีข้อความ</div>
         ) : (
           messages.map((msg, idx) => {
-            const isAgent = msg.sender_type === 'AGENT';
+            // Display on the right if it was sent by the current logged-in user
+            const isMe = currentUser && msg.sender_id === currentUser.user_id;
+            const isRightAligned = isMe || (!currentUser && msg.sender_type === 'AGENT');
+            const bubbleColor = isRightAligned ? 'var(--primary)' : '#fff';
+            const textColor = isRightAligned ? '#fff' : 'var(--text-primary)';
+
             return (
               <div key={idx} style={{
-                alignSelf: isAgent ? 'flex-end' : 'flex-start',
+                alignSelf: isRightAligned ? 'flex-end' : 'flex-start',
                 maxWidth: '80%',
-                background: isAgent ? 'var(--primary)' : '#fff',
-                color: isAgent ? '#fff' : 'var(--text)',
+                background: bubbleColor,
+                color: textColor,
                 padding: '10px 14px',
-                borderRadius: isAgent ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                borderRadius: isRightAligned ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
                 boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                 fontSize: '0.9rem',
-                border: isAgent ? 'none' : '1px solid var(--border)'
+                border: isRightAligned ? 'none' : '1px solid var(--border)'
               }}>
-                {!isAgent && (
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>
-                    {msg.sender_name || 'Reporter'} {msg.source === 'LINE' ? '(via LINE)' : ''}
-                  </div>
-                )}
-                {isAgent && (
-                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)', marginBottom: '4px', fontWeight: 600, textAlign: 'right' }}>
-                    {msg.sender_name || 'IT Support'}
-                  </div>
-                )}
+                <div style={{ 
+                  fontSize: '0.7rem', 
+                  color: isRightAligned ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)', 
+                  marginBottom: '4px', 
+                  fontWeight: 600, 
+                  textAlign: isRightAligned ? 'right' : 'left' 
+                }}>
+                  {msg.sender_name || (msg.sender_type === 'AGENT' ? 'IT Support' : 'Reporter')} 
+                  {msg.source === 'LINE' ? ' (via LINE)' : ''}
+                </div>
                 {msg.message_text}
               </div>
             );
