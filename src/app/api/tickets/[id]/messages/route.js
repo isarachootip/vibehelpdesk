@@ -1,0 +1,92 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+
+// GET all messages for a ticket
+export async function GET(request, { params }) {
+  try {
+    const { id } = params;
+    const messages = await prisma.ticketMessage.findMany({
+      where: { ticket_id: parseInt(id) },
+      include: {
+        sender: {
+          select: { full_name: true, role: true, avatar_url: true }
+        }
+      },
+      orderBy: { created_at: 'asc' }
+    });
+
+    return NextResponse.json(messages);
+  } catch (error) {
+    console.error('GET /api/tickets/[id]/messages error:', error);
+    return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
+  }
+}
+
+// POST a new message to a ticket
+export async function POST(request, { params }) {
+  try {
+    const { id } = params;
+    const body = await request.json();
+    const { sender_type, sender_id, sender_name, message_text, source } = body;
+
+    if (!message_text) {
+      return NextResponse.json({ error: 'Message text is required' }, { status: 400 });
+    }
+
+    // Verify ticket exists
+    const ticket = await prisma.ticket.findUnique({ where: { ticket_id: parseInt(id) } });
+    if (!ticket) {
+      return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
+    }
+
+    const message = await prisma.ticketMessage.create({
+      data: {
+        ticket_id: parseInt(id),
+        sender_type: sender_type || 'REPORTER',
+        sender_id: sender_id ? parseInt(sender_id) : null,
+        sender_name: sender_name || null,
+        message_text,
+        source: source || 'WEB'
+      },
+      include: {
+        sender: {
+          select: { full_name: true, role: true, avatar_url: true }
+        }
+      }
+    });
+
+    // Push message to LINE OA if sender is AGENT and we have a valid LINE user ID
+    if (sender_type === 'AGENT' && ticket.reporter_line_id && ticket.reporter_line_id.startsWith('U') && ticket.reporter_line_id.length === 33) {
+      const config = await prisma.systemConfig.findUnique({
+        where: { config_key: 'LINE_CHANNEL_ACCESS_TOKEN' }
+      });
+      const channelAccessToken = config?.config_value || process.env.LINE_CHANNEL_ACCESS_TOKEN;
+      
+      if (channelAccessToken) {
+        try {
+          await fetch('https://api.line.me/v2/bot/message/push', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${channelAccessToken}`
+            },
+            body: JSON.stringify({
+              to: ticket.reporter_line_id,
+              messages: [{
+                type: 'text',
+                text: `[อัปเดตจาก IT Support]\nTicket: ${ticket.ticket_no}\nข้อความ: ${message_text}`
+              }]
+            })
+          });
+        } catch (pushErr) {
+          console.error('Failed to push to LINE:', pushErr);
+        }
+      }
+    }
+
+    return NextResponse.json(message, { status: 201 });
+  } catch (error) {
+    console.error('POST /api/tickets/[id]/messages error:', error);
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+  }
+}

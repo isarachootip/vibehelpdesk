@@ -6,16 +6,22 @@ export async function PUT(request, { params }) {
     const { id } = await params;
     const data = await request.json();
     
+    const updateData = {
+      full_name: data.full_name,
+      phone: data.phone || null,
+      role: data.role,
+      bu_id: data.bu_id || null,
+      location_id: data.location_id || null,
+      is_active: data.is_active !== undefined ? data.is_active : true
+    };
+    
+    if (data.password && data.password.trim() !== '') {
+      updateData.password = data.password.trim();
+    }
+
     const user = await prisma.user.update({
       where: { user_id: parseInt(id) },
-      data: {
-        full_name: data.full_name,
-        phone: data.phone || null,
-        role: data.role,
-        bu_id: data.bu_id || null,
-        location_id: data.location_id || null,
-        is_active: data.is_active !== undefined ? data.is_active : true
-      }
+      data: updateData
     });
     return NextResponse.json(user);
   } catch (error) {

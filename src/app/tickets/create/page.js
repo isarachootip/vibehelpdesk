@@ -8,6 +8,7 @@ export default function CreateTicket() {
   const [masterData, setMasterData] = useState({ bus: [], systems: [], locations: [], users: [] });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [form, setForm] = useState({
@@ -58,6 +59,12 @@ export default function CreateTicket() {
       return updated;
     });
   };
+
+  const filteredUsers = masterData.users.filter(u => 
+    (u.full_name?.toLowerCase().includes(form.reporter_name.toLowerCase()) ||
+    u.email?.toLowerCase().includes(form.reporter_name.toLowerCase())) &&
+    (!form.bu_id || u.bu_id === parseInt(form.bu_id) || !u.bu_id)
+  );
 
   const handleFiles = (e) => {
     const selected = Array.from(e.target.files);
@@ -172,9 +179,54 @@ export default function CreateTicket() {
               </div>
             </div>
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group" style={{ position: "relative" }}>
                 <label>ชื่อผู้แจ้ง (Reporter Name) <span className="req">*</span></label>
-                <input type="text" name="reporter_name" className="form-control" value={form.reporter_name} onChange={handleChange} placeholder="ระบุชื่อผู้แจ้งปัญหา" required disabled={!form.bu_id} />
+                <input 
+                  type="text" 
+                  name="reporter_name" 
+                  className="form-control" 
+                  value={form.reporter_name} 
+                  onChange={(e) => {
+                    handleChange(e);
+                    setShowUserDropdown(true);
+                    setForm(prev => ({ ...prev, reporter_id: "" }));
+                  }} 
+                  onFocus={() => setShowUserDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowUserDropdown(false), 200)}
+                  placeholder="ระบุชื่อผู้แจ้งปัญหา" 
+                  required 
+                  disabled={!form.bu_id} 
+                  autoComplete="off"
+                />
+                {showUserDropdown && form.reporter_name && filteredUsers.length > 0 && (
+                  <div style={{
+                    position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
+                    background: "var(--bg)", border: "1px solid var(--border)", 
+                    borderRadius: "var(--radius-sm)", maxHeight: "200px", overflowY: "auto",
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+                  }}>
+                    {filteredUsers.map(u => (
+                      <div key={u.user_id} 
+                        style={{ padding: "8px 12px", cursor: "pointer", borderBottom: "1px solid var(--border)" }}
+                        onMouseDown={() => {
+                          setForm(prev => ({
+                            ...prev,
+                            reporter_id: u.user_id,
+                            reporter_name: u.full_name,
+                            reporter_email: u.email || "",
+                            reporter_phone: u.phone || prev.reporter_phone,
+                          }));
+                          setShowUserDropdown(false);
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-secondary)"}
+                        onMouseLeave={(e) => e.currentTarget.style.background = "var(--bg)"}
+                      >
+                        <div style={{ fontWeight: 600, fontSize: ".9rem" }}>{u.full_name}</div>
+                        <div style={{ fontSize: ".8rem", color: "var(--text-muted)" }}>{u.email}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="form-group">
                 <label>Email (ถ้ามี)</label>

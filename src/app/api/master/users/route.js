@@ -31,6 +31,7 @@ export async function POST(request) {
         full_name: data.full_name,
         phone: data.phone || null,
         role: data.role,
+        password: data.password || null,
         bu_id: data.bu_id || null,
         location_id: data.location_id || null
       }

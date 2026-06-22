@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, use } from "react";
+import AgentChat from "@/components/AgentChat";
 
 export default function TicketDetail({ params }) {
   const { id } = use(params);
@@ -133,6 +134,9 @@ export default function TicketDetail({ params }) {
               </div>
             </div>
           )}
+
+          {/* Agent Chat */}
+          <AgentChat ticketId={ticket.ticket_id} />
         </div>
 
         {/* Right Column — Timeline & Actions */}

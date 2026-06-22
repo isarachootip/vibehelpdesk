@@ -1,14 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from "chart.js";
-import { Doughnut, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement, Tooltip, Legend,
+  CategoryScale, LinearScale,
+  BarElement, Title,
+  LineElement, PointElement, Filler,
+} from "chart.js";
+import { Doughnut, Bar, Line } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+ChartJS.register(
+  ArcElement, Tooltip, Legend,
+  CategoryScale, LinearScale,
+  BarElement, Title,
+  LineElement, PointElement, Filler
+);
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Trend chart state
+  const [trendPeriod, setTrendPeriod] = useState("mtd");
+  const [trendData, setTrendData] = useState(null);
+  const [trendLoading, setTrendLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/dashboard")
@@ -16,6 +32,14 @@ export default function Dashboard() {
       .then((d) => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    setTrendLoading(true);
+    fetch(`/api/dashboard/trend?period=${trendPeriod}`)
+      .then((r) => r.json())
+      .then((d) => { setTrendData(d); setTrendLoading(false); })
+      .catch(() => setTrendLoading(false));
+  }, [trendPeriod]);
 
   if (loading) return <div className="flex-center" style={{height:"300px"}}><div className="loader-wrap"><div className="loader-pulse"></div><p>Loading Dashboard...</p></div></div>;
   if (!data) return <div className="empty-state"><i className="fa-solid fa-database"></i><h3>ยังไม่มีข้อมูล</h3><p>กรุณาเชื่อมต่อฐานข้อมูล</p></div>;
@@ -93,6 +117,94 @@ export default function Dashboard() {
     },
   };
 
+  // --- Trend / Line chart ---
+  const periodLabel = { mtd: "Month to Date", weekly: "7 วันล่าสุด", yearly: "Year to Date" };
+
+  const formatTrendLabel = (key) => {
+    if (trendPeriod === "yearly") {
+      const [y, m] = key.split("-");
+      return new Date(parseInt(y), parseInt(m) - 1).toLocaleDateString("th-TH", { month: "short", year: "2-digit" });
+    }
+    const d = new Date(key);
+    return d.toLocaleDateString("th-TH", { day: "2-digit", month: "short" });
+  };
+
+  const trendChartData = trendData ? {
+    labels: trendData.labels.map(formatTrendLabel),
+    datasets: [
+      {
+        label: "Total",
+        data: trendData.datasets.total,
+        borderColor: "#6366f1",
+        backgroundColor: "rgba(99,102,241,0.12)",
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: "#6366f1",
+        tension: 0.4,
+        fill: true,
+      },
+      {
+        label: "Open",
+        data: trendData.datasets.open,
+        borderColor: "#f59e0b",
+        backgroundColor: "rgba(245,158,11,0.08)",
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointBackgroundColor: "#f59e0b",
+        tension: 0.4,
+        fill: false,
+        borderDash: [4, 3],
+      },
+      {
+        label: "Resolved / Closed",
+        data: trendData.datasets.resolved,
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(34,197,94,0.08)",
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        pointBackgroundColor: "#22c55e",
+        tension: 0.4,
+        fill: false,
+      },
+    ],
+  } : null;
+
+  const trendOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: "index", intersect: false },
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+        align: "end",
+        labels: { color: "#94a3b8", font: { size: 11 }, padding: 16, usePointStyle: true, pointStyle: "circle" },
+      },
+      tooltip: {
+        backgroundColor: "rgba(30,30,45,0.92)",
+        titleColor: "#e2e8f0",
+        bodyColor: "#cbd5e1",
+        borderColor: "rgba(99,102,241,0.3)",
+        borderWidth: 1,
+        padding: 10,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: "#94a3b8", font: { size: 11 }, maxRotation: 45 },
+      },
+      y: {
+        grid: { color: "rgba(148,163,184,0.1)" },
+        ticks: { color: "#94a3b8", font: { size: 11 }, stepSize: 1, precision: 0 },
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <>
       {/* Stats Row */}
@@ -110,6 +222,76 @@ export default function Dashboard() {
             <div><div className="stat-number">{s.n}</div><div className="stat-label">{s.l}</div></div>
           </div>
         ))}
+      </div>
+
+      {/* ── Trend Line Chart ── */}
+      <div className="card" style={{ marginBottom: "16px" }}>
+        <div className="card-header" style={{ flexWrap: "wrap", gap: "12px" }}>
+          <h2 className="card-title">
+            <i className="fa-solid fa-chart-line" style={{ marginRight: "8px", color: "#6366f1" }}></i>
+            จำนวน Ticket รายวัน
+            <span style={{ marginLeft: "8px", fontSize: ".78rem", color: "#94a3b8", fontWeight: 400 }}>
+              ({periodLabel[trendPeriod]})
+            </span>
+          </h2>
+
+          {/* Period Tabs */}
+          <div style={{ display: "flex", gap: "6px" }}>
+            {[
+              { key: "weekly", label: "Weekly" },
+              { key: "mtd",    label: "MTD" },
+              { key: "yearly", label: "Yearly" },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setTrendPeriod(key)}
+                style={{
+                  padding: "5px 14px",
+                  fontSize: ".78rem",
+                  fontWeight: 600,
+                  borderRadius: "20px",
+                  border: "1.5px solid",
+                  cursor: "pointer",
+                  transition: "all 0.18s",
+                  borderColor: trendPeriod === key ? "#6366f1" : "var(--border)",
+                  background: trendPeriod === key ? "#6366f1" : "transparent",
+                  color: trendPeriod === key ? "#fff" : "var(--text-secondary)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Summary mini-stats */}
+        {trendData?.summary && (
+          <div style={{ display: "flex", gap: "24px", padding: "0 20px 12px", borderBottom: "1px solid var(--border-light)" }}>
+            {[
+              { label: "Total",            value: trendData.summary.total,    color: "#6366f1" },
+              { label: "Open",             value: trendData.summary.open,     color: "#f59e0b" },
+              { label: "Resolved/Closed",  value: trendData.summary.resolved, color: "#22c55e" },
+            ].map((s, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: s.color, flexShrink: 0 }}></span>
+                <span style={{ fontSize: ".8rem", color: "var(--text-secondary)" }}>{s.label}</span>
+                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: s.color }}>{s.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="card-body" style={{ height: "280px", position: "relative" }}>
+          {trendLoading ? (
+            <div className="flex-center" style={{ height: "100%" }}>
+              <div className="loader-wrap"><div className="loader-pulse"></div><p>กำลังโหลด...</p></div>
+            </div>
+          ) : trendChartData ? (
+            <Line data={trendChartData} options={trendOpts} />
+          ) : (
+            <p className="text-muted" style={{ textAlign: "center", paddingTop: "80px" }}>ไม่มีข้อมูล</p>
+          )}
+        </div>
       </div>
 
       {/* Charts Row 1: Status + Priority */}

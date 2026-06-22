@@ -73,6 +73,36 @@ export async function POST(request) {
     // Get system owner for auto-assign
     const system = await prisma.systemGroup.findUnique({ where: { system_id: parseInt(system_id) } });
 
+    let final_reporter_id = reporter_id ? parseInt(reporter_id) : null;
+    if (!final_reporter_id && reporter_name) {
+      // Try to find if user already exists
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          OR: [
+            reporter_email ? { email: reporter_email } : null,
+            { full_name: reporter_name }
+          ].filter(Boolean)
+        }
+      });
+
+      if (existingUser) {
+        final_reporter_id = existingUser.user_id;
+      } else {
+        // Create new User
+        const dummyEmail = reporter_email || `temp_${Date.now()}@helpdesk.local`;
+        const newUser = await prisma.user.create({
+          data: {
+            full_name: reporter_name,
+            email: dummyEmail,
+            phone: reporter_phone || null,
+            role: 'USER',
+            bu_id: parseInt(bu_id)
+          }
+        });
+        final_reporter_id = newUser.user_id;
+      }
+    }
+
     const ticket = await prisma.ticket.create({
       data: {
         ticket_no,
@@ -81,7 +111,7 @@ export async function POST(request) {
         system_id: parseInt(system_id),
         location_id: location_id ? parseInt(location_id) : null,
         location_text: location_text || null,
-        reporter_id: reporter_id ? parseInt(reporter_id) : null,
+        reporter_id: final_reporter_id,
         reporter_name: reporter_name || null,
         reporter_email: reporter_email || null,
         reporter_phone: reporter_phone || null,
