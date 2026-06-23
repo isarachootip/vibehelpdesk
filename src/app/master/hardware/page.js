@@ -1,12 +1,31 @@
 "use client";
 import { useState, useEffect } from "react";
 
+const HARDWARE_CATEGORIES = [
+  { value: "LAPTOP", label: "Laptop" },
+  { value: "DESKTOP", label: "Desktop" },
+  { value: "TABLET", label: "Tablet" },
+  { value: "MOBILE", label: "Mobile" },
+  { value: "TELEPHONE", label: "Telephone" },
+  { value: "PRINTER", label: "Printer" },
+  { value: "SCANNER", label: "Scanner" },
+  { value: "POS", label: "POS" },
+  { value: "ROUTER", label: "Router" },
+  { value: "SWITCH", label: "Switch" },
+  { value: "CCTV", label: "CCTV" },
+  { value: "UPS", label: "UPS" },
+  { value: "MONITOR", label: "Monitor" },
+  { value: "KEYBOARD_MOUSE", label: "Keyboard / Mouse" },
+  { value: "SERVER", label: "Server" },
+  { value: "OTHER", label: "อื่นๆ / Other" },
+];
+
 export default function MasterHardware() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const [form, setForm] = useState({ hardware_code: "", hardware_name: "", brand: "", model: "", description: "" });
+  const [form, setForm] = useState({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" });
 
   const [selectedHardware, setSelectedHardware] = useState(null); // For symptoms
   const [symptomForm, setSymptomForm] = useState({ symptom_code: "", symptom_name: "", description: "" });
@@ -32,6 +51,29 @@ export default function MasterHardware() {
 
   useEffect(() => { fetchData(); }, []);
 
+  const fetchNextCode = async (category) => {
+    if (!category) {
+      setForm(f => ({ ...f, hardware_code: "" }));
+      return;
+    }
+    try {
+      const res = await fetch(`/api/master/hardware/next-code?category=${category}`);
+      const data = await res.json();
+      if (data.nextCode) {
+        setForm(f => ({ ...f, hardware_code: data.nextCode }));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCategoryChange = (categoryValue) => {
+    setForm(f => ({ ...f, category: categoryValue }));
+    if (!editItem) {
+      fetchNextCode(categoryValue);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = editItem ? `/api/master/hardware/${editItem.hardware_id}` : "/api/master/hardware";
@@ -39,7 +81,7 @@ export default function MasterHardware() {
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     if (res.ok) { 
       fetchData(); setShowForm(false); setEditItem(null); 
-      setForm({ hardware_code: "", hardware_name: "", brand: "", model: "", description: "" }); 
+      setForm({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" }); 
     }
     else { const err = await res.json(); alert(err.error || "Error"); }
   };
@@ -49,6 +91,7 @@ export default function MasterHardware() {
     setForm({ 
       hardware_code: item.hardware_code, 
       hardware_name: item.hardware_name, 
+      category: item.category || "",
       brand: item.brand || "", 
       model: item.model || "", 
       description: item.description || "" 
@@ -90,7 +133,7 @@ export default function MasterHardware() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700 }}><i className="fa-solid fa-microchip" style={{ marginRight: "8px", color: "var(--warning)" }}></i>Hardware / Products</h2>
-        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ hardware_code: "", hardware_name: "", brand: "", model: "", description: "" }); setSelectedHardware(null); }}>
+        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" }); setSelectedHardware(null); }}>
           <i className="fa-solid fa-plus"></i> เพิ่ม Hardware ใหม่
         </button>
       </div>
@@ -113,14 +156,26 @@ export default function MasterHardware() {
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group" style={{ flex: 1 }}>
-                    <label>รหัส / Code <span className="req">*</span></label>
-                    <input className="form-control" value={form.hardware_code} onChange={e => setForm(f => ({ ...f, hardware_code: e.target.value }))} placeholder="เช่น PRN-001" required />
+                    <label>ประเภท / Category <span className="req">*</span></label>
+                    <select className="form-control" value={form.category} onChange={e => handleCategoryChange(e.target.value)} required>
+                      <option value="">-- เลือกประเภท --</option>
+                      {HARDWARE_CATEGORIES.map(cat => (
+                        <option key={cat.value} value={cat.value}>{cat.label}</option>
+                      ))}
+                    </select>
                   </div>
-                  <div className="form-group" style={{ flex: 2 }}>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>รหัส / Code {editItem && <span className="req">*</span>}</label>
+                    <input className="form-control" value={form.hardware_code} onChange={e => setForm(f => ({ ...f, hardware_code: e.target.value }))} placeholder={editItem ? "เช่น LAPTOP-001" : "(Auto)"} required={!!editItem} readOnly={!editItem} style={!editItem ? { backgroundColor: "var(--bg-lighter)", color: "var(--text-muted)", cursor: "default" } : {}} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
                     <label>ชื่ออุปกรณ์ / Product Name <span className="req">*</span></label>
                     <input className="form-control" value={form.hardware_name} onChange={e => setForm(f => ({ ...f, hardware_name: e.target.value }))} placeholder="เช่น เครื่องพิมพ์ใบเสร็จ" required />
                   </div>
                 </div>
+
                 <div className="form-row">
                   <div className="form-group" style={{ flex: 1 }}>
                     <label>ยี่ห้อ / Brand</label>
@@ -146,12 +201,13 @@ export default function MasterHardware() {
           <div className="card-body" style={{ padding: 0 }}>
             <div className="table-wrap">
               <table className="data-table">
-                <thead><tr><th>Code</th><th>Product Name</th><th>Brand/Model</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>Code</th><th>Product Name</th><th>Category</th><th>Brand/Model</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   {items.map(item => (
                     <tr key={item.hardware_id} style={{ opacity: item.is_active ? 1 : 0.5, backgroundColor: selectedHardware?.hardware_id === item.hardware_id ? "var(--bg-lighter)" : "transparent" }}>
                       <td><span className="chip">{item.hardware_code}</span></td>
                       <td style={{ fontWeight: 600 }}>{item.hardware_name}</td>
+                      <td><span className="chip" style={{ background: "var(--bg-lighter)", color: "var(--text)" }}>{HARDWARE_CATEGORIES.find(c => c.value === item.category)?.label || item.category || "-"}</span></td>
                       <td className="text-muted" style={{ fontSize: ".82rem" }}>{item.brand} {item.model}</td>
                       <td><span className={`badge ${item.is_active ? "badge-success" : "badge-gray"}`}>{item.is_active ? "Active" : "Inactive"}</span></td>
                       <td>
@@ -165,7 +221,7 @@ export default function MasterHardware() {
                       </td>
                     </tr>
                   ))}
-                  {items.length === 0 && <tr><td colSpan="5" style={{ textAlign: "center", padding: "20px" }}>ไม่มีข้อมูล Hardware</td></tr>}
+                  {items.length === 0 && <tr><td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>ไม่มีข้อมูล Hardware</td></tr>}
                 </tbody>
               </table>
             </div>

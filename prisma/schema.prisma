@@ -201,6 +201,7 @@ model Hardware {
   hardware_id    Int      @id @default(autoincrement())
   hardware_code  String   @unique @db.VarChar(50)
   hardware_name  String   @db.VarChar(100)
+  category       String?  @db.VarChar(50)
   brand          String?  @db.VarChar(50)
   model          String?  @db.VarChar(50)
   description    String?  @db.Text

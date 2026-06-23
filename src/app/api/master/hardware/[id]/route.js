@@ -8,7 +8,7 @@ export async function PUT(request, { params }) {
     const { id } = await params;
     const hardwareId = parseInt(id, 10);
     const body = await request.json();
-    const { hardware_code, hardware_name, brand, model, description, is_active } = body;
+    const { hardware_code, hardware_name, category, brand, model, description, is_active } = body;
     
     if (isNaN(hardwareId)) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
@@ -17,6 +17,7 @@ export async function PUT(request, { params }) {
       data: {
         hardware_code,
         hardware_name,
+        category: category || null,
         brand: brand || null,
         model: model || null,
         description: description || null,

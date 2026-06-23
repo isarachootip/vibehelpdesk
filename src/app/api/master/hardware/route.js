@@ -20,16 +20,43 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { hardware_code, hardware_name, brand, model, description } = body;
+    const { hardware_name, category, brand, model, description } = body;
     
-    if (!hardware_code || !hardware_name) {
+    if (!hardware_name) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+    if (!category) {
+      return NextResponse.json({ error: "กรุณาเลือกประเภท / Category" }, { status: 400 });
+    }
+
+    // Auto-generate hardware_code from category + running number
+    const existing = await prisma.hardware.findMany({
+      where: {
+        hardware_code: {
+          startsWith: `${category}-`,
+        },
+      },
+      select: { hardware_code: true },
+      orderBy: { hardware_code: "desc" },
+    });
+
+    let nextNumber = 1;
+    if (existing.length > 0) {
+      const numbers = existing.map(h => {
+        const parts = h.hardware_code.split("-");
+        const num = parseInt(parts[parts.length - 1], 10);
+        return isNaN(num) ? 0 : num;
+      });
+      nextNumber = Math.max(...numbers) + 1;
+    }
+
+    const hardware_code = `${category}-${String(nextNumber).padStart(3, "0")}`;
 
     const item = await prisma.hardware.create({
       data: {
         hardware_code,
         hardware_name,
+        category,
         brand: brand || null,
         model: model || null,
         description: description || null,
