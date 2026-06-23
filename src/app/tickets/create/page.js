@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateTicket() {
   const router = useRouter();
-  const [masterData, setMasterData] = useState({ bus: [], systems: [], locations: [], users: [] });
+  const [masterData, setMasterData] = useState({ bus: [], systems: [], locations: [], users: [], hardware: [] });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -15,6 +15,7 @@ export default function CreateTicket() {
     subject: "",
     problem_type: "software",
     system_id: "",
+    hardware_id: "",
     location_text: "",
     reporter_name: "",
     reporter_email: "",
@@ -36,6 +37,7 @@ export default function CreateTicket() {
             systems: d.systems || [],
             locations: d.locations || [],
             users: d.users || [],
+            hardware: d.hardware || [],
           });
         }
         setLoading(false);
@@ -49,11 +51,10 @@ export default function CreateTicket() {
     setForm((prev) => {
       const updated = { ...prev, [name]: value };
 
-      // If BU changes, do we need to reset? Maybe not for free text.
-      // But we can leave it as is or remove it.
-      if (name === "bu_id") {
-        // We don't necessarily need to clear the free text when BU changes anymore,
-        // but it's okay to do so if you want strict enforcement.
+      // When switching problem_type, reset system_id and hardware_id
+      if (name === "problem_type") {
+        updated.system_id = "";
+        updated.hardware_id = "";
       }
 
       return updated;
@@ -266,15 +267,31 @@ export default function CreateTicket() {
                 </select>
               </div>
               <div className="form-group">
-                <label>ระบบที่มีปัญหา (System) <span className="req">*</span></label>
-                <select name="system_id" className="form-control" value={form.system_id} onChange={handleChange} required>
-                  <option value="">-- เลือกระบบ --</option>
-                  {masterData.systems.map((sys) => (
-                    <option key={sys.system_id} value={sys.system_id}>
-                      {sys.system_code} — {sys.system_name}
-                    </option>
-                  ))}
-                </select>
+                {form.problem_type === "hardware" ? (
+                  <>
+                    <label>อุปกรณ์ที่มีปัญหา (Hardware) <span className="req">*</span></label>
+                    <select name="hardware_id" className="form-control" value={form.hardware_id} onChange={handleChange} required>
+                      <option value="">-- เลือก Hardware --</option>
+                      {masterData.hardware.map((hw) => (
+                        <option key={hw.hardware_id} value={hw.hardware_id}>
+                          {hw.hardware_code} — {hw.hardware_name}{hw.brand ? ` (${hw.brand}${hw.model ? ` ${hw.model}` : ''})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <>
+                    <label>ระบบที่มีปัญหา (System) <span className="req">*</span></label>
+                    <select name="system_id" className="form-control" value={form.system_id} onChange={handleChange} required>
+                      <option value="">-- เลือกระบบ --</option>
+                      {masterData.systems.map((sys) => (
+                        <option key={sys.system_id} value={sys.system_id}>
+                          {sys.system_code} — {sys.system_name}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                )}
               </div>
               <div className="form-group" style={{ maxWidth: "200px" }}>
                 <label>ความเร่งด่วน <span className="req">*</span></label>

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 // GET all master data for dropdowns (BU, Systems, Locations, Users)
 export async function GET() {
   try {
-    const [bus, systems, locations, users] = await Promise.all([
+    const [bus, systems, locations, users, hardware] = await Promise.all([
       prisma.businessUnit.findMany({ where: { is_active: true }, orderBy: { bu_code: 'asc' } }),
       prisma.systemGroup.findMany({
         where: { is_active: true },
@@ -19,9 +19,14 @@ export async function GET() {
         select: { user_id: true, full_name: true, email: true, phone: true, role: true, bu_id: true },
         orderBy: { full_name: 'asc' },
       }),
+      prisma.hardware.findMany({
+        where: { is_active: true },
+        include: { symptoms: { where: { is_active: true } } },
+        orderBy: { hardware_name: 'asc' },
+      }),
     ]);
 
-    return NextResponse.json({ bus, systems, locations, users });
+    return NextResponse.json({ bus, systems, locations, users, hardware });
   } catch (error) {
     console.error('GET /api/master error:', error);
     return NextResponse.json({ error: 'Failed to fetch master data' }, { status: 500 });

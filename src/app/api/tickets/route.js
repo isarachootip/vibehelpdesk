@@ -52,13 +52,14 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
-      subject, problem_type, system_id, location_id, location_text,
+      subject, problem_type, system_id, hardware_id, location_id, location_text,
       reporter_id, reporter_name, reporter_email, reporter_phone, reporter_line_id, 
       bu_id, priority, description, symptom
     } = body;
 
     // Validate required fields
-    if (!subject || !problem_type || !system_id || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !priority || !description || !symptom) {
+    const hasSystemOrHardware = problem_type === 'hardware' ? !!hardware_id : !!system_id;
+    if (!subject || !problem_type || !hasSystemOrHardware || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !priority || !description || !symptom) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -71,8 +72,11 @@ export async function POST(request) {
     // Generate ticket number: BU + DDMMYYYY + 5-digit running
     const ticket_no = await generateTicketNo(bu.bu_code, bu.bu_id);
 
-    // Get system owner for auto-assign
-    const system = await prisma.systemGroup.findUnique({ where: { system_id: parseInt(system_id) } });
+    // Get system owner for auto-assign (only for software tickets)
+    let system = null;
+    if (system_id) {
+      system = await prisma.systemGroup.findUnique({ where: { system_id: parseInt(system_id) } });
+    }
 
     let final_reporter_id = reporter_id ? parseInt(reporter_id) : null;
     if (!final_reporter_id && reporter_name) {
@@ -109,7 +113,8 @@ export async function POST(request) {
         ticket_no,
         subject,
         problem_type,
-        system_id: parseInt(system_id),
+        system_id: system_id ? parseInt(system_id) : null,
+        hardware_id: hardware_id ? parseInt(hardware_id) : null,
         location_id: location_id ? parseInt(location_id) : null,
         location_text: location_text || null,
         reporter_id: final_reporter_id,

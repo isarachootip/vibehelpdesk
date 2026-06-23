@@ -95,7 +95,7 @@ model Ticket {
   ticket_no           String   @unique @db.VarChar(30)
   subject             String   @db.VarChar(255)
   problem_type        String   @db.VarChar(20)
-  system_id           Int
+  system_id           Int?
   location_id         Int?
   location_text       String?  @db.VarChar(200)
   reporter_id         Int?
@@ -144,7 +144,7 @@ model Ticket {
   reopened_at         DateTime?
   updated_at          DateTime @updatedAt
 
-  system              SystemGroup  @relation(fields: [system_id], references: [system_id])
+  system              SystemGroup?  @relation(fields: [system_id], references: [system_id])
   location            Location?    @relation(fields: [location_id], references: [location_id])
   reporter            User?        @relation("Reporter", fields: [reporter_id], references: [user_id])
   tier1               User?        @relation("Tier1Assigned", fields: [tier1_id], references: [user_id])
