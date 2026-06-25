@@ -130,6 +130,12 @@ export default function AppSidebar({ user, onLogout }) {
               <i className="fa-solid fa-users nav-icon"></i>
               <span className="nav-label">Users</span>
             </a>
+            <a href="/master/settings" className="nav-item" id="nav-master-announcements"
+              style={{ position: "relative" }}
+            >
+              <i className="fa-solid fa-bullhorn nav-icon" style={{ color: "#f59e0b" }}></i>
+              <span className="nav-label">ประกาศแจ้งเตือน</span>
+            </a>
             <a href="/master/settings" className="nav-item" id="nav-master-settings">
               <i className="fa-solid fa-cogs nav-icon"></i>
               <span className="nav-label">System Settings</span>
