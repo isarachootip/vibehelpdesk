@@ -71,6 +71,9 @@ body {
 }
 @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.25);opacity:.6} }
 @keyframes slideDown { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes flashIcon { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.15)} }
+@keyframes urgentPulse { 0%,100%{background-color:inherit;box-shadow:none} 50%{filter:brightness(1.25)} }
 
 /* ─── APP SHELL ─── */
 #app { display: flex; min-height: 100vh; }

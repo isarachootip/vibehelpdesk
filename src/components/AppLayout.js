@@ -207,48 +207,141 @@ export default function AppLayout({ children }) {
           )}
         </header>
 
-        {/* Page Body */}
-        {/* System Announcements */}
+        {/* System Announcements — Scrolling Marquee */}
         {announcements.filter(a => !dismissedIds.includes(a.id)).map(ann => {
           const typeStyles = {
-            danger:  { bg: "rgba(239,68,68,0.12)",  border: "rgba(239,68,68,0.35)",  text: "#dc2626", icon: "fa-circle-exclamation" },
-            warning: { bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.4)",  text: "#b45309", icon: "fa-triangle-exclamation" },
-            info:    { bg: "rgba(59,130,246,0.1)",  border: "rgba(59,130,246,0.3)",  text: "#1d4ed8", icon: "fa-circle-info" },
-            success: { bg: "rgba(16,185,129,0.1)",  border: "rgba(16,185,129,0.3)", text: "#047857", icon: "fa-circle-check" },
+            danger:  {
+              bg: "linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d)",
+              border: "#ef4444",
+              text: "#fef2f2",
+              iconColor: "#fca5a5",
+              icon: "fa-circle-exclamation",
+              badge: "🚨",
+              badgeBg: "#dc2626",
+              pulse: true,
+            },
+            warning: {
+              bg: "linear-gradient(90deg, #78350f, #92400e, #78350f)",
+              border: "#f59e0b",
+              text: "#fffbeb",
+              iconColor: "#fcd34d",
+              icon: "fa-triangle-exclamation",
+              badge: "⚠️",
+              badgeBg: "#d97706",
+              pulse: false,
+            },
+            info: {
+              bg: "linear-gradient(90deg, #1e3a5f, #1e40af, #1e3a5f)",
+              border: "#3b82f6",
+              text: "#eff6ff",
+              iconColor: "#93c5fd",
+              icon: "fa-circle-info",
+              badge: "ℹ️",
+              badgeBg: "#2563eb",
+              pulse: false,
+            },
+            success: {
+              bg: "linear-gradient(90deg, #064e3b, #065f46, #064e3b)",
+              border: "#10b981",
+              text: "#ecfdf5",
+              iconColor: "#6ee7b7",
+              icon: "fa-circle-check",
+              badge: "✅",
+              badgeBg: "#059669",
+              pulse: false,
+            },
           };
           const s = typeStyles[ann.type] || typeStyles.warning;
+
+          // Repeat message for seamless scroll
+          const repeatedMsg = `${ann.message}　　　　　　　　${ann.message}　　　　　　　　${ann.message}`;
+
           return (
             <div
               key={ann.id}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
-                padding: "10px 20px",
+                gap: 0,
                 background: s.bg,
-                borderBottom: `1px solid ${s.border}`,
+                borderBottom: `2px solid ${s.border}`,
                 color: s.text,
-                fontSize: "0.85rem",
-                fontWeight: 600,
+                fontSize: "0.88rem",
+                fontWeight: 700,
+                overflow: "hidden",
+                position: "relative",
                 animation: "slideDown 0.3s ease",
+                boxShadow: s.pulse ? `0 0 16px ${s.border}60` : "none",
               }}
             >
-              <i className={`fa-solid ${s.icon}`} style={{ flexShrink: 0 }}></i>
-              <span style={{ flex: 1 }}>{ann.message}</span>
+              {/* Left badge label */}
+              <div style={{
+                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 16px",
+                background: s.badgeBg,
+                color: "#fff",
+                fontWeight: 800,
+                fontSize: "0.8rem",
+                letterSpacing: "0.05em",
+                whiteSpace: "nowrap",
+                borderRight: `2px solid ${s.border}`,
+                animation: s.pulse ? "urgentPulse 1s ease-in-out infinite" : "none",
+              }}>
+                <i className={`fa-solid ${s.icon}`} style={{
+                  animation: "flashIcon 0.8s ease-in-out infinite",
+                  fontSize: "1rem",
+                }}></i>
+                <span>ประกาศด่วน</span>
+              </div>
+
+              {/* Scrolling text */}
+              <div style={{
+                flex: 1,
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                padding: "0 8px",
+                height: "42px",
+              }}>
+                <div style={{
+                  display: "flex",
+                  gap: "32px",
+                  whiteSpace: "nowrap",
+                  animation: "marqueeScroll 20s linear infinite",
+                }}>
+                  {/* Repeat text 4x for seamless loop */}
+                  {[0, 1, 2, 3].map(i => (
+                    <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ color: s.iconColor, fontSize: "1rem" }}>{s.badge}</span>
+                      {ann.message}
+                      <span style={{ color: s.iconColor, fontSize: "1rem" }}>{s.badge}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Close button */}
               <button
                 onClick={() => setDismissedIds(prev => [...prev, ann.id])}
                 style={{
-                  background: "none",
+                  flexShrink: 0,
+                  background: "rgba(0,0,0,0.25)",
                   border: "none",
                   cursor: "pointer",
                   color: s.text,
-                  opacity: 0.7,
-                  padding: "2px 6px",
-                  borderRadius: "4px",
+                  padding: "10px 14px",
                   fontSize: "0.9rem",
                   lineHeight: 1,
-                  flexShrink: 0,
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  transition: "background 0.15s",
                 }}
+                onMouseOver={e => e.currentTarget.style.background = "rgba(0,0,0,0.4)"}
+                onMouseOut={e => e.currentTarget.style.background = "rgba(0,0,0,0.25)"}
                 aria-label="ปิดประกาศ"
               >
                 <i className="fa-solid fa-xmark"></i>
