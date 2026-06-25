@@ -29,20 +29,23 @@ export async function GET() {
     const userId = payload.userId;
     const role = payload.role?.toUpperCase();
 
-    // Default filter for Tier 3: tickets assigned to them or owned by them
-    let whereCondition = {
-      OR: [
-        { tier3_id: userId },
-        { owner_id: userId }
-      ]
-    };
+    // Tier 3 sees tickets escalated to Tier 3 (ESCALATED_TIER3 status)
+    // or assigned to them, or all ESCALATED_TIER3 if Admin
+    let whereCondition;
 
-    // If Admin, they see all escalated or Tier 3 relevant tickets
     if (role === 'ADMIN') {
       whereCondition = {
         OR: [
           { status: 'ESCALATED_TIER3' },
           { tier3_id: { not: null } }
+        ]
+      };
+    } else {
+      whereCondition = {
+        OR: [
+          { AND: [{ status: 'ESCALATED_TIER3' }, { tier3_id: null }] }, // Unassigned escalated T3
+          { tier3_id: userId }, // Assigned to this Tier 3
+          { AND: [{ status: 'ESCALATED_TIER3' }, { tier3_id: userId }] }
         ]
       };
     }
@@ -54,6 +57,7 @@ export async function GET() {
         location: true,
         reporter: true,
         bu: true,
+        tier1: { select: { user_id: true, full_name: true } },
         tier2: { select: { user_id: true, full_name: true } },
         tier3: { select: { user_id: true, full_name: true } },
       },

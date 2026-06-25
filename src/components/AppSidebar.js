@@ -3,6 +3,7 @@
 export default function AppSidebar({ user, onLogout }) {
   const role = user?.role?.toUpperCase() || "USER";
 
+  const isGeneralUser = ["USER", "END_USER"].includes(role);
   const canSeeTier1 = ["ADMIN", "TIER1"].includes(role);
   const canSeeTier2 = ["ADMIN", "TIER2", "OWNER"].includes(role);
   const canSeeTier3 = ["ADMIN", "TIER3"].includes(role);
@@ -41,18 +42,40 @@ export default function AppSidebar({ user, onLogout }) {
 
       <div className="sidebar-section">Main Menu</div>
       <nav className="sidebar-nav">
-        <a href="/" className="nav-item" id="nav-dashboard">
-          <i className="fa-solid fa-gauge-high nav-icon"></i>
-          <span className="nav-label">Dashboard</span>
-        </a>
-        <a href="/tickets" className="nav-item" id="nav-tickets">
-          <i className="fa-solid fa-ticket nav-icon"></i>
-          <span className="nav-label">All Tickets</span>
-        </a>
-        <a href="/tickets/create" className="nav-item" id="nav-create-ticket">
-          <i className="fa-solid fa-plus-circle nav-icon"></i>
-          <span className="nav-label">แจ้งปัญหาใหม่</span>
-        </a>
+        {/* Dashboard & All Tickets: Admin/IT only */}
+        {!isGeneralUser && (
+          <>
+            <a href="/" className="nav-item" id="nav-dashboard">
+              <i className="fa-solid fa-gauge-high nav-icon"></i>
+              <span className="nav-label">Dashboard</span>
+            </a>
+            <a href="/tickets" className="nav-item" id="nav-tickets">
+              <i className="fa-solid fa-ticket nav-icon"></i>
+              <span className="nav-label">All Tickets</span>
+            </a>
+          </>
+        )}
+
+        {/* General Users: Workflow/Request links */}
+        {isGeneralUser && (
+          <>
+            <a href="/" className="nav-item" id="nav-my-workflow">
+              <i className="fa-solid fa-diagram-project nav-icon"></i>
+              <span className="nav-label">ขั้นตอนการแจ้งปัญหา</span>
+            </a>
+            <a href="/tickets/my" className="nav-item" id="nav-my-tickets">
+              <i className="fa-solid fa-list-check nav-icon"></i>
+              <span className="nav-label">ติดตาม Ticket ของฉัน</span>
+            </a>
+          </>
+        )}
+
+        {role !== "TIER1" && (
+          <a href="/tickets/create" className="nav-item" id="nav-create-ticket">
+            <i className="fa-solid fa-plus-circle nav-icon"></i>
+            <span className="nav-label">แจ้งปัญหาใหม่</span>
+          </a>
+        )}
 
         {canSeeTier1 && (
           <>

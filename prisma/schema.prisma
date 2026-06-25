@@ -16,6 +16,7 @@ model BusinessUnit {
   phone          String?  @db.VarChar(50)
   line_id        String?  @db.VarChar(50)
   website        String?  @db.VarChar(255)
+  logo_url       String?  @db.Text
   is_active      Boolean  @default(true)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
@@ -54,8 +55,9 @@ model User {
   role         String   @db.VarChar(20)
   bu_id        Int?
   location_id  Int?
-  avatar_url   String?  @db.Text
-  password     String?  @db.VarChar(255)
+  avatar_url      String?  @db.Text
+  specialization  String?  @db.VarChar(150)
+  password        String?  @db.VarChar(255)
   is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt

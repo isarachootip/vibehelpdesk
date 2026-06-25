@@ -6,17 +6,15 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
+    // Tier 1 sees ALL tickets (every status) to monitor the full lifecycle
     const tickets = await prisma.ticket.findMany({
-      where: {
-        status: { in: ['NEW', 'IN_PROGRESS'] },
-        is_escalated: false // If it's escalated, it moves to Tier 2
-      },
       include: {
         system: true,
         location: true,
         reporter: true,
         bu: true,
-        tier1: true
+        tier1: true,
+        tier2: { select: { user_id: true, full_name: true, specialization: true } },
       },
       orderBy: { created_at: 'desc' }
     });

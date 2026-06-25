@@ -70,6 +70,7 @@ body {
   animation: pulse 1.2s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.25);opacity:.6} }
+@keyframes slideDown { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
 
 /* ─── APP SHELL ─── */
 #app { display: flex; min-height: 100vh; }

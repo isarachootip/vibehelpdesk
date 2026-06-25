@@ -29,20 +29,27 @@ export async function GET() {
     const userId = payload.userId;
     const role = payload.role?.toUpperCase();
 
-    // Default filter for Tier 2: tickets assigned to them or owned by them
-    let whereCondition = {
-      OR: [
-        { tier2_id: userId },
-        { owner_id: userId }
-      ]
-    };
+    // Tier 2 sees ONLY tickets that have been escalated from Tier 1 (is_escalated = true)
+    // and are assigned to them, or all escalated if Admin
+    let whereCondition;
 
-    // If Admin, they see all escalated or Tier 2 relevant tickets
     if (role === 'ADMIN') {
       whereCondition = {
-        OR: [
+        is_escalated: true,
+      };
+    } else {
+      // Tier 2 sees tickets escalated to them specifically
+      whereCondition = {
+        AND: [
           { is_escalated: true },
-          { status: { in: ['ESCALATED', 'IN_PROGRESS_TIER2', 'RESOLVED_TIER2'] } }
+          {
+            OR: [
+              { tier2_id: userId },
+              { owner_id: userId },
+              // Also see newly escalated tickets not yet assigned
+              { AND: [{ tier2_id: null }, { status: 'ESCALATED' }] }
+            ]
+          }
         ]
       };
     }
@@ -54,7 +61,8 @@ export async function GET() {
         location: true,
         reporter: true,
         bu: true,
-        tier2: { select: { user_id: true, full_name: true } },
+        tier1: { select: { user_id: true, full_name: true } },
+        tier2: { select: { user_id: true, full_name: true, specialization: true } },
         tier3: { select: { user_id: true, full_name: true } },
       },
       orderBy: { created_at: 'desc' }

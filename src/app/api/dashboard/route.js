@@ -2,8 +2,14 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 // GET: Dashboard statistics
-export async function GET() {
+export async function GET(request) {
   try {
+    // Today boundaries (local midnight)
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
     const [
       totalTickets,
       newTickets,
@@ -12,6 +18,9 @@ export async function GET() {
       resolvedTickets,
       closedTickets,
       criticalTickets,
+      newToday,
+      resolvedToday,
+      closedToday,
       recentTickets,
       ticketsByBU,
       ticketsBySystem,
@@ -25,6 +34,9 @@ export async function GET() {
       prisma.ticket.count({ where: { status: 'RESOLVED' } }),
       prisma.ticket.count({ where: { status: 'CLOSED' } }),
       prisma.ticket.count({ where: { priority: 'Critical', status: { notIn: ['CLOSED', 'CANCELLED'] } } }),
+      prisma.ticket.count({ where: { created_at: { gte: todayStart, lte: todayEnd } } }),
+      prisma.ticket.count({ where: { status: 'RESOLVED', resolved_at: { gte: todayStart, lte: todayEnd } } }),
+      prisma.ticket.count({ where: { status: 'CLOSED', closed_at: { gte: todayStart, lte: todayEnd } } }),
       prisma.ticket.findMany({
         take: 10,
         orderBy: { created_at: 'desc' },
@@ -154,6 +166,9 @@ export async function GET() {
         closed: closedTickets,
         critical: criticalTickets,
         open: totalTickets - closedTickets - (await prisma.ticket.count({ where: { status: 'CANCELLED' } })),
+        newToday,
+        resolvedToday,
+        closedToday,
       },
       recentTickets,
       ticketsByBU: enrichedByBU,

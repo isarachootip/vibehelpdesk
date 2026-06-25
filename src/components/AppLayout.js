@@ -10,6 +10,8 @@ export default function AppLayout({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [announcements, setAnnouncements] = useState([]);
+  const [dismissedIds, setDismissedIds] = useState([]);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -40,6 +42,26 @@ export default function AppLayout({ children }) {
         router.push("/login");
       });
   }, [pathname, isLoginPage, router]);
+
+  // Fetch system announcements from settings
+  useEffect(() => {
+    if (isLoginPage) return;
+    fetch("/api/settings")
+      .then(r => r.ok ? r.json() : [])
+      .then(configs => {
+        if (!Array.isArray(configs)) return;
+        // Look for announcement_* keys that are enabled
+        const annItems = configs
+          .filter(c => c.config_key?.startsWith("announcement_") && c.config_value && c.config_value !== "" && c.config_value !== "disabled")
+          .map(c => ({
+            id: c.config_key,
+            message: c.config_value,
+            type: c.description || "warning", // warning | danger | info | success
+          }));
+        setAnnouncements(annItems);
+      })
+      .catch(() => {});
+  }, [isLoginPage]);
 
   // Handle Logout
   const handleLogout = async () => {
@@ -186,6 +208,54 @@ export default function AppLayout({ children }) {
         </header>
 
         {/* Page Body */}
+        {/* System Announcements */}
+        {announcements.filter(a => !dismissedIds.includes(a.id)).map(ann => {
+          const typeStyles = {
+            danger:  { bg: "rgba(239,68,68,0.12)",  border: "rgba(239,68,68,0.35)",  text: "#dc2626", icon: "fa-circle-exclamation" },
+            warning: { bg: "rgba(245,158,11,0.12)", border: "rgba(245,158,11,0.4)",  text: "#b45309", icon: "fa-triangle-exclamation" },
+            info:    { bg: "rgba(59,130,246,0.1)",  border: "rgba(59,130,246,0.3)",  text: "#1d4ed8", icon: "fa-circle-info" },
+            success: { bg: "rgba(16,185,129,0.1)",  border: "rgba(16,185,129,0.3)", text: "#047857", icon: "fa-circle-check" },
+          };
+          const s = typeStyles[ann.type] || typeStyles.warning;
+          return (
+            <div
+              key={ann.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 20px",
+                background: s.bg,
+                borderBottom: `1px solid ${s.border}`,
+                color: s.text,
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                animation: "slideDown 0.3s ease",
+              }}
+            >
+              <i className={`fa-solid ${s.icon}`} style={{ flexShrink: 0 }}></i>
+              <span style={{ flex: 1 }}>{ann.message}</span>
+              <button
+                onClick={() => setDismissedIds(prev => [...prev, ann.id])}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: s.text,
+                  opacity: 0.7,
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  fontSize: "0.9rem",
+                  lineHeight: 1,
+                  flexShrink: 0,
+                }}
+                aria-label="ปิดประกาศ"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          );
+        })}
         <div className="page-body">{children}</div>
       </main>
     </div>

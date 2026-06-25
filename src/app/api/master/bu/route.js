@@ -17,11 +17,11 @@ export async function GET() {
 // POST create BU
 export async function POST(request) {
   try {
-    const { bu_code, bu_name, bu_description, contact_person, phone, line_id, website } = await request.json();
+    const { bu_code, bu_name, bu_description, contact_person, phone, line_id, website, logo_url } = await request.json();
     if (!bu_code || !bu_name) return NextResponse.json({ error: 'bu_code and bu_name required' }, { status: 400 });
 
     const bu = await prisma.businessUnit.create({
-      data: { bu_code, bu_name, bu_description, contact_person, phone, line_id, website },
+      data: { bu_code, bu_name, bu_description, contact_person, phone, line_id, website, logo_url: logo_url || null },
     });
     return NextResponse.json(bu, { status: 201 });
   } catch (error) {

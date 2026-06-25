@@ -58,8 +58,8 @@ export async function POST(request) {
     } = body;
 
     // Validate required fields
-    const hasSystemOrHardware = problem_type === 'hardware' ? !!hardware_id : !!system_id;
-    if (!subject || !problem_type || !hasSystemOrHardware || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !priority || !description || !symptom) {
+    const hasSystemOrHardware = problem_type === 'hardware' ? !!hardware_id : (!!system_id || problem_type === 'software');
+    if (!subject || !problem_type || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !description || !symptom) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -124,7 +124,7 @@ export async function POST(request) {
         reporter_line_id: reporter_line_id || null,
         bu_id: parseInt(bu_id),
         owner_id: system?.owner_user_id || null,
-        priority,
+        priority: priority || 'Medium',
         description,
         symptom,
         status: 'NEW',

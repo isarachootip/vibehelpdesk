@@ -166,6 +166,13 @@ export async function PUT(request, { params }) {
         auditDetail = 'Ticket cancelled';
         break;
 
+      case 'UPDATE_PRIORITY':
+        updateData = {
+          priority: data.priority,
+        };
+        auditDetail = `Priority updated to ${data.priority}`;
+        break;
+
       default:
         updateData = data;
         auditDetail = 'Ticket updated';

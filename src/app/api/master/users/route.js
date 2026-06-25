@@ -7,7 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const users = await prisma.user.findMany({
-      include: {
+      select: {
+        user_id: true, full_name: true, email: true, phone: true,
+        role: true, bu_id: true, specialization: true,
         bu: { select: { bu_code: true, bu_name: true } },
         location: { select: { location_code: true, location_name: true } }
       },

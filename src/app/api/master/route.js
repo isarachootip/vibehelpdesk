@@ -16,7 +16,7 @@ export async function GET() {
       prisma.location.findMany({ where: { is_active: true }, orderBy: { location_code: 'asc' } }),
       prisma.user.findMany({
         where: { is_active: true },
-        select: { user_id: true, full_name: true, email: true, phone: true, role: true, bu_id: true },
+        select: { user_id: true, full_name: true, email: true, phone: true, role: true, bu_id: true, specialization: true },
         orderBy: { full_name: 'asc' },
       }),
       prisma.hardware.findMany({

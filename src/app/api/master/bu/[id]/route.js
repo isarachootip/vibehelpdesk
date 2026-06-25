@@ -16,6 +16,7 @@ export async function PUT(request, { params }) {
         phone: data.phone,
         line_id: data.line_id,
         website: data.website,
+        logo_url: data.logo_url !== undefined ? data.logo_url : undefined,
         is_active: data.is_active 
       },
     });
