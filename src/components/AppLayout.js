@@ -266,7 +266,7 @@ export default function AppLayout({ children }) {
                 background: s.bg,
                 borderBottom: `2px solid ${s.border}`,
                 color: s.text,
-                fontSize: "0.88rem",
+                fontSize: "1.05rem",
                 fontWeight: 700,
                 overflow: "hidden",
                 position: "relative",
@@ -279,20 +279,20 @@ export default function AppLayout({ children }) {
                 flexShrink: 0,
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "10px 16px",
+                gap: "10px",
+                padding: "13px 20px",
                 background: s.badgeBg,
                 color: "#fff",
                 fontWeight: 800,
-                fontSize: "0.8rem",
-                letterSpacing: "0.05em",
+                fontSize: "0.92rem",
+                letterSpacing: "0.06em",
                 whiteSpace: "nowrap",
                 borderRight: `2px solid ${s.border}`,
                 animation: s.pulse ? "urgentPulse 1s ease-in-out infinite" : "none",
               }}>
                 <i className={`fa-solid ${s.icon}`} style={{
                   animation: "flashIcon 0.8s ease-in-out infinite",
-                  fontSize: "1rem",
+                  fontSize: "1.1rem",
                 }}></i>
                 <span>ประกาศด่วน</span>
               </div>
@@ -303,21 +303,24 @@ export default function AppLayout({ children }) {
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
-                padding: "0 8px",
-                height: "42px",
+                padding: "0 12px",
+                height: "52px",
               }}>
                 <div style={{
                   display: "flex",
-                  gap: "32px",
+                  gap: "48px",
                   whiteSpace: "nowrap",
                   animation: "marqueeScroll 20s linear infinite",
+                  fontSize: "1.05rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
                 }}>
                   {/* Repeat text 4x for seamless loop */}
                   {[0, 1, 2, 3].map(i => (
-                    <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "10px" }}>
-                      <span style={{ color: s.iconColor, fontSize: "1rem" }}>{s.badge}</span>
+                    <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "12px" }}>
+                      <span style={{ color: s.iconColor, fontSize: "1.3rem" }}>{s.badge}</span>
                       {ann.message}
-                      <span style={{ color: s.iconColor, fontSize: "1rem" }}>{s.badge}</span>
+                      <span style={{ color: s.iconColor, fontSize: "1.3rem" }}>{s.badge}</span>
                     </span>
                   ))}
                 </div>
