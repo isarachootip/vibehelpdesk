@@ -247,9 +247,20 @@ export default function MasterUsers() {
                     <label>เบอร์โทรศัพท์</label>
                     <div style={{ position: "relative" }}>
                       <i className="fa-solid fa-phone" style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", fontSize: ".82rem" }}></i>
-                      <input className="form-control" value={form.phone}
-                        onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                        placeholder="เช่น 0812345678" style={{ paddingLeft: "34px" }} />
+                      <input
+                        type="tel"
+                        className="form-control"
+                        value={form.phone}
+                        onChange={e => {
+                          const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                          setForm(f => ({ ...f, phone: digits }));
+                        }}
+                        placeholder="เช่น 0812345678"
+                        maxLength={10}
+                        inputMode="numeric"
+                        pattern="[0-9]{9,10}"
+                        style={{ paddingLeft: "34px" }}
+                      />
                     </div>
                   </div>
                   <div className="form-group" style={{ flex: 1 }}>

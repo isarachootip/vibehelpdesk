@@ -133,6 +133,12 @@ export default function CreateTicket() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "reporter_phone") {
+      // กรอกได้เฉพาะตัวเลข ไม่เกิน 10 หลัก
+      const digits = value.replace(/\D/g, "").slice(0, 10);
+      setForm((prev) => ({ ...prev, [name]: digits }));
+      return;
+    }
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -661,7 +667,52 @@ export default function CreateTicket() {
               <div className="form-row">
                 <div className="form-group">
                   <label>เบอร์โทรติดต่อ <span className="req">*</span></label>
-                  <input type="text" name="reporter_phone" className="form-control" value={form.reporter_phone} onChange={handleChange} placeholder="เช่น 081-xxx-xxxx" required />
+                  <div style={{ position: "relative" }}>
+                    <i className="fa-solid fa-phone" style={{
+                      position: "absolute", left: "12px", top: "50%",
+                      transform: "translateY(-50%)",
+                      color: form.reporter_phone.length >= 9 ? "var(--success)" : form.reporter_phone.length > 0 ? "var(--warning)" : "var(--text-muted)",
+                      fontSize: ".85rem", transition: "color 0.2s"
+                    }}></i>
+                    <input
+                      type="tel"
+                      name="reporter_phone"
+                      className="form-control"
+                      value={form.reporter_phone}
+                      onChange={handleChange}
+                      placeholder="เช่น 0812345678"
+                      maxLength={10}
+                      pattern="[0-9]{9,10}"
+                      inputMode="numeric"
+                      required
+                      style={{
+                        paddingLeft: "36px",
+                        borderColor: form.reporter_phone.length > 0 && form.reporter_phone.length < 9
+                          ? "var(--warning)" : undefined
+                      }}
+                    />
+                    {/* Character counter */}
+                    <span style={{
+                      position: "absolute", right: "12px", top: "50%",
+                      transform: "translateY(-50%)",
+                      fontSize: ".72rem", fontWeight: 600,
+                      color: form.reporter_phone.length >= 9 ? "var(--success)" : form.reporter_phone.length > 0 ? "var(--warning)" : "var(--text-muted)"
+                    }}>
+                      {form.reporter_phone.length}/10
+                    </span>
+                  </div>
+                  {form.reporter_phone.length > 0 && form.reporter_phone.length < 9 && (
+                    <p style={{ fontSize: ".75rem", color: "var(--warning)", marginTop: "4px" }}>
+                      <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: "4px" }}></i>
+                      เบอร์โทรต้องมีอย่างน้อย 9 หลัก (กรอกแล้ว {form.reporter_phone.length} หลัก)
+                    </p>
+                  )}
+                  {form.reporter_phone.length === 10 && (
+                    <p style={{ fontSize: ".75rem", color: "var(--success)", marginTop: "4px" }}>
+                      <i className="fa-solid fa-circle-check" style={{ marginRight: "4px" }}></i>
+                      เบอร์โทรครบถ้วน
+                    </p>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Line ID (ถ้ามี)</label>
