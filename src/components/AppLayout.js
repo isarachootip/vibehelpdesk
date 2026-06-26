@@ -43,25 +43,46 @@ export default function AppLayout({ children }) {
       });
   }, [pathname, isLoginPage, router]);
 
-  // Fetch system announcements from settings
+  // Fetch system announcements — refresh every 60s to auto-hide expired ones
   useEffect(() => {
     if (isLoginPage) return;
-    fetch("/api/settings")
-      .then(r => r.ok ? r.json() : [])
-      .then(configs => {
-        if (!Array.isArray(configs)) return;
-        // Look for announcement_* keys that are enabled
-        const annItems = configs
-          .filter(c => c.config_key?.startsWith("announcement_") && c.config_value && c.config_value !== "" && c.config_value !== "disabled")
-          .map(c => ({
-            id: c.config_key,
-            message: c.config_value,
-            type: c.description || "warning", // warning | danger | info | success
-          }));
-        setAnnouncements(annItems);
-      })
-      .catch(() => {});
+
+    const parseAnn = (c) => {
+      if (!c.config_value || c.config_value === "disabled") return null;
+      let data;
+      try {
+        data = JSON.parse(c.config_value);
+        if (!data?.message) return null;
+      } catch (_) {
+        // Legacy plain string
+        data = { message: c.config_value, type: c.description || "warning", start_at: null, end_at: null };
+      }
+      // Time filter
+      const now = new Date();
+      if (data.start_at && new Date(data.start_at) > now) return null; // not yet
+      if (data.end_at && new Date(data.end_at) < now) return null;     // expired
+      return { id: c.config_key, message: data.message, type: data.type || "warning" };
+    };
+
+    const load = () => {
+      fetch("/api/settings")
+        .then(r => r.ok ? r.json() : [])
+        .then(configs => {
+          if (!Array.isArray(configs)) return;
+          const annItems = configs
+            .filter(c => c.config_key?.startsWith("announcement_"))
+            .map(parseAnn)
+            .filter(Boolean);
+          setAnnouncements(annItems);
+        })
+        .catch(() => {});
+    };
+
+    load();
+    const interval = setInterval(load, 60_000); // re-check every 60s
+    return () => clearInterval(interval);
   }, [isLoginPage]);
+
 
   // Handle Logout
   const handleLogout = async () => {
@@ -207,8 +228,11 @@ export default function AppLayout({ children }) {
           )}
         </header>
 
-        {/* System Announcements — Scrolling Marquee */}
-        {announcements.filter(a => !dismissedIds.includes(a.id)).map(ann => {
+        {/* System Announcements — Single Combined Scrolling Ticker */}
+        {(() => {
+          const visible = announcements.filter(a => !dismissedIds.includes(a.id));
+          if (visible.length === 0) return null;
+
           const typeStyles = {
             danger:  {
               bg: "linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d)",
@@ -219,6 +243,7 @@ export default function AppLayout({ children }) {
               badge: "🚨",
               badgeBg: "#dc2626",
               pulse: true,
+              priority: 4,
             },
             warning: {
               bg: "linear-gradient(90deg, #78350f, #92400e, #78350f)",
@@ -229,6 +254,7 @@ export default function AppLayout({ children }) {
               badge: "⚠️",
               badgeBg: "#d97706",
               pulse: false,
+              priority: 3,
             },
             info: {
               bg: "linear-gradient(90deg, #1e3a5f, #1e40af, #1e3a5f)",
@@ -239,6 +265,7 @@ export default function AppLayout({ children }) {
               badge: "ℹ️",
               badgeBg: "#2563eb",
               pulse: false,
+              priority: 2,
             },
             success: {
               bg: "linear-gradient(90deg, #064e3b, #065f46, #064e3b)",
@@ -249,16 +276,29 @@ export default function AppLayout({ children }) {
               badge: "✅",
               badgeBg: "#059669",
               pulse: false,
+              priority: 1,
             },
           };
-          const s = typeStyles[ann.type] || typeStyles.warning;
 
-          // Repeat message for seamless scroll
-          const repeatedMsg = `${ann.message}　　　　　　　　${ann.message}　　　　　　　　${ann.message}`;
+          // Pick highest severity type
+          const highestType = visible.reduce((best, ann) => {
+            const cur = typeStyles[ann.type] || typeStyles.warning;
+            const prev = typeStyles[best] || typeStyles.warning;
+            return cur.priority > prev.priority ? ann.type : best;
+          }, visible[0].type);
+
+          const s = typeStyles[highestType] || typeStyles.warning;
+
+          // duplicate for seamless loop
+          const tickerItems = [...visible, ...visible];
+
+          // dismiss ALL visible announcements
+          const handleDismissAll = () => {
+            setDismissedIds(prev => [...prev, ...visible.map(a => a.id)]);
+          };
 
           return (
             <div
-              key={ann.id}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -272,15 +312,17 @@ export default function AppLayout({ children }) {
                 position: "relative",
                 animation: "slideDown 0.3s ease",
                 boxShadow: s.pulse ? `0 0 16px ${s.border}60` : "none",
+                height: "52px",
               }}
             >
-              {/* Left badge label */}
+              {/* Left badge — shows count if multiple */}
               <div style={{
                 flexShrink: 0,
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                padding: "13px 20px",
+                padding: "0 20px",
+                height: "100%",
                 background: s.badgeBg,
                 color: "#fff",
                 fontWeight: 800,
@@ -295,63 +337,85 @@ export default function AppLayout({ children }) {
                   fontSize: "1.1rem",
                 }}></i>
                 <span>ประกาศด่วน</span>
+                {visible.length > 1 && (
+                  <span style={{
+                    background: "rgba(255,255,255,0.25)",
+                    borderRadius: "20px",
+                    padding: "1px 8px",
+                    fontSize: "0.78rem",
+                    fontWeight: 900,
+                    marginLeft: "2px",
+                  }}>
+                    {visible.length}
+                  </span>
+                )}
               </div>
 
-              {/* Scrolling text */}
+              {/* Scrolling ticker — all announcements in one stream */}
               <div style={{
                 flex: 1,
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
-                padding: "0 12px",
-                height: "52px",
+                height: "100%",
               }}>
                 <div style={{
-                  display: "flex",
-                  gap: "48px",
+                  display: "inline-flex",
+                  alignItems: "center",
                   whiteSpace: "nowrap",
-                  animation: "marqueeScroll 20s linear infinite",
+                  animation: `marqueeScroll ${Math.max(18, visible.length * 14)}s linear infinite`,
                   fontSize: "1.05rem",
                   fontWeight: 700,
                   letterSpacing: "0.02em",
                 }}>
-                  {/* Repeat text 4x for seamless loop */}
-                  {[0, 1, 2, 3].map(i => (
-                    <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "12px" }}>
-                      <span style={{ color: s.iconColor, fontSize: "1.3rem" }}>{s.badge}</span>
-                      {ann.message}
-                      <span style={{ color: s.iconColor, fontSize: "1.3rem" }}>{s.badge}</span>
-                    </span>
-                  ))}
+                  {tickerItems.map((ann, i) => {
+                    const st = typeStyles[ann.type] || typeStyles.warning;
+                    return (
+                      <span key={`${ann.id}-${i}`} style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        padding: "0 40px",
+                        borderRight: i < tickerItems.length - 1
+                          ? "1px solid rgba(255,255,255,0.2)" : "none",
+                      }}>
+                        <span style={{ fontSize: "1.2rem" }}>{st.badge}</span>
+                        <span>{ann.message}</span>
+                        <span style={{ fontSize: "1.2rem" }}>{st.badge}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Close button */}
+              {/* Single dismiss-all button */}
               <button
-                onClick={() => setDismissedIds(prev => [...prev, ann.id])}
+                onClick={handleDismissAll}
+                title="ปิดประกาศทั้งหมด"
                 style={{
                   flexShrink: 0,
                   background: "rgba(0,0,0,0.25)",
                   border: "none",
                   cursor: "pointer",
                   color: s.text,
-                  padding: "10px 14px",
+                  padding: "0 16px",
                   fontSize: "0.9rem",
-                  lineHeight: 1,
                   height: "100%",
                   display: "flex",
                   alignItems: "center",
+                  gap: "6px",
                   transition: "background 0.15s",
+                  borderLeft: "1px solid rgba(255,255,255,0.15)",
                 }}
                 onMouseOver={e => e.currentTarget.style.background = "rgba(0,0,0,0.4)"}
                 onMouseOut={e => e.currentTarget.style.background = "rgba(0,0,0,0.25)"}
-                aria-label="ปิดประกาศ"
+                aria-label="ปิดประกาศทั้งหมด"
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
           );
-        })}
+        })()}
         <div className="page-body">{children}</div>
       </main>
     </div>
