@@ -67,6 +67,10 @@ export default function AppSidebar({ user, onLogout }) {
               <i className="fa-solid fa-list-check nav-icon"></i>
               <span className="nav-label">ติดตาม Ticket ของฉัน</span>
             </a>
+            <a href="/my-assets" className="nav-item" id="nav-my-assets">
+              <i className="fa-solid fa-laptop nav-icon"></i>
+              <span className="nav-label">อุปกรณ์ของฉัน</span>
+            </a>
           </>
         )}
 
@@ -109,6 +113,15 @@ export default function AppSidebar({ user, onLogout }) {
 
         {canSeeMaster && (
           <>
+            <div className="sidebar-section" style={{ marginTop: "16px" }}>Asset Inventory</div>
+            <a href="/assets" className="nav-item" id="nav-assets">
+              <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
+              <span className="nav-label">IT Assets</span>
+            </a>
+            <a href="/master/asset-types" className="nav-item" id="nav-asset-types">
+              <i className="fa-solid fa-tags nav-icon" style={{ color: "#8b5cf6" }}></i>
+              <span className="nav-label">ประเภท Asset</span>
+            </a>
             <div className="sidebar-section" style={{ marginTop: "16px" }}>Master Data</div>
             <a href="/master/bu" className="nav-item" id="nav-master-bu">
               <i className="fa-solid fa-building nav-icon"></i>
