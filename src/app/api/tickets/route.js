@@ -52,13 +52,13 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
-      subject, problem_type, system_id, hardware_id, location_id, location_text,
+      subject, problem_type, system_id, hardware_id, asset_id, location_id, location_text,
       reporter_id, reporter_name, reporter_email, reporter_phone, reporter_line_id, 
       bu_id, priority, description, symptom
     } = body;
 
     // Validate required fields
-    const hasSystemOrHardware = problem_type === 'hardware' ? !!hardware_id : (!!system_id || problem_type === 'software');
+    const hasSystemOrHardware = problem_type === 'hardware' ? (!!hardware_id || !!asset_id) : (!!system_id || problem_type === 'software');
     if (!subject || !problem_type || (!location_id && !location_text) || (!reporter_id && !reporter_name) || !bu_id || !description || !symptom) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -115,6 +115,7 @@ export async function POST(request) {
         problem_type,
         system_id: system_id ? parseInt(system_id) : null,
         hardware_id: hardware_id ? parseInt(hardware_id) : null,
+        asset_id: (asset_id && asset_id !== 'other' && !isNaN(parseInt(asset_id))) ? parseInt(asset_id) : null,
         location_id: location_id ? parseInt(location_id) : null,
         location_text: location_text || null,
         reporter_id: final_reporter_id,

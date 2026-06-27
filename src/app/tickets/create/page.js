@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Problem category definitions – maps to problem_type and sub-options
 const PROBLEM_CATEGORIES = [
@@ -83,7 +83,17 @@ const PROBLEM_CATEGORIES = [
 const BU_COLORS = ["#3b82f6", "#8b5cf6", "#22c55e", "#f59e0b", "#ef4444", "#ec4899", "#14b8a6", "#6366f1", "#f97316", "#0ea5e9"];
 
 export default function CreateTicket() {
+  return (
+    <Suspense fallback={<div className="flex-center" style={{ height: "300px" }}><div className="loader-wrap"><div className="loader-pulse"></div><p>Loading...</p></div></div>}>
+      <CreateTicketForm />
+    </Suspense>
+  );
+}
+
+function CreateTicketForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlAssetId = searchParams.get("asset_id");
   const [masterData, setMasterData] = useState({ bus: [], systems: [], locations: [], users: [], hardware: [] });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -91,7 +101,6 @@ export default function CreateTicket() {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
 
-  // Step tracking: 1=BU, 2=Problem, 3=Details, 4=Contact
   const [step, setStep] = useState(1);
 
   const [form, setForm] = useState({
@@ -99,6 +108,7 @@ export default function CreateTicket() {
     problem_type: "software",
     system_id: "",
     hardware_id: "",
+    asset_id: "",
     hardware_symptom: "",
     sub_option: "",
     location_text: "",
@@ -112,11 +122,14 @@ export default function CreateTicket() {
   });
 
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [assets, setAssets] = useState([]);
 
   useEffect(() => {
-    fetch("/api/master")
-      .then((res) => res.json())
-      .then((d) => {
+    Promise.all([
+      fetch("/api/master").then((res) => res.json()),
+      fetch("/api/assets").then((res) => res.ok ? res.json() : []).catch(() => []),
+    ])
+      .then(([d, ass]) => {
         if (d && !d.error) {
           setMasterData({
             bus: d.bus || [],
@@ -126,10 +139,29 @@ export default function CreateTicket() {
             hardware: d.hardware || [],
           });
         }
+        setAssets(Array.isArray(ass) ? ass : []);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (urlAssetId && assets.length > 0) {
+      const assetObj = assets.find(a => a.asset_id === parseInt(urlAssetId));
+      if (assetObj) {
+        setForm(prev => ({
+          ...prev,
+          asset_id: urlAssetId,
+          bu_id: assetObj.bu_id ? assetObj.bu_id.toString() : prev.bu_id,
+          location_text: assetObj.location
+            ? `${assetObj.location.location_code} — ${assetObj.location.location_name}${assetObj.location.floor ? ` ชั้น ${assetObj.location.floor}` : ''}`
+            : prev.location_text
+        }));
+        setSelectedCategory(PROBLEM_CATEGORIES.find(c => c.id === "computer"));
+        setStep(3);
+      }
+    }
+  }, [urlAssetId, assets]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -443,23 +475,54 @@ export default function CreateTicket() {
               {selectedCategory?.useHardware && (
                 <>
                   <div className="form-group">
-                    <label>อุปกรณ์ที่มีปัญหา <span className="req">*</span></label>
-                    <select name="hardware_id" className="form-control" value={form.hardware_id} onChange={e => {
-                      handleChange(e);
-                      setForm(prev => ({ ...prev, hardware_symptom: "" }));
+                    <label>เลือกจากทะเบียนทรัพย์สิน (IT Asset) <span className="req">*</span></label>
+                    <select name="asset_id" className="form-control" value={form.asset_id} onChange={e => {
+                      const val = e.target.value;
+                      setForm(prev => {
+                        const next = { ...prev, asset_id: val };
+                        if (val && val !== "other") {
+                          const assetObj = assets.find(a => a.asset_id === parseInt(val));
+                          if (assetObj) {
+                            next.location_text = assetObj.location
+                              ? `${assetObj.location.location_code} — ${assetObj.location.location_name}${assetObj.location.floor ? ` ชั้น ${assetObj.location.floor}` : ''}`
+                              : "";
+                          }
+                        }
+                        return next;
+                      });
                     }} required>
-                      <option value="">-- เลือกอุปกรณ์ --</option>
-                      {masterData.hardware.map(hw => (
-                        <option key={hw.hardware_id} value={hw.hardware_id}>
-                          {hw.hardware_code} — {hw.hardware_name}
+                      <option value="">-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --</option>
+                      {assets.map(ast => (
+                        <option key={ast.asset_id} value={ast.asset_id}>
+                          [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''} — {ast.location ? ast.location.location_code : 'ไม่ระบุสถานที่'}
                         </option>
                       ))}
+                      <option value="other">⚠️ ไม่มีในทะเบียนทรัพย์สิน / อุปกรณ์ส่วนตัว</option>
                     </select>
                   </div>
-                  {symptoms.length > 0 && (
-                    <div className="form-group">
-                      <label>อาการที่พบ <span className="req">*</span></label>
-                      <select name="hardware_symptom" className="form-control" value={form.hardware_symptom} onChange={handleChange} required>
+
+                  {/* Fallback to general hardware selection */}
+                  {(form.asset_id === "other" || !form.asset_id) && (
+                    <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
+                      <label>ระบุประเภทอุปกรณ์หลัก <span className="req">*</span></label>
+                      <select name="hardware_id" className="form-control" value={form.hardware_id} onChange={e => {
+                        handleChange(e);
+                        setForm(prev => ({ ...prev, hardware_symptom: "" }));
+                      }} required={form.asset_id === "other"}>
+                        <option value="">-- เลือกประเภทอุปกรณ์ --</option>
+                        {masterData.hardware.map(hw => (
+                          <option key={hw.hardware_id} value={hw.hardware_id}>
+                            {hw.hardware_code} — {hw.hardware_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {(form.asset_id === "other" || !form.asset_id) && symptoms.length > 0 && (
+                    <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
+                      <label>อาการที่พบเบื้องต้น <span className="req">*</span></label>
+                      <select name="hardware_symptom" className="form-control" value={form.hardware_symptom} onChange={handleChange} required={form.asset_id === "other"}>
                         <option value="">-- เลือกอาการ --</option>
                         {symptoms.map(s => (
                           <option key={s.symptom_id} value={s.symptom_name}>{s.symptom_name}</option>

@@ -108,6 +108,15 @@ export default function TicketDetail({ params }) {
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>จุดเกิดเหตุ</span>{ticket.location?.location_name || ticket.location_text || "-"}</div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>ประเภท</span>{ticket.problem_type === "hardware" ? "🔧 Hardware" : "💻 Software"}</div>
                 <div><span className="text-muted" style={{fontSize:".75rem",display:"block"}}>Owner</span>{ticket.owner?.full_name || "-"}</div>
+                {ticket.asset && (
+                  <div style={{ gridColumn: "1 / -1", borderTop: "1px dashed var(--border)", paddingTop: "8px", marginTop: "4px" }}>
+                    <span className="text-muted" style={{fontSize:".75rem",display:"block"}}>อุปกรณ์ / ทรัพย์สินที่แจ้งเสีย</span>
+                    <a href={`/assets/${ticket.asset.asset_id}`} style={{ fontWeight: 700, display: "inline-flex", alignItems: "center", gap: "6px", color: "var(--primary)" }}>
+                      <i className={`fa-solid ${ticket.asset.asset_type?.icon || "fa-laptop"}`}></i>
+                      [{ticket.asset.asset_code}] {ticket.asset.brand} {ticket.asset.model} {ticket.asset.serial_no ? `(S/N: ${ticket.asset.serial_no})` : ""}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

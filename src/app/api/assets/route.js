@@ -22,12 +22,21 @@ export async function GET(request) {
     const type_id     = searchParams.get('type_id');
     const location_id = searchParams.get('location_id');
     const bu_id       = searchParams.get('bu_id');
+    const user_id     = searchParams.get('user_id');
 
     const where = { is_active: true };
     if (status)      where.status = status;
     if (type_id)     where.asset_type_id = parseInt(type_id);
     if (location_id) where.location_id   = parseInt(location_id);
     if (bu_id)       where.bu_id         = parseInt(bu_id);
+    if (user_id) {
+      where.assignments = {
+        some: {
+          user_id: parseInt(user_id),
+          returned_at: null
+        }
+      };
+    }
     if (search) {
       where.OR = [
         { asset_code: { contains: search, mode: 'insensitive' } },

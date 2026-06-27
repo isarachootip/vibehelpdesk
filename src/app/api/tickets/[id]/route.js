@@ -11,6 +11,8 @@ export async function GET(request, { params }) {
       include: {
         system: true,
         location: true,
+        hardware: true,
+        asset: { include: { asset_type: true } },
         reporter: { select: { user_id: true, full_name: true, email: true, phone: true } },
         tier1: { select: { user_id: true, full_name: true, email: true } },
         tier2: { select: { user_id: true, full_name: true, email: true } },
