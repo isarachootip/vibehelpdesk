@@ -44,7 +44,9 @@ export async function POST(request) {
       const location_id  = locationMap[locationCode] || null;
 
       const buCode = String(row['bu_code'] || '').trim().toUpperCase();
-      const bu_id  = buMap[buCode] || null;
+      if (!buCode) { errors.push({ row: rowNum, message: 'bu_code is required' }); continue; }
+      const bu_id  = buMap[buCode];
+      if (!bu_id) { errors.push({ row: rowNum, message: `bu_code "${buCode}" not found` }); continue; }
 
       // Parse dates (XLSX may return Date objects or strings)
       const parseDate = (v) => {

@@ -63,8 +63,8 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const data = await request.json();
-    if (!data.asset_code || !data.asset_type_id)
-      return NextResponse.json({ error: 'Asset code and type are required' }, { status: 400 });
+    if (!data.asset_code || !data.asset_type_id || !data.bu_id)
+      return NextResponse.json({ error: 'Asset code, type, and Business Unit are required' }, { status: 400 });
 
     const asset = await prisma.asset.create({
       data: {

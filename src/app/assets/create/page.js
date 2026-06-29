@@ -186,8 +186,8 @@ export default function AssetCreatePage() {
               <p className="text-muted" style={{ fontSize: ".72rem", marginTop: "4px" }}>ห้อง / ชั้น / สาขาที่ Asset ตั้งอยู่</p>
             </div>
             <div className="form-group">
-              <label>Business Unit (BU)</label>
-              <select className="form-control" value={form.bu_id} onChange={e => set("bu_id", e.target.value)}>
+              <label>Business Unit (BU) <span className="req">*</span></label>
+              <select className="form-control" value={form.bu_id} onChange={e => set("bu_id", e.target.value)} required>
                 <option value="">-- เลือก BU --</option>
                 {bus.map(b => <option key={b.bu_id} value={b.bu_id}>{b.bu_code} — {b.bu_name}</option>)}
               </select>

@@ -232,9 +232,9 @@ export default function AssetDetailPage({ params }) {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label>Business Unit (BU)</label>
-                    <select className="form-control" value={editForm.bu_id || ""} onChange={e => setEditForm({ ...editForm, bu_id: e.target.value })}>
-                      <option value="">-- ไม่ระบุ --</option>
+                    <label>Business Unit (BU) <span className="req">*</span></label>
+                    <select className="form-control" value={editForm.bu_id || ""} onChange={e => setEditForm({ ...editForm, bu_id: e.target.value })} required>
+                      <option value="">-- เลือก BU --</option>
                       {bus.map(b => <option key={b.bu_id} value={b.bu_id}>{b.bu_code} — {b.bu_name}</option>)}
                     </select>
                   </div>

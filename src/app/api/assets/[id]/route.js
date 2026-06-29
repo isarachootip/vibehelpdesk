@@ -48,7 +48,7 @@ export async function PUT(request, { params }) {
         vendor:        data.vendor    !== undefined ? (data.vendor || null)    : undefined,
         po_number:     data.po_number !== undefined ? (data.po_number || null) : undefined,
         location_id:   data.location_id !== undefined ? (data.location_id ? parseInt(data.location_id) : null) : undefined,
-        bu_id:         data.bu_id       !== undefined ? (data.bu_id       ? parseInt(data.bu_id)       : null) : undefined,
+        bu_id:         data.bu_id ? parseInt(data.bu_id) : undefined,
         status:        data.status || undefined,
         note:          data.note !== undefined ? (data.note || null) : undefined,
       }
