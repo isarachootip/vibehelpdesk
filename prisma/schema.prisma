@@ -139,6 +139,8 @@ model Ticket {
   tier3_assigned_at      DateTime?
   tier3_id               Int?
   asset_id               Int?
+  sla_deadline           DateTime?
+  asset                  Asset?          @relation(fields: [asset_id], references: [asset_id])
   attachments            Attachment[]
   audit_logs             AuditLog[]
   bu                     BusinessUnit    @relation(fields: [bu_id], references: [bu_id])
@@ -276,10 +278,15 @@ model Asset {
   is_active     Boolean           @default(true)
   created_at    DateTime          @default(now())
   updated_at    DateTime          @updatedAt
+  cpu           String?           @db.VarChar(100)
+  ram_gb        Int?
+  storage_gb    Int?
+  storage_type  String?           @db.VarChar(50)
   asset_type    AssetType         @relation(fields: [asset_type_id], references: [type_id])
   bu            BusinessUnit      @relation(fields: [bu_id], references: [bu_id])
   location      Location?         @relation(fields: [location_id], references: [location_id])
   assignments   AssetAssignment[]
+  tickets       Ticket[]
 }
 
 model AssetAssignment {
@@ -293,4 +300,22 @@ model AssetAssignment {
   assigned_by   Int?
   note          String?
   asset         Asset     @relation(fields: [asset_id], references: [asset_id], onDelete: Cascade)
+}
+
+model RecurringTicket {
+  id                  Int      @id @default(autoincrement())
+  title               String   @db.VarChar(255)
+  subject             String   @db.VarChar(255)
+  description         String   @db.Text
+  priority            String   @db.VarChar(20)
+  problem_type        String   @db.VarChar(20)
+  bu_id               Int
+  system_id           Int?
+  hardware_id         Int?
+  location_id         Int?
+  cron_expression     String   @db.VarChar(50)
+  is_active           Boolean  @default(true)
+  last_triggered_at   DateTime?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
 }

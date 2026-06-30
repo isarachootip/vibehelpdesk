@@ -143,6 +143,10 @@ export default function AppSidebar({ user, onLogout }) {
               <i className="fa-solid fa-users nav-icon"></i>
               <span className="nav-label">Users</span>
             </a>
+            <a href="/master/recurring" className="nav-item" id="nav-master-recurring">
+              <i className="fa-solid fa-clock-rotate-left nav-icon" style={{ color: "#3b82f6" }}></i>
+              <span className="nav-label">ตั๋วประจำรอบ (Recurring)</span>
+            </a>
             <a href="/master/settings" className="nav-item" id="nav-master-announcements"
               style={{ position: "relative" }}
             >

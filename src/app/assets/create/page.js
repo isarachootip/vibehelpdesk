@@ -17,6 +17,7 @@ export default function AssetCreatePage() {
     serial_no: "", spec: "", os: "", mac_address: "", ip_address: "",
     purchase_date: "", warranty_end: "", cost: "", vendor: "", po_number: "",
     location_id: "", bu_id: "", status: "IN_USE", note: "",
+    cpu: "", ram_gb: "", storage_gb: "", storage_type: "SSD",
     // Assignment
     assign_user_id: "", assign_user_name: "", assign_note: "",
   });
@@ -62,6 +63,10 @@ export default function AssetCreatePage() {
         bu_id:          form.bu_id ? parseInt(form.bu_id) : null,
         status:         form.status,
         note:           form.note || null,
+        cpu:            form.cpu || null,
+        ram_gb:         form.ram_gb ? parseInt(form.ram_gb) : null,
+        storage_gb:     form.storage_gb ? parseInt(form.storage_gb) : null,
+        storage_type:   form.storage_type || null,
         // Assignment
         assign_user_id:   form.assign_user_id ? parseInt(form.assign_user_id) : null,
         assign_user_name: form.assign_user_name || null,
@@ -142,8 +147,31 @@ export default function AssetCreatePage() {
             <p className="text-muted" style={{ fontSize: ".72rem", marginTop: "4px" }}>ใช้สแกน Barcode หรือพิมพ์จากฉลากด้านล่างเครื่อง</p>
           </div>
           <div className="form-group">
-            <label>Spec (CPU / RAM / Storage)</label>
-            <textarea className="form-control" rows={2} placeholder="เช่น Intel Core i5-1135G7, RAM 16GB, SSD 512GB" value={form.spec} onChange={e => set("spec", e.target.value)} />
+            <label>หน่วยประมวลผล (CPU)</label>
+            <input className="form-control" placeholder="เช่น Intel Core i5-1135G7, Apple M2" value={form.cpu} onChange={e => set("cpu", e.target.value)} />
+          </div>
+          <InputRow>
+            <div className="form-group">
+              <label>หน่วยความจำ (RAM - GB)</label>
+              <input type="number" className="form-control" placeholder="เช่น 8, 16, 32" value={form.ram_gb} onChange={e => set("ram_gb", e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label>พื้นที่เก็บข้อมูล (Storage - GB)</label>
+              <input type="number" className="form-control" placeholder="เช่น 256, 512, 1024" value={form.storage_gb} onChange={e => set("storage_gb", e.target.value)} />
+            </div>
+          </InputRow>
+          <div className="form-group">
+            <label>ประเภทพื้นที่เก็บข้อมูล (Storage Type)</label>
+            <select className="form-control" value={form.storage_type} onChange={e => set("storage_type", e.target.value)}>
+              <option value="SSD">SSD (Solid State Drive)</option>
+              <option value="HDD">HDD (Hard Disk Drive)</option>
+              <option value="NVMe">M.2 NVMe SSD</option>
+              <option value="eMMC">eMMC</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Spec อื่นๆ เพิ่มเติม (เช่น การ์ดจอ / หน้าจอ)</label>
+            <textarea className="form-control" rows={2} placeholder="เช่น Intel Iris Xe Graphics, Display 15.6 FHD" value={form.spec} onChange={e => set("spec", e.target.value)} />
           </div>
           <InputRow>
             <div className="form-group">

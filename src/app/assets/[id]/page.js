@@ -84,6 +84,10 @@ export default function AssetDetailPage({ params }) {
         location_id:   editForm.location_id ? parseInt(editForm.location_id) : null,
         bu_id:         editForm.bu_id ? parseInt(editForm.bu_id) : null,
         cost:          editForm.cost ? parseFloat(editForm.cost) : null,
+        cpu:           editForm.cpu || null,
+        ram_gb:        editForm.ram_gb ? parseInt(editForm.ram_gb) : null,
+        storage_gb:    editForm.storage_gb ? parseInt(editForm.storage_gb) : null,
+        storage_type:  editForm.storage_type || null,
       })
     });
     if (res.ok) {
@@ -199,11 +203,28 @@ export default function AssetDetailPage({ params }) {
                     <input className="form-control" value={editForm.model || ""} onChange={e => setEditForm({ ...editForm, model: e.target.value })} />
                   </div>
                   <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                    <label>Serial Number</label>
-                    <input className="form-control" value={editForm.serial_no || ""} onChange={e => setEditForm({ ...editForm, serial_no: e.target.value })} />
+                    <label>หน่วยประมวลผล (CPU)</label>
+                    <input className="form-control" value={editForm.cpu || ""} onChange={e => setEditForm({ ...editForm, cpu: e.target.value })} />
+                  </div>
+                  <div className="form-group">
+                    <label>หน่วยความจำ (RAM - GB)</label>
+                    <input type="number" className="form-control" value={editForm.ram_gb || ""} onChange={e => setEditForm({ ...editForm, ram_gb: e.target.value })} />
+                  </div>
+                  <div className="form-group">
+                    <label>พื้นที่เก็บข้อมูล (Storage - GB)</label>
+                    <input type="number" className="form-control" value={editForm.storage_gb || ""} onChange={e => setEditForm({ ...editForm, storage_gb: e.target.value })} />
+                  </div>
+                  <div className="form-group">
+                    <label>ประเภทพื้นที่เก็บข้อมูล</label>
+                    <select className="form-control" value={editForm.storage_type || "SSD"} onChange={e => setEditForm({ ...editForm, storage_type: e.target.value })}>
+                      <option value="SSD">SSD</option>
+                      <option value="HDD">HDD</option>
+                      <option value="NVMe">M.2 NVMe SSD</option>
+                      <option value="eMMC">eMMC</option>
+                    </select>
                   </div>
                   <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                    <label>Spec</label>
+                    <label>Spec อื่นๆ เพิ่มเติม</label>
                     <textarea className="form-control" rows={2} value={editForm.spec || ""} onChange={e => setEditForm({ ...editForm, spec: e.target.value })} />
                   </div>
                   <div className="form-group">
@@ -283,12 +304,30 @@ export default function AssetDetailPage({ params }) {
                     <div style={{ fontSize: ".75rem", color: "var(--text-muted)", marginBottom: "4px" }}>Serial Number (S/N)</div>
                     <div style={{ fontWeight: 700, fontFamily: "monospace", fontSize: "1.05rem", color: "var(--primary)" }}>{asset.serial_no || "—"}</div>
                   </div>
-                  <div style={{ gridColumn: "1 / -1" }}>
-                    <div style={{ fontSize: ".75rem", color: "var(--text-muted)", marginBottom: "4px" }}>รายละเอียดคุณสมบัติ (Specification)</div>
-                    <div style={{ background: "var(--border-light)", padding: "12px", borderRadius: "8px", fontSize: ".82rem", whiteSpace: "pre-wrap", fontFamily: "monospace" }}>
-                      {asset.spec || "ไม่มีรายละเอียดสเปคเครื่อง"}
+                  {/* Hardware Specs Display */}
+                  <div style={{ gridColumn: "1 / -1", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px", background: "var(--border-light)", padding: "14px", borderRadius: "10px", marginTop: "8px" }}>
+                    <div>
+                      <div style={{ fontSize: ".7rem", color: "var(--text-muted)", marginBottom: "2px" }}>CPU</div>
+                      <div style={{ fontWeight: 700, fontSize: ".85rem" }}>{asset.cpu || "—"}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: ".7rem", color: "var(--text-muted)", marginBottom: "2px" }}>RAM (Memory)</div>
+                      <div style={{ fontWeight: 700, fontSize: ".85rem" }}>{asset.ram_gb ? `${asset.ram_gb} GB` : "—"}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: ".7rem", color: "var(--text-muted)", marginBottom: "2px" }}>Storage (Disk)</div>
+                      <div style={{ fontWeight: 700, fontSize: ".85rem" }}>{asset.storage_gb ? `${asset.storage_gb} GB (${asset.storage_type || 'SSD'})` : "—"}</div>
                     </div>
                   </div>
+
+                  {asset.spec && (
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <div style={{ fontSize: ".75rem", color: "var(--text-muted)", marginBottom: "4px" }}>รายละเอียดคุณสมบัติเพิ่มเติม (Other Spec)</div>
+                      <div style={{ background: "var(--border-light)", padding: "12px", borderRadius: "8px", fontSize: ".82rem", whiteSpace: "pre-wrap", fontFamily: "monospace" }}>
+                        {asset.spec}
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <div style={{ fontSize: ".75rem", color: "var(--text-muted)", marginBottom: "4px" }}>ระบบปฏิบัติการ (OS)</div>
                     <div style={{ fontWeight: 600 }}>{asset.os || "—"}</div>

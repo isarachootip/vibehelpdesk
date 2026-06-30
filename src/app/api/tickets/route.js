@@ -108,6 +108,17 @@ export async function POST(request) {
       }
     }
 
+    // Calculate SLA Deadline based on priority
+    let slaHours = 24;
+    const p = priority || 'Medium';
+    if (p === 'Critical') slaHours = 2;
+    else if (p === 'High') slaHours = 4;
+    else if (p === 'Medium') slaHours = 24;
+    else if (p === 'Low') slaHours = 72;
+
+    const sla_deadline = new Date();
+    sla_deadline.setHours(sla_deadline.getHours() + slaHours);
+
     const ticket = await prisma.ticket.create({
       data: {
         ticket_no,
@@ -125,10 +136,11 @@ export async function POST(request) {
         reporter_line_id: reporter_line_id || null,
         bu_id: parseInt(bu_id),
         owner_id: system?.owner_user_id || null,
-        priority: priority || 'Medium',
+        priority: p,
         description,
         symptom,
         status: 'NEW',
+        sla_deadline,
       },
       include: {
         system: true,

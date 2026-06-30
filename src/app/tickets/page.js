@@ -138,45 +138,76 @@ export default function TicketList() {
                     <th>Tier 2</th>
                     <th>Tier 3</th>
                     <th>วันที่สร้าง</th>
+                    <th>SLA</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {tickets.length > 0 ? tickets.map((t) => (
-                    <tr key={t.ticket_id}>
-                      <td className="font-mono" style={{ fontSize: ".76rem", fontWeight: 600 }}>{t.ticket_no}</td>
-                      <td style={{ maxWidth: "180px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</td>
-                      <td><span className="chip">{t.bu?.bu_code}</span></td>
-                      <td>
-                        <span className="chip">{t.system?.system_code}</span><br/>
-                        <span style={{fontSize:".8rem",color:"var(--text-secondary)"}}>{t.system?.system_name}</span>
-                      </td>
-                      <td style={{ fontSize: ".8rem" }}>
-                        {t.problem_type === "hardware" ? (
-                          <span style={{ color: "var(--warning)" }}><i className="fa-solid fa-microchip"></i> HW</span>
-                        ) : (
-                          <span style={{ color: "var(--primary-light)" }}><i className="fa-solid fa-code"></i> SW</span>
-                        )}
-                      </td>
-                      <td><span className={`badge ${priorityColor(t.priority)}`}>{t.priority}</span></td>
-                      <td><span className={`badge ${statusColor(t.status)}`}>{statusLabel(t.status)}</span></td>
-                      <td>
-                        {t.reporter?.full_name || t.reporter_name || "-"}<br/>
-                        <span style={{fontSize:".75rem",color:"var(--text-muted)"}}>{t.reporter?.email || t.reporter_email || "-"}</span>
-                      </td>
-                      <td style={{ fontSize: ".8rem" }}>{t.tier1?.full_name || "-"}</td>
-                      <td style={{ fontSize: ".8rem" }}>{t.tier2?.full_name || "-"}</td>
-                      <td style={{ fontSize: ".8rem" }}>{t.tier3?.full_name || "-"}</td>
-                      <td style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>
-                        {new Date(t.created_at).toLocaleDateString("th-TH", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                      </td>
-                      <td>
-                        <a href={`/tickets/${t.ticket_id}`} className="btn btn-outline btn-sm">
-                          <i className="fa-solid fa-eye"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  )) : (
+                  {tickets.length > 0 ? tickets.map((t) => {
+                    // Calculate SLA indicator
+                    let slaText = "—";
+                    let slaColor = "var(--text-muted)";
+                    const isClosed = ["RESOLVED", "CLOSED"].includes(t.status);
+
+                    if (t.sla_deadline && !isClosed) {
+                      const now = new Date();
+                      const deadline = new Date(t.sla_deadline);
+                      const diffMs = deadline - now;
+                      if (diffMs < 0) {
+                        slaText = "Overdue 🚨";
+                        slaColor = "var(--danger)";
+                      } else {
+                        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+                        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                        if (diffHrs > 0) {
+                          slaText = `${diffHrs} ชม. ${diffMins} น.`;
+                        } else {
+                          slaText = `${diffMins} นาที!`;
+                          slaColor = "#f59e0b"; // orange
+                        }
+                      }
+                    } else if (isClosed) {
+                      slaText = "✅ Resolved";
+                      slaColor = "var(--success)";
+                    }
+
+                    return (
+                      <tr key={t.ticket_id}>
+                        <td className="font-mono" style={{ fontSize: ".76rem", fontWeight: 600 }}>{t.ticket_no}</td>
+                        <td style={{ maxWidth: "180px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</td>
+                        <td><span className="chip">{t.bu?.bu_code}</span></td>
+                        <td>
+                          <span className="chip">{t.system?.system_code}</span><br/>
+                          <span style={{fontSize:".8rem",color:"var(--text-secondary)"}}>{t.system?.system_name}</span>
+                        </td>
+                        <td style={{ fontSize: ".8rem" }}>
+                          {t.problem_type === "hardware" ? (
+                            <span style={{ color: "var(--warning)" }}><i className="fa-solid fa-microchip"></i> HW</span>
+                          ) : (
+                            <span style={{ color: "var(--primary-light)" }}><i className="fa-solid fa-code"></i> SW</span>
+                          )}
+                        </td>
+                        <td><span className={`badge ${priorityColor(t.priority)}`}>{t.priority}</span></td>
+                        <td><span className={`badge ${statusColor(t.status)}`}>{statusLabel(t.status)}</span></td>
+                        <td>
+                          {t.reporter?.full_name || t.reporter_name || "-"}<br/>
+                          <span style={{fontSize:".75rem",color:"var(--text-muted)"}}>{t.reporter?.email || t.reporter_email || "-"}</span>
+                        </td>
+                        <td style={{ fontSize: ".8rem" }}>{t.tier1?.full_name || "-"}</td>
+                        <td style={{ fontSize: ".8rem" }}>{t.tier2?.full_name || "-"}</td>
+                        <td style={{ fontSize: ".8rem" }}>{t.tier3?.full_name || "-"}</td>
+                        <td style={{ fontSize: ".76rem", whiteSpace: "nowrap" }}>
+                          {new Date(t.created_at).toLocaleDateString("th-TH", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </td>
+                        <td style={{ fontSize: ".8rem", fontWeight: 700, color: slaColor }}>{slaText}</td>
+                        <td>
+                          <a href={`/tickets/${t.ticket_id}`} className="btn btn-outline btn-sm">
+                            <i className="fa-solid fa-eye"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  }) : (
                     <tr>
                       <td colSpan="12" className="text-center text-muted" style={{ padding: "48px" }}>
                         <i className="fa-solid fa-inbox" style={{ fontSize: "2rem", marginBottom: "8px", display: "block" }}></i>

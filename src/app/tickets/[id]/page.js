@@ -39,6 +39,51 @@ export default function TicketDetail({ params }) {
     fetchUsers();
   }, [id]);
 
+  const [slaCountdown, setSlaCountdown] = useState({ text: "", color: "var(--text-muted)", overdue: false });
+
+  useEffect(() => {
+    if (!ticket || !ticket.sla_deadline) return;
+    const isClosed = ["RESOLVED", "CLOSED"].includes(ticket.status);
+    if (isClosed) {
+      setSlaCountdown({ text: "แก้ไขเสร็จสิ้นภายใต้กำหนด SLA ✅", color: "var(--success)", overdue: false });
+      return;
+    }
+
+    const updateTimer = () => {
+      const now = new Date();
+      const deadline = new Date(ticket.sla_deadline);
+      const diffMs = deadline - now;
+
+      if (diffMs < 0) {
+        const absDiff = Math.abs(diffMs);
+        const diffHrs = Math.floor(absDiff / (1000 * 60 * 60));
+        const diffMins = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const diffSecs = Math.floor((absDiff % (1000 * 60)) / 1000);
+        setSlaCountdown({
+          text: `เกินเวลากำหนด SLA แล้ว 🚨 (เลยกำหนด: ${diffHrs} ชม. ${diffMins} น. ${diffSecs} ว.)`,
+          color: "var(--danger)",
+          overdue: true
+        });
+      } else {
+        const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
+        
+        let text = `เหลือเวลาแก้ไข: ${diffHrs} ชม. ${diffMins} น. ${diffSecs} ว.`;
+        let color = "var(--primary-light)";
+        if (diffHrs === 0) {
+          color = "#f59e0b"; // Warning orange color if under 1 hour
+        }
+        
+        setSlaCountdown({ text, color, overdue: false });
+      }
+    };
+
+    updateTimer();
+    const intervalId = setInterval(updateTimer, 1000);
+    return () => clearInterval(intervalId);
+  }, [ticket]);
+
   const doAction = async (action, extra = {}) => {
     const res = await fetch(`/api/tickets/${id}`, {
       method: "PUT",
@@ -85,6 +130,28 @@ export default function TicketDetail({ params }) {
         <span className={`badge ${priorityColor(ticket.priority)}`} style={{fontSize:".85rem",padding:"5px 14px"}}>{ticket.priority}</span>
         <span className={`badge ${statusColor(ticket.status)}`} style={{fontSize:".85rem",padding:"5px 14px"}}>{statusLabel(ticket.status)}</span>
       </div>
+
+      {ticket.sla_deadline && (
+        <div style={{
+          padding: "12px 18px",
+          borderRadius: "var(--radius-sm)",
+          background: slaCountdown.overdue ? "rgba(239, 68, 68, 0.1)" : "rgba(99, 102, 241, 0.08)",
+          border: `1.5px solid ${slaCountdown.overdue ? "var(--danger)" : "var(--primary-light)"}`,
+          color: slaCountdown.color,
+          fontWeight: 700,
+          fontSize: ".9rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "16px",
+        }}>
+          <i className={`fa-solid ${slaCountdown.overdue ? "fa-circle-exclamation fa-beat" : "fa-clock"}`} style={{ fontSize: "1.1rem" }}></i>
+          <span>{slaCountdown.text}</span>
+          <span style={{ fontSize: ".76rem", fontWeight: 400, color: "var(--text-secondary)", marginLeft: "auto" }}>
+            SLA Deadline: {new Date(ticket.sla_deadline).toLocaleString("th-TH")}
+          </span>
+        </div>
+      )}
 
       <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:"16px"}}>
         {/* Left Column */}
