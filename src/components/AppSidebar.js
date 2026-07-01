@@ -75,10 +75,16 @@ export default function AppSidebar({ user, onLogout }) {
         )}
 
         {role !== "TIER1" && (
-          <a href="/tickets/create" className="nav-item" id="nav-create-ticket">
-            <i className="fa-solid fa-plus-circle nav-icon"></i>
-            <span className="nav-label">แจ้งปัญหาใหม่</span>
-          </a>
+          <>
+            <a href="/tickets/create" className="nav-item" id="nav-create-ticket">
+              <i className="fa-solid fa-plus-circle nav-icon"></i>
+              <span className="nav-label">แจ้งปัญหาใหม่</span>
+            </a>
+            <a href="/kb" className="nav-item" id="nav-user-kb">
+              <i className="fa-solid fa-book nav-icon" style={{ color: "#10b981" }}></i>
+              <span className="nav-label">คลังความรู้ (KM / FAQ)</span>
+            </a>
+          </>
         )}
 
         {canSeeTier1 && (
@@ -146,6 +152,10 @@ export default function AppSidebar({ user, onLogout }) {
             <a href="/master/recurring" className="nav-item" id="nav-master-recurring">
               <i className="fa-solid fa-clock-rotate-left nav-icon" style={{ color: "#3b82f6" }}></i>
               <span className="nav-label">ตั๋วประจำรอบ (Recurring)</span>
+            </a>
+            <a href="/master/kb" className="nav-item" id="nav-master-kb">
+              <i className="fa-solid fa-book-open nav-icon" style={{ color: "#10b981" }}></i>
+              <span className="nav-label">จัดการคลังความรู้ (KM)</span>
             </a>
             <a href="/master/settings" className="nav-item" id="nav-master-announcements"
               style={{ position: "relative" }}

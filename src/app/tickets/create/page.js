@@ -123,13 +123,16 @@ function CreateTicketForm() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [assets, setAssets] = useState([]);
+  const [kbArticles, setKbArticles] = useState([]);
+  const [activeKb, setActiveKb] = useState(null);
 
   useEffect(() => {
     Promise.all([
       fetch("/api/master").then((res) => res.json()),
       fetch("/api/assets").then((res) => res.ok ? res.json() : []).catch(() => []),
+      fetch("/api/kb").then((res) => res.ok ? res.json() : []).catch(() => []),
     ])
-      .then(([d, ass]) => {
+      .then(([d, ass, kb]) => {
         if (d && !d.error) {
           setMasterData({
             bus: d.bus || [],
@@ -140,6 +143,7 @@ function CreateTicketForm() {
           });
         }
         setAssets(Array.isArray(ass) ? ass : []);
+        setKbArticles(Array.isArray(kb) ? kb : []);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -470,8 +474,11 @@ function CreateTicketForm() {
                 </h3>
               </div>
             </div>
-            <div className="card-body">
-              {/* Hardware: select device then symptom */}
+            
+            {/* Split layout: Form on Left, FAQs on Right */}
+            <div style={{ display: "grid", gridTemplateColumns: "2.2fr 1fr", gap: "20px", padding: "20px" }}>
+              <div>
+                {/* Hardware: select device then symptom */}
               {selectedCategory?.useHardware && (
                 <>
                   <div className="form-group">
@@ -643,6 +650,76 @@ function CreateTicketForm() {
                 )}
               </div>
             </div>
+
+              {/* Right Column: Suggested FAQs */}
+              <div style={{ borderLeft: "1px solid var(--border-light)", paddingLeft: "20px" }}>
+                <div style={{
+                  background: "rgba(59, 130, 246, 0.05)",
+                  border: "1.5px solid rgba(59, 130, 246, 0.15)",
+                  borderRadius: "10px",
+                  padding: "16px"
+                }}>
+                  <h4 style={{ fontSize: ".82rem", fontWeight: 700, color: "var(--primary-light)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+                    <i className="fa-solid fa-lightbulb fa-bounce"></i>
+                    บทความช่วยเหลือแนะนำ
+                  </h4>
+                  
+                  {(() => {
+                    const catMap = {
+                      computer: "Computer",
+                      software: "Software",
+                      network: "Network",
+                      printer: "Printer",
+                      pos: "POS"
+                    };
+                    const targetCategory = catMap[selectedCategory?.id];
+                    const matched = kbArticles.filter(a => a.category === targetCategory);
+
+                    if (matched.length === 0) {
+                      return (
+                        <p style={{ fontSize: ".76rem", color: "var(--text-muted)", lineHeight: 1.4 }}>
+                          ยังไม่มีบทความในหมวดหมู่นี้ ลองกรอกรายละเอียดและส่งข้อมูลได้เลยครับ
+                        </p>
+                      );
+                    }
+
+                    return (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                        <p style={{ fontSize: ".72rem", color: "var(--text-secondary)", marginBottom: "4px" }}>
+                          แนะนำให้ลองทำตามคู่มือเบื้องต้นนี้ก่อนได้ครับ:
+                        </p>
+                        {matched.map(art => (
+                          <div
+                            key={art.id}
+                            onClick={() => {
+                              fetch(`/api/kb/${art.id}`) // Increment views
+                                .then(res => res.json())
+                                .then(data => setActiveKb(data));
+                            }}
+                            style={{
+                              padding: "10px 12px",
+                              background: "var(--bg-secondary)",
+                              borderRadius: "6px",
+                              border: "1px solid var(--border-light)",
+                              cursor: "pointer",
+                              fontSize: ".78rem",
+                              fontWeight: 600,
+                              color: "var(--text-secondary)",
+                              transition: "all 0.2s",
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--primary-light)"; e.currentTarget.style.background = "#fff"; }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-light)"; e.currentTarget.style.background = "var(--bg-secondary)"; }}
+                          >
+                            <i className="fa-regular fa-file-lines" style={{ marginRight: "6px", color: "var(--primary-light)" }}></i>
+                            {art.title}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
           </div>
           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "16px" }}>
             <a href="/tickets" className="btn btn-ghost">ยกเลิก</a>
@@ -804,6 +881,30 @@ function CreateTicketForm() {
             </button>
           </div>
         </form>
+      )}
+
+      {/* KB Article Modal Popup */}
+      {activeKb && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div className="card" style={{ width: "100%", maxWidth: "600px", margin: 0, maxHeight: "80vh", display: "flex", flexDirection: "column" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--border-light)" }}>
+              <div>
+                <span className="badge" style={{ background: "rgba(99,102,241,0.1)", color: "var(--primary-light)", fontSize: ".7rem" }}>
+                  {activeKb.category}
+                </span>
+                <h3 className="card-title" style={{ marginTop: "4px", fontSize: ".95rem" }}>{activeKb.title}</h3>
+              </div>
+              <button className="btn btn-ghost btn-sm" onClick={() => setActiveKb(null)}><i className="fa-solid fa-xmark"></i></button>
+            </div>
+            <div className="card-body" style={{ overflowY: "auto", flex: 1, padding: "16px", fontSize: ".82rem", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
+              {activeKb.content}
+            </div>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: ".7rem", color: "var(--text-muted)", borderTop: "1px solid var(--border-light)", padding: "10px 16px" }}>
+              <span><i className="fa-solid fa-eye"></i> ยอดผู้ชม {activeKb.views} ครั้ง</span>
+              <button className="btn btn-primary btn-sm" onClick={() => setActiveKb(null)}>ปิดหน้าต่าง</button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
