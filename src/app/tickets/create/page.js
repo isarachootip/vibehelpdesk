@@ -492,7 +492,7 @@ function CreateTicketForm() {
                       });
                     }} required>
                       <option value="">-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --</option>
-                      {assets.map(ast => (
+                      {assets.filter(ast => ast.bu_id.toString() === form.bu_id).map(ast => (
                         <option key={ast.asset_id} value={ast.asset_id}>
                           [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''} — {ast.location ? ast.location.location_code : 'ไม่ระบุสถานที่'}
                         </option>
