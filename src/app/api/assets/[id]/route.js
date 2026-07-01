@@ -17,6 +17,19 @@ export async function GET(request, { params }) {
             assigned_at: true, returned_at: true, note: true, assigned_by: true
           }
         },
+        tickets: {
+          orderBy: { created_at: 'desc' },
+          select: {
+            ticket_id: true,
+            ticket_no: true,
+            subject: true,
+            status: true,
+            priority: true,
+            created_at: true,
+            reporter_name: true,
+            reporter: { select: { full_name: true } }
+          }
+        }
       }
     });
     if (!asset) return NextResponse.json({ error: 'Not found' }, { status: 404 });

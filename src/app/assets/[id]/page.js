@@ -412,6 +412,63 @@ export default function AssetDetailPage({ params }) {
               )}
             </div>
           </div>
+
+          {/* Ticket History */}
+          <div className="card" style={{ marginTop: "20px" }}>
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 className="card-title">
+                <i className="fa-solid fa-tools" style={{ marginRight: "8px", color: "var(--primary-light)" }}></i>
+                ประวัติการแจ้งซ่อม/แจ้งเสีย ({asset.tickets?.length || 0} รายการ)
+              </h3>
+            </div>
+            <div className="card-body" style={{ padding: 0 }}>
+              {!asset.tickets || asset.tickets.length === 0 ? (
+                <div style={{ padding: "30px", textAlign: "center", color: "var(--text-muted)" }}>ยังไม่มีประวัติการแจ้งเสียสำหรับอุปกรณ์นี้</div>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Job No.</th>
+                      <th>หัวข้อปัญหา</th>
+                      <th>ผู้แจ้ง</th>
+                      <th>สถานะ</th>
+                      <th>วันที่แจ้ง</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {asset.tickets.map(t => (
+                      <tr key={t.ticket_id}>
+                        <td className="font-mono" style={{ fontSize: ".76rem", fontWeight: 600 }}>{t.ticket_no}</td>
+                        <td style={{ maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {t.subject}
+                        </td>
+                        <td>{t.reporter?.full_name || t.reporter_name || "—"}</td>
+                        <td>
+                          <span className={`badge`} style={{ 
+                            fontSize: ".7rem",
+                            background: t.status === "RESOLVED" || t.status === "CLOSED" ? "rgba(16,185,129,0.12)" : "rgba(245,158,11,0.12)",
+                            color: t.status === "RESOLVED" || t.status === "CLOSED" ? "var(--success)" : "#f59e0b",
+                            border: `1px solid ${t.status === "RESOLVED" || t.status === "CLOSED" ? "rgba(16,185,129,0.25)" : "rgba(245,158,11,0.25)"}`
+                          }}>
+                            {t.status}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: ".78rem" }}>
+                          {new Date(t.created_at).toLocaleDateString("th-TH")}
+                        </td>
+                        <td>
+                          <a href={`/tickets/${t.ticket_id}`} className="btn btn-outline btn-sm">
+                            <i className="fa-solid fa-eye"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Right Side: Current Assignment & Assign Controls */}

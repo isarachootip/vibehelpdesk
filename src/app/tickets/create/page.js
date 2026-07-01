@@ -479,67 +479,78 @@ function CreateTicketForm() {
             <div style={{ display: "grid", gridTemplateColumns: "2.2fr 1fr", gap: "20px", padding: "20px" }}>
               <div>
                 {/* Hardware: select device then symptom */}
-              {selectedCategory?.useHardware && (
-                <>
-                  <div className="form-group">
-                    <label>เลือกจากทะเบียนทรัพย์สิน (IT Asset) <span className="req">*</span></label>
-                    <select name="asset_id" className="form-control" value={form.asset_id} onChange={e => {
-                      const val = e.target.value;
-                      setForm(prev => {
-                        const next = { ...prev, asset_id: val };
-                        if (val && val !== "other") {
-                          const assetObj = assets.find(a => a.asset_id === parseInt(val));
-                          if (assetObj) {
-                            next.location_text = assetObj.location
-                              ? `${assetObj.location.location_code} — ${assetObj.location.location_name}${assetObj.location.floor ? ` ชั้น ${assetObj.location.floor}` : ''}`
-                              : "";
-                          }
+                {/* 1. IT Asset Selection (Shown for all categories; required for computer/hardware, optional for others) */}
+                <div className="form-group">
+                  <label>
+                    เลือกจากทะเบียนทรัพย์สิน (IT Asset) {selectedCategory?.useHardware && <span className="req">*</span>}
+                  </label>
+                  <select name="asset_id" className="form-control" value={form.asset_id} onChange={e => {
+                    const val = e.target.value;
+                    setForm(prev => {
+                      const next = { ...prev, asset_id: val };
+                      if (val && val !== "other") {
+                        const assetObj = assets.find(a => a.asset_id === parseInt(val));
+                        if (assetObj) {
+                          next.location_text = assetObj.location
+                            ? `${assetObj.location.location_code} — ${assetObj.location.location_name}${assetObj.location.floor ? ` ชั้น ${assetObj.location.floor}` : ''}`
+                            : "";
                         }
-                        return next;
-                      });
-                    }} required>
-                      <option value="">-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --</option>
-                      {assets.filter(ast => ast.bu_id.toString() === form.bu_id).map(ast => (
-                        <option key={ast.asset_id} value={ast.asset_id}>
-                          [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''} — {ast.location ? ast.location.location_code : 'ไม่ระบุสถานที่'}
-                        </option>
-                      ))}
+                      }
+                      return next;
+                    });
+                  }} required={selectedCategory?.useHardware}>
+                    <option value="">
+                      {selectedCategory?.useHardware 
+                        ? "-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --" 
+                        : "-- เลือกอุปกรณ์ที่เกี่ยวข้อง (ถ้ามี/ไม่บังคับ) --"
+                      }
+                    </option>
+                    {assets.filter(ast => ast.bu_id.toString() === form.bu_id).map(ast => (
+                      <option key={ast.asset_id} value={ast.asset_id}>
+                        [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''} — {ast.location ? ast.location.location_code : 'ไม่ระบุสถานที่'}
+                      </option>
+                    ))}
+                    {selectedCategory?.useHardware && (
                       <option value="other">⚠️ ไม่มีในทะเบียนทรัพย์สิน / อุปกรณ์ส่วนตัว</option>
-                    </select>
-                  </div>
+                    )}
+                  </select>
+                </div>
 
-                  {/* Fallback to general hardware selection */}
-                  {(form.asset_id === "other" || !form.asset_id) && (
-                    <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
-                      <label>ระบุประเภทอุปกรณ์หลัก <span className="req">*</span></label>
-                      <select name="hardware_id" className="form-control" value={form.hardware_id} onChange={e => {
-                        handleChange(e);
-                        setForm(prev => ({ ...prev, hardware_symptom: "" }));
-                      }} required={form.asset_id === "other"}>
-                        <option value="">-- เลือกประเภทอุปกรณ์ --</option>
-                        {masterData.hardware.map(hw => (
-                          <option key={hw.hardware_id} value={hw.hardware_id}>
-                            {hw.hardware_code} — {hw.hardware_name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                {/* 2. Hardware Category Details */}
+                {selectedCategory?.useHardware && (
+                  <>
+                    {/* Fallback to general hardware selection */}
+                    {(form.asset_id === "other" || !form.asset_id) && (
+                      <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
+                        <label>ระบุประเภทอุปกรณ์หลัก <span className="req">*</span></label>
+                        <select name="hardware_id" className="form-control" value={form.hardware_id} onChange={e => {
+                          handleChange(e);
+                          setForm(prev => ({ ...prev, hardware_symptom: "" }));
+                        }} required={form.asset_id === "other"}>
+                          <option value="">-- เลือกประเภทอุปกรณ์ --</option>
+                          {masterData.hardware.map(hw => (
+                            <option key={hw.hardware_id} value={hw.hardware_id}>
+                              {hw.hardware_code} — {hw.hardware_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
-                  {(form.asset_id === "other" || !form.asset_id) && symptoms.length > 0 && (
-                    <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
-                      <label>อาการที่พบเบื้องต้น <span className="req">*</span></label>
-                      <select name="hardware_symptom" className="form-control" value={form.hardware_symptom} onChange={handleChange} required={form.asset_id === "other"}>
-                        <option value="">-- เลือกอาการ --</option>
-                        {symptoms.map(s => (
-                          <option key={s.symptom_id} value={s.symptom_name}>{s.symptom_name}</option>
-                        ))}
-                        <option value="อื่น ๆ">อื่น ๆ (ระบุด้านล่าง)</option>
-                      </select>
-                    </div>
-                  )}
-                </>
-              )}
+                    {(form.asset_id === "other" || !form.asset_id) && symptoms.length > 0 && (
+                      <div className="form-group" style={{ borderLeft: "3px solid var(--border)", paddingLeft: "12px" }}>
+                        <label>อาการที่พบเบื้องต้น <span className="req">*</span></label>
+                        <select name="hardware_symptom" className="form-control" value={form.hardware_symptom} onChange={handleChange} required={form.asset_id === "other"}>
+                          <option value="">-- เลือกอาการ --</option>
+                          {symptoms.map(s => (
+                            <option key={s.symptom_id} value={s.symptom_name}>{s.symptom_name}</option>
+                          ))}
+                          <option value="อื่น ๆ">อื่น ๆ (ระบุด้านล่าง)</option>
+                        </select>
+                      </div>
+                    )}
+                  </>
+                )}
 
               {/* Software: select system */}
               {selectedCategory?.useSystem && (

@@ -30,6 +30,7 @@ export async function GET(request) {
       include: {
         system: true,
         location: true,
+        asset: { include: { asset_type: true } },
         reporter: { select: { user_id: true, full_name: true, email: true } },
         tier1: { select: { user_id: true, full_name: true } },
         tier2: { select: { user_id: true, full_name: true } },

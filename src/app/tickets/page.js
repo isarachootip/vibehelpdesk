@@ -130,6 +130,7 @@ export default function TicketList() {
                     <th>Subject</th>
                     <th>BU</th>
                     <th>System</th>
+                    <th>Asset</th>
                     <th>ประเภท</th>
                     <th>Priority</th>
                     <th>Status</th>
@@ -180,6 +181,16 @@ export default function TicketList() {
                           <span className="chip">{t.system?.system_code}</span><br/>
                           <span style={{fontSize:".8rem",color:"var(--text-secondary)"}}>{t.system?.system_name}</span>
                         </td>
+                        <td>
+                          {t.asset ? (
+                            <a href={`/assets/${t.asset.asset_id}`} className="hover-underline" style={{ fontWeight: 600, color: "var(--primary)", fontSize: ".8rem" }}>
+                              <i className={`fa-solid ${t.asset.asset_type?.icon || "fa-laptop"}`} style={{ marginRight: "4px" }}></i>
+                              {t.asset.asset_code}
+                            </a>
+                          ) : (
+                            <span style={{ color: "var(--text-muted)", fontSize: ".8rem" }}>—</span>
+                          )}
+                        </td>
                         <td style={{ fontSize: ".8rem" }}>
                           {t.problem_type === "hardware" ? (
                             <span style={{ color: "var(--warning)" }}><i className="fa-solid fa-microchip"></i> HW</span>
@@ -209,7 +220,7 @@ export default function TicketList() {
                     );
                   }) : (
                     <tr>
-                      <td colSpan="12" className="text-center text-muted" style={{ padding: "48px" }}>
+                      <td colSpan="13" className="text-center text-muted" style={{ padding: "48px" }}>
                         <i className="fa-solid fa-inbox" style={{ fontSize: "2rem", marginBottom: "8px", display: "block" }}></i>
                         ไม่พบ Ticket ตามเงื่อนไข
                       </td>
