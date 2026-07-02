@@ -33,6 +33,7 @@ export default function AssetsPage() {
   const [types, setTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
@@ -62,9 +63,11 @@ export default function AssetsPage() {
     Promise.all([
       fetch("/api/assets/types").then(r => r.json()),
       fetch("/api/master").then(r => r.json()),
-    ]).then(([t, m]) => {
+      fetch("/api/auth/me").then(r => r.ok ? r.json() : null),
+    ]).then(([t, m, u]) => {
       setTypes(Array.isArray(t) ? t : []);
       setLocations(m.locations || []);
+      if (u) setUser(u.user);
     });
     fetchAssets();
   }, []);
@@ -127,21 +130,23 @@ export default function AssetsPage() {
             จัดการอุปกรณ์/ทรัพย์สิน IT ทั้งหมด ({assets.length} รายการ)
           </p>
         </div>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          <button className="btn btn-outline btn-sm" onClick={handleGlpiSync} disabled={syncing}>
-            {syncing ? (
-              <><i className="fa-solid fa-spinner fa-spin" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI...</>
-            ) : (
-              <><i className="fa-solid fa-rotate" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI</>
-            )}
-          </button>
-          <button className="btn btn-outline btn-sm" onClick={() => setShowImport(v => !v)}>
-            <i className="fa-solid fa-file-import"></i> Import Excel
-          </button>
-          <a href="/assets/create" className="btn btn-primary">
-            <i className="fa-solid fa-plus"></i> เพิ่ม Asset ใหม่
-          </a>
-        </div>
+        {user && ["ADMIN", "TIER1", "TIER2", "TIER3"].includes(user.role?.toUpperCase()) && (
+          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            <button className="btn btn-outline btn-sm" onClick={handleGlpiSync} disabled={syncing}>
+              {syncing ? (
+                <><i className="fa-solid fa-spinner fa-spin" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI...</>
+              ) : (
+                <><i className="fa-solid fa-rotate" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI</>
+              )}
+            </button>
+            <button className="btn btn-outline btn-sm" onClick={() => setShowImport(v => !v)}>
+              <i className="fa-solid fa-file-import"></i> Import Excel
+            </button>
+            <a href="/assets/create" className="btn btn-primary">
+              <i className="fa-solid fa-plus"></i> เพิ่ม Asset ใหม่
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Summary cards */}

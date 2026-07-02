@@ -87,6 +87,11 @@ export default function AppSidebar({ user, onLogout }) {
           </>
         )}
 
+        <a href="/assets" className="nav-item" id="nav-assets">
+          <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
+          <span className="nav-label">รายการอุปกรณ์ทั้งหมด</span>
+        </a>
+
         {canSeeTier1 && (
           <>
             <div className="sidebar-section" style={{ marginTop: "16px" }}>Tier 1 Support</div>
@@ -120,10 +125,6 @@ export default function AppSidebar({ user, onLogout }) {
         {canSeeMaster && (
           <>
             <div className="sidebar-section" style={{ marginTop: "16px" }}>Asset Inventory</div>
-            <a href="/assets" className="nav-item" id="nav-assets">
-              <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
-              <span className="nav-label">IT Assets</span>
-            </a>
             <a href="/master/asset-types" className="nav-item" id="nav-asset-types">
               <i className="fa-solid fa-tags nav-icon" style={{ color: "#8b5cf6" }}></i>
               <span className="nav-label">ประเภท Asset</span>
