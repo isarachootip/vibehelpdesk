@@ -42,6 +42,8 @@ export default function AssetsPage() {
   const [showImport, setShowImport] = useState(false);
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState(null);
   const fileRef = useRef();
 
   const fetchAssets = () => {
@@ -92,6 +94,24 @@ export default function AssetsPage() {
     const a = document.createElement("a"); a.href = url; a.download = "asset_import_template.csv"; a.click();
   };
 
+  const handleGlpiSync = async () => {
+    setSyncing(true);
+    setSyncResult(null);
+    try {
+      const res = await fetch("/api/assets/import/glpi", { method: "POST" });
+      const result = await res.json();
+      setSyncResult(result);
+      fetchAssets();
+      // Fetch fresh master types if any new types were created
+      fetch("/api/assets/types")
+        .then(r => r.json())
+        .then(t => setTypes(Array.isArray(t) ? t : []));
+    } catch (err) {
+      setSyncResult({ error: "เชื่อมต่อเซิร์ฟเวอร์นำเข้าข้อมูลล้มเหลว" });
+    }
+    setSyncing(false);
+  };
+
   const countByStatus = (s) => assets.filter(a => a.status === s).length;
 
   return (
@@ -107,7 +127,14 @@ export default function AssetsPage() {
             จัดการอุปกรณ์/ทรัพย์สิน IT ทั้งหมด ({assets.length} รายการ)
           </p>
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <button className="btn btn-outline btn-sm" onClick={handleGlpiSync} disabled={syncing}>
+            {syncing ? (
+              <><i className="fa-solid fa-spinner fa-spin" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI...</>
+            ) : (
+              <><i className="fa-solid fa-rotate" style={{ marginRight: "4px" }}></i> ซิงค์จาก GLPI</>
+            )}
+          </button>
           <button className="btn btn-outline btn-sm" onClick={() => setShowImport(v => !v)}>
             <i className="fa-solid fa-file-import"></i> Import Excel
           </button>
@@ -171,6 +198,39 @@ export default function AssetsPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* GLPI Sync Result */}
+      {syncResult && (
+        <div className="card" style={{ marginBottom: "16px", border: syncResult.error ? "1px solid var(--danger)" : "1px solid var(--success)", background: syncResult.error ? "rgba(239,68,68,0.05)" : "rgba(16,185,129,0.05)" }}>
+          <div className="card-body" style={{ padding: "14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <h4 style={{ fontWeight: 700, color: syncResult.error ? "var(--danger)" : "var(--success)", fontSize: ".85rem", margin: 0 }}>
+                  {syncResult.error ? (
+                    <><i className="fa-solid fa-triangle-exclamation" style={{ marginRight: "8px" }}></i> {syncResult.error}</>
+                  ) : (
+                    <><i className="fa-solid fa-circle-check" style={{ marginRight: "8px" }}></i> ซิงค์ข้อมูลสำเร็จ {syncResult.success} รายการ (จากทั้งหมด {syncResult.total} รายการ ใน GLPI)</>
+                  )}
+                </h4>
+              </div>
+              <button className="btn btn-ghost btn-sm" onClick={() => setSyncResult(null)} style={{ padding: "4px 8px", fontSize: ".8rem" }}>ปิด</button>
+            </div>
+            {syncResult.errors && syncResult.errors.length > 0 && (
+              <div style={{ marginTop: "10px", maxHeight: "150px", overflowY: "auto", fontSize: ".78rem", borderTop: "1px solid var(--border)", paddingTop: "8px" }}>
+                <div style={{ fontWeight: 600, color: "var(--danger)", marginBottom: "4px" }}>มีข้อผิดพลาดบางรายการ ({syncResult.errors.length} รายการ):</div>
+                {syncResult.errors.slice(0, 20).map((e, idx) => (
+                  <div key={idx} style={{ color: "var(--danger)", marginBottom: "2px" }}>
+                    [{e.category}] {e.assetCode ? `Asset: ${e.assetCode}` : `Row: ${e.row}`} — {e.message}
+                  </div>
+                ))}
+                {syncResult.errors.length > 20 && (
+                  <div style={{ color: "var(--text-muted)", fontStyle: "italic", marginTop: "4px" }}>... และรายการอื่น ๆ อีก {syncResult.errors.length - 20} รายการ</div>
+                )}
               </div>
             )}
           </div>
