@@ -20,6 +20,28 @@ export default function MasterLocations() {
     bu_id: ""
   });
 
+  const [isUpdatingBus, setIsUpdatingBus] = useState(false);
+
+  const handleUpdateLocationBus = async () => {
+    if (!confirm("คุณต้องการปรับปรุง BU ของสาขาอัตโนมัติ (แบรนด์ Auto1 และ TW) หรือไม่?")) return;
+    setIsUpdatingBus(true);
+    try {
+      const res = await fetch("/api/master/locations/update-bus", { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`ปรับปรุง BU สาขาสำเร็จ! (แบรนด์ Auto1: ${data.auto1_updated_count} สาขา, แบรนด์ TW: ${data.tw_updated_count} สาขา)`);
+        fetchData();
+      } else {
+        alert(data.error || "เกิดข้อผิดพลาด");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    } finally {
+      setIsUpdatingBus(false);
+    }
+  };
+
   const handleImportExcel = async () => {
     if (!confirm("คุณต้องการนำเข้ารายการสาขา/สถานที่ทั้งหมดจากไฟล์ Excel (store_CHG) หรือไม่?")) return;
     setIsImporting(true);
@@ -130,6 +152,14 @@ export default function MasterLocations() {
               style={{ display: "flex", alignItems: "center", gap: "6px" }}
             >
               <i className="fa-solid fa-file-excel" style={{ color: "#10b981" }}></i> {isImporting ? "กำลังนำเข้า..." : "นำเข้าสาขาจาก Excel"}
+            </button>
+            <button 
+              className="btn btn-outline" 
+              onClick={handleUpdateLocationBus}
+              disabled={isUpdatingBus}
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <i className="fa-solid fa-arrows-rotate" style={{ color: "#3b82f6" }}></i> {isUpdatingBus ? "กำลังปรับปรุง..." : "ปรับปรุง BU สาขา"}
             </button>
             <button 
               className="btn btn-success" 
