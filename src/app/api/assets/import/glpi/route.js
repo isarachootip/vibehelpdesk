@@ -92,7 +92,27 @@ const nameMappings = {
   'chaiyaphum': 'ชัยภูมิ',
   'suphan buri': 'สุพรรณบุรี',
   'kanchanaburi': 'กาญจนบุรี',
-  'ratchaburi': 'ราชบุรี'
+  'ratchaburi': 'ราชบุรี',
+
+  // Thaiwatsadu and Go Wow / Other locations
+  'srisaman': 'ศรีสมาน',
+  'bangsaen': 'บางแสน',
+  'rangsit': 'รังสิต',
+  'phuket': 'ภูเก็ต',
+  'nakornin': 'นครอินทร์',
+  'udonthani': 'อุดรธานี',
+  'rama3': 'พระราม 3',
+  'bangbuathong': 'บางบัวทอง',
+  'buriram': 'บุรีรัมย์',
+  'surat thani': 'สุราษฏร์',
+  'phetchabun': 'เพชรบูรณ์',
+  'suksawat': 'สุขสวัสดิ์',
+  'nakhon ratchasima': 'นครราชสีมา',
+  'yasothon': 'ยโสธร',
+  'arunyaprathet': 'อรัญประเทศ',
+  'sa kaeo': 'สระแก้ว',
+  'wongnoi': 'วังน้อย',
+  'mahathi': 'มหาชัย'
 };
 
 // GLPI authentication helper
@@ -414,21 +434,30 @@ export async function POST(request) {
             }
 
             if (thaiKeyword) {
-              const candidates = dbLocations.filter(l => 
-                (l.location_code.startsWith('10') || l.location_name.toLowerCase().includes('auto')) &&
-                l.location_name.includes(thaiKeyword)
-              );
+              const candidates = dbLocations.filter(l => l.location_name.includes(thaiKeyword));
 
               if (candidates.length > 0) {
+                // If we have candidates, filter by brand to ensure correct mapping
+                let brandCandidates = [];
+                if (glpiLocLower.includes('auto1')) {
+                  brandCandidates = candidates.filter(c => c.location_code.startsWith('10') || c.location_name.toLowerCase().includes('auto'));
+                } else if (glpiLocLower.includes('go wow')) {
+                  brandCandidates = candidates.filter(c => c.location_name.toLowerCase().includes('go wow'));
+                } else if (glpiLocLower.includes('thaiwatsadu') || glpiLocLower.includes('bnb')) {
+                  brandCandidates = candidates.filter(c => c.location_name.toLowerCase().includes('ไทวัสดุ') || c.location_name.toLowerCase().includes('bnb') || c.location_code.startsWith('02') || c.location_code.startsWith('03'));
+                }
+
+                const filtered = brandCandidates.length > 0 ? brandCandidates : candidates;
+
                 let best = null;
                 if (glpiLocLower.includes('central')) {
-                  best = candidates.find(c => c.location_name.includes('เซ็นทรัล'));
+                  best = filtered.find(c => c.location_name.includes('เซ็นทรัล'));
                 } else if (glpiLocLower.includes('robinson')) {
-                  best = candidates.find(c => c.location_name.includes('โรบินสัน'));
+                  best = filtered.find(c => c.location_name.includes('โรบินสัน'));
                 } else if (glpiLocLower.includes('lotus')) {
-                  best = candidates.find(c => c.location_name.includes('โลตัส'));
+                  best = filtered.find(c => c.location_name.includes('โลตัส'));
                 }
-                matchedLoc = best || candidates[0];
+                matchedLoc = best || filtered[0];
               }
             }
           }
