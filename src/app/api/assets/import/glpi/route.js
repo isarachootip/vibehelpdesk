@@ -39,6 +39,44 @@ function parseCSV(csvText) {
   return lines;
 }
 
+// RAM parser
+function parseRamGb(ramStr) {
+  if (!ramStr) return null;
+  const match = ramStr.match(/(\d+(?:\.\d+)?)\s*(MB|GB|KB|TB)/i);
+  if (!match) return null;
+  const val = parseFloat(match[1]);
+  const unit = match[2].toUpperCase();
+  if (unit === 'GB') return Math.round(val);
+  if (unit === 'MB') return Math.round(val / 1024);
+  if (unit === 'TB') return Math.round(val * 1024);
+  return null;
+}
+
+// Storage size parser
+function parseStorageGb(storageStr) {
+  if (!storageStr) return null;
+  const match = storageStr.match(/(\d+(?:\.\d+)?)\s*(MB|GB|KB|TB)/i);
+  if (!match) return null;
+  const val = parseFloat(match[1]);
+  const unit = match[2].toUpperCase();
+  if (unit === 'GB') return Math.round(val);
+  if (unit === 'MB') return Math.round(val / 1024);
+  if (unit === 'TB') return Math.round(val * 1024);
+  return null;
+}
+
+// Storage type parser
+function parseStorageType(typeStr, sizeStr) {
+  const combined = `${typeStr || ''} ${sizeStr || ''}`.toLowerCase();
+  if (combined.includes('ssd') || combined.includes('nvme') || combined.includes('flash') || combined.includes('solid state') || combined.includes('wds') || combined.includes('kingston') || combined.includes('crucial')) {
+    return 'SSD';
+  }
+  if (combined.includes('hdd') || combined.includes('sata') || combined.includes('wdc wd') || combined.includes('st1000') || combined.includes('seagate')) {
+    return 'HDD';
+  }
+  return null;
+}
+
 // English to Thai Location name keyword mapper
 const nameMappings = {
   'lat krabang': 'ลาดกระบัง',
@@ -218,6 +256,9 @@ export async function POST(request) {
     // Cache of dynamically retrieved asset types
     const assetTypeCache = new Map(dbAssetTypes.map(t => [t.type_name.toLowerCase(), t]));
 
+    // Keep track of serial numbers we process in this execution to prevent self-collision
+    const seenSerialsThisRun = new Set();
+
     for (const cat of assetCategories) {
       const csvPath = `/glpi/front/report.dynamic.php?item_type=${cat.name}&start=0&criteria%5B0%5D%5Bfield%5D=view&criteria%5B0%5D%5Blink%5D=contains&criteria%5B0%5D%5Bvalue%5D=&display_type=3`;
       const reportRes = await fetchPage(loggedInCookies, csvPath);
@@ -247,6 +288,19 @@ export async function POST(request) {
         if (lowerH === 'types' || lowerH === 'type') headersMap.type = idx;
       });
 
+      // Find indexes for CPU, RAM, Storage in headers
+      let cpuIdx = -1;
+      let ramIdx = -1;
+      let storageSizeIdx = -1;
+      let storageTypeIdx = -1;
+      rawHeaders.forEach((h, idx) => {
+        const lowerH = h.toLowerCase();
+        if (lowerH.includes('processor') && lowerH.includes('component')) cpuIdx = idx;
+        if (lowerH.includes('memory') && lowerH.includes('component')) ramIdx = idx;
+        if (lowerH.includes('drive size') && lowerH.includes('component')) storageSizeIdx = idx;
+        if (lowerH.includes('drive type') && lowerH.includes('component')) storageTypeIdx = idx;
+      });
+
       // If key headers are missing, map defaults
       if (headersMap.name === undefined) headersMap.name = 0;
       if (headersMap.serial === undefined) headersMap.serial = 5;
@@ -260,11 +314,14 @@ export async function POST(request) {
         const serialVal = String(row[headersMap.serial] || '').trim();
 
         // Use name as asset_code, fallback to serial
-        const assetCode = nameVal || serialVal;
+        let assetCode = nameVal || serialVal;
         if (!assetCode) {
           errors.push({ category: cat.name, row: i + 1, message: 'Both Name and Serial are missing' });
           continue;
         }
+
+        // Truncate asset_code to 50 chars to match VarChar(50)
+        assetCode = assetCode.substring(0, 50);
 
         // Determine GLPI type name
         let typeName = cat.name;
@@ -298,13 +355,34 @@ export async function POST(request) {
           specStr = specDetails.join('\n');
         }
 
+        // Parse exact CPU, RAM, and Storage
+        let cpuVal = null;
+        let ramGbVal = null;
+        let storageGbVal = null;
+        let storageTypeVal = null;
+
+        if (cpuIdx !== -1 && row[cpuIdx]) {
+          cpuVal = String(row[cpuIdx]).trim().replace(/<br>/g, ', ').substring(0, 100);
+        }
+        if (ramIdx !== -1 && row[ramIdx]) {
+          ramGbVal = parseRamGb(String(row[ramIdx]));
+        }
+        if (storageSizeIdx !== -1 && row[storageSizeIdx]) {
+          storageGbVal = parseStorageGb(String(row[storageSizeIdx]));
+        }
+        if (storageTypeIdx !== -1 || storageSizeIdx !== -1) {
+          const typeStr = storageTypeIdx !== -1 ? String(row[storageTypeIdx]) : '';
+          const sizeStr = storageSizeIdx !== -1 ? String(row[storageSizeIdx]) : '';
+          storageTypeVal = parseStorageType(typeStr, sizeStr);
+        }
+
         // Map IP and MAC
         let ipVal = null;
         if (headersMap.ip !== undefined && row[headersMap.ip]) {
           const ips = String(row[headersMap.ip]).split(/<br>/i);
-          // find first valid IPv4 (contains dot and not fe80/::/127)
           const validIp = ips.find(ip => ip.includes('.') && !ip.startsWith('127.'));
           ipVal = validIp ? validIp.trim() : ips[0].trim();
+          ipVal = ipVal.substring(0, 50);
         }
 
         let macVal = null;
@@ -312,6 +390,7 @@ export async function POST(request) {
           const macs = String(row[headersMap.mac]).split(/<br>/i);
           const validMac = macs.find(mac => mac.trim() && mac.trim() !== '00:00:00:00:00:00');
           macVal = validMac ? validMac.trim() : macs[0].trim();
+          macVal = macVal.substring(0, 50);
         }
 
         // Smart Location and BU mapping
@@ -370,11 +449,56 @@ export async function POST(request) {
         else if (glpiStatus === 'retired' || glpiStatus.includes('เลิก')) status = 'RETIRED';
         else if (glpiStatus === 'lost' || glpiStatus.includes('หาย')) status = 'LOST';
 
+        // Normalize and de-duplicate serial_no
+        let serialNo = serialVal ? serialVal.substring(0, 100) : null;
+        if (serialNo) {
+          const lowerSerial = serialNo.toLowerCase().trim();
+          const genericPlaceholders = [
+            'to be filled by o.e.m.',
+            'system serial number',
+            'default string',
+            '123456789',
+            'n/a',
+            'none',
+            'null',
+            'unknown',
+            'empty',
+            '-'
+          ];
+          if (genericPlaceholders.includes(lowerSerial)) {
+            serialNo = null;
+          }
+        }
+
+        if (serialNo) {
+          // Check if we've seen this serial number in this run, or if it exists in the DB under a different asset
+          const isSeenThisRun = seenSerialsThisRun.has(serialNo);
+          let existsInDb = false;
+          if (!isSeenThisRun) {
+            const duplicateInDb = await prisma.asset.findFirst({
+              where: {
+                serial_no: serialNo,
+                asset_code: { not: assetCode }
+              }
+            });
+            if (duplicateInDb) {
+              existsInDb = true;
+            }
+          }
+
+          if (isSeenThisRun || existsInDb) {
+            // Append a unique suffix using the assetCode to resolve the unique constraint
+            serialNo = `${serialNo}-DUP-${assetCode}`.substring(0, 100);
+          }
+          
+          seenSerialsThisRun.add(serialNo);
+        }
+
         const payload = {
           asset_type_id: assetType.type_id,
           brand: headersMap.manufacturer !== undefined ? (String(row[headersMap.manufacturer] || '').trim() || null) : null,
           model: headersMap.model !== undefined ? (String(row[headersMap.model] || '').trim() || null) : null,
-          serial_no: serialVal || null,
+          serial_no: serialNo,
           spec: specStr || null,
           os: headersMap.os !== undefined ? (String(row[headersMap.os] || '').trim() || null) : null,
           mac_address: macVal,
@@ -382,8 +506,17 @@ export async function POST(request) {
           location_id: locationId,
           bu_id: buId,
           status,
-          note: headersMap.comment !== undefined ? (String(row[headersMap.comment] || '').trim() || null) : null
+          note: headersMap.comment !== undefined ? (String(row[headersMap.comment] || '').trim() || null) : null,
+          cpu: cpuVal,
+          ram_gb: ramGbVal,
+          storage_gb: storageGbVal,
+          storage_type: storageTypeVal
         };
+
+        // Truncate fields to prevent DB errors
+        if (payload.brand) payload.brand = payload.brand.substring(0, 100);
+        if (payload.model) payload.model = payload.model.substring(0, 100);
+        if (payload.os) payload.os = payload.os.substring(0, 100);
 
         try {
           await prisma.asset.upsert({
