@@ -220,13 +220,16 @@ async function fetchPage(cookies, path) {
 }
 
 export async function POST(request) {
+  let loggedInCookies = null;
+  let useFallback = false;
+
   try {
     // 1. Authenticate with GLPI
     const { data: loginHtml, cookies: initCookies } = await getLoginPage();
     const parsedForm = parseForm(loginHtml);
 
     if (!parsedForm.csrfToken || !parsedForm.loginNameField || !parsedForm.passwordField) {
-      return NextResponse.json({ error: 'Failed to parse GLPI login form fields' }, { status: 500 });
+      throw new Error('Failed to parse GLPI login form fields');
     }
 
     const formData = {
@@ -244,8 +247,98 @@ export async function POST(request) {
       return NextResponse.json({ error: 'GLPI Login failed. Please check credentials.' }, { status: 401 });
     }
 
-    const loggedInCookies = loginRes.cookies.length > 0 ? loginRes.cookies : initCookies;
+    loggedInCookies = loginRes.cookies.length > 0 ? loginRes.cookies : initCookies;
+  } catch (err) {
+    console.warn('GLPI connection failed, falling back to local JSON data:', err.message);
+    useFallback = true;
+  }
 
+  // Fallback to local JSON if GLPI is unreachable
+  if (useFallback) {
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const jsonPath = path.join(process.cwd(), 'src', 'data', 'glpi_assets.json');
+      
+      if (!fs.existsSync(jsonPath)) {
+        return NextResponse.json({ error: 'GLPI not reachable and backup JSON file not found.' }, { status: 500 });
+      }
+
+      const rawJson = fs.readFileSync(jsonPath, 'utf-8');
+      const glpiAssets = JSON.parse(rawJson);
+
+      // Load DB Locations, BUs, and AssetTypes
+      const [dbLocations, dbBUs, dbAssetTypes] = await Promise.all([
+        prisma.location.findMany(),
+        prisma.businessUnit.findMany({ where: { is_active: true } }),
+        prisma.assetType.findMany()
+      ]);
+
+      const buMap = new Map(dbBUs.map(b => [b.bu_code.toUpperCase(), b.bu_id]));
+      const locMap = new Map(dbLocations.map(l => [l.location_code.toUpperCase(), l.location_id]));
+      const typeMap = new Map(dbAssetTypes.map(t => [t.type_code.toUpperCase(), t]));
+
+      const defaultBU = dbBUs.find(b => b.bu_id === 33) || dbBUs[0];
+
+      let successCount = 0;
+      const errors = [];
+
+      for (const asset of glpiAssets) {
+        // Resolve type
+        let assetType = typeMap.get(asset.asset_type_code.toUpperCase());
+        if (!assetType) {
+          assetType = await prisma.assetType.upsert({
+            where: { type_code: asset.asset_type_code },
+            update: { type_name: asset.asset_type_name, icon: asset.asset_type_icon },
+            create: { type_code: asset.asset_type_code, type_name: asset.asset_type_name, icon: asset.asset_type_icon }
+          });
+          typeMap.set(asset.asset_type_code.toUpperCase(), assetType);
+        }
+
+        // Resolve location and BU
+        let locationId = asset.location_code ? locMap.get(asset.location_code.toUpperCase()) : null;
+        let buId = asset.bu_code ? (buMap.get(asset.bu_code.toUpperCase()) || defaultBU.bu_id) : defaultBU.bu_id;
+
+        const payload = {
+          asset_type_id: assetType.type_id,
+          brand: asset.brand,
+          model: asset.model,
+          serial_no: asset.serial_no,
+          spec: asset.spec,
+          os: asset.os,
+          mac_address: asset.mac_address,
+          ip_address: asset.ip_address,
+          location_id,
+          bu_id,
+          status: asset.status,
+          note: asset.note,
+          cpu: asset.cpu,
+          ram_gb: asset.ram_gb,
+          storage_gb: asset.storage_gb,
+          storage_type: asset.storage_type
+        };
+
+        try {
+          await prisma.asset.upsert({
+            where: { asset_code: asset.asset_code },
+            update: payload,
+            create: { asset_code: asset.asset_code, ...payload }
+          });
+          successCount++;
+        } catch (dbErr) {
+          errors.push({ assetCode: asset.asset_code, message: dbErr.message });
+        }
+      }
+
+      return NextResponse.json({ success: successCount, errors, total: glpiAssets.length, note: 'Imported from offline JSON backup (GLPI server unreachable)' });
+    } catch (e) {
+      console.error('Offline import failed:', e);
+      return NextResponse.json({ error: 'Offline import failed: ' + e.message }, { status: 500 });
+    }
+  }
+
+  // Otherwise, standard online sync from GLPI
+  try {
     // Load active DB Business Units and Locations for mapping
     const [dbLocations, dbBUs, dbAssetTypes] = await Promise.all([
       prisma.location.findMany(),
