@@ -10,6 +10,7 @@ export default function MasterLocations() {
   const [editItem, setEditItem] = useState(null);
   const [user, setUser] = useState(null);
   const canManage = user && ["ADMIN", "TIER1", "TIER2", "TIER3"].includes(user.role?.toUpperCase());
+  const [isImporting, setIsImporting] = useState(false);
   const [form, setForm] = useState({
     location_code: "",
     location_name: "",
@@ -18,6 +19,26 @@ export default function MasterLocations() {
     address: "",
     bu_id: ""
   });
+
+  const handleImportExcel = async () => {
+    if (!confirm("คุณต้องการนำเข้ารายการสาขา/สถานที่ทั้งหมดจากไฟล์ Excel (store_CHG) หรือไม่?")) return;
+    setIsImporting(true);
+    try {
+      const res = await fetch("/api/master/locations/import", { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`นำเข้าสำเร็จ: ${data.success} สาขา (ล้มเหลว ${data.errors.length} รายการ)`);
+        fetchData();
+      } else {
+        alert(data.error || "เกิดข้อผิดพลาด");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -101,16 +122,27 @@ export default function MasterLocations() {
           Locations (สถานที่)
         </h2>
         {canManage && (
-          <button 
-            className="btn btn-success" 
-            onClick={() => { 
-              setShowForm(true); 
-              setEditItem(null); 
-              setForm({ location_code: "", location_name: "", location_type: "store", floor: "", address: "", bu_id: "" }); 
-            }}
-          >
-            <i className="fa-solid fa-plus"></i> เพิ่มสถานที่ใหม่
-          </button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button 
+              className="btn btn-outline" 
+              onClick={handleImportExcel}
+              disabled={isImporting}
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <i className="fa-solid fa-file-excel" style={{ color: "#10b981" }}></i> {isImporting ? "กำลังนำเข้า..." : "นำเข้าสาขาจาก Excel"}
+            </button>
+            <button 
+              className="btn btn-success" 
+              onClick={() => { 
+                setShowForm(true); 
+                setEditItem(null); 
+                setForm({ location_code: "", location_name: "", location_type: "store", floor: "", address: "", bu_id: "" }); 
+              }}
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <i className="fa-solid fa-plus"></i> เพิ่มสถานที่ใหม่
+            </button>
+          </div>
         )}
       </div>
 

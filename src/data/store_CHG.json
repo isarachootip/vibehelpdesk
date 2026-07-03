@@ -1,0 +1,2592 @@
+[
+  {
+    "in_bu": "A1",
+    "store_code": "10002",
+    "store_code_oracle": "0528A3",
+    "store_nick3": "ALB",
+    "store_name_th": "Auto1 โรบินสันลาดกระบัง",
+    "store_name_en": "Auto1 Robinson Ladkrabang",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน โรบินสันลาดกระบัง)",
+    "formal_address_th": "308/1 ถนนลาดกระบัง แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10101",
+    "store_code_oracle": "",
+    "store_nick3": "AT1",
+    "store_name_th": "Auto 1 ออนไลน์",
+    "store_name_en": "Auto 1 Online",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10103",
+    "store_code_oracle": "0528A4",
+    "store_nick3": "ABO",
+    "store_name_th": "Auto1 โรบินสันบ่อวิน",
+    "store_name_en": "Auto1 Robinson Bo Win",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน โรบินสันบ่อวิน)",
+    "formal_address_th": "354 ม.6 ตำบลบ่อวิน อำเภอศรีราชา จังหวัดชลบุรี 20230"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10104",
+    "store_code_oracle": "0528A5",
+    "store_nick3": "AST",
+    "store_name_th": "Auto1 สาทร",
+    "store_name_en": "Auto1 Sathon",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน สาทร)",
+    "formal_address_th": "1/4 ถนนนราธิวาสราชนครินทร์ แขวงทุ่งวัดดอน เขตสาทร กรุงเทพมหานคร 10120"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10105",
+    "store_code_oracle": "0528A6",
+    "store_nick3": "ACR",
+    "store_name_th": "Auto1 เซ็นทรัลเชียงราย",
+    "store_name_en": "Auto1 Central Chiang Rai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัลเชียงราย)",
+    "formal_address_th": "99/9 หมู่ 13 ตำบลรอบเวียง อำเภอเมืองเชียงราย จังหวัดเชียงราย 57000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10106",
+    "store_code_oracle": "0528A7",
+    "store_nick3": "AWG",
+    "store_name_th": "Auto1 เซ็นทรัลเวสต์เกต",
+    "store_name_en": "Auto1 Central Westgate",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัลเวสต์เกต) ",
+    "formal_address_th": "199, 199/1, 199/2  หมู่ 6 ตำบลเสาธงหิน อำเภอบางใหญ่ จังหวัดนนทบุรี 11140"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10107",
+    "store_code_oracle": "0528A8",
+    "store_nick3": "ARY",
+    "store_name_th": "Auto1 โลตัสระยอง",
+    "store_name_en": "Auto1 Lotus Rayong",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน โลตัสระยอง)",
+    "formal_address_th": "3/1 ซอยศูนย์การค้าสาย5 ถนนสุขุมวิท ตำบลท่าประดู่ อำเภอเมืองระยอง จังหวัดระยอง  21000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10108",
+    "store_code_oracle": "0528A9",
+    "store_nick3": "ASC",
+    "store_name_th": "Auto1 เซ็นทรัล ศรีราชา",
+    "store_name_en": "Auto1 Central Si Racha",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัล ศรีราชา)",
+    "formal_address_th": "8 ห้องเคแอลจี01 ถนนสุขุมวิท ตำบลศรีราชา อำเภอศรีราชา จังหวัดชลบุรี 20110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10109",
+    "store_code_oracle": "0528AA",
+    "store_nick3": "ARA",
+    "store_name_th": "Auto1 เซ็นทรัล พระราม 2",
+    "store_name_en": "Auto1 Central Rama2",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัล พระราม 2)",
+    "formal_address_th": "160 ห้องเคจี36  ถนนพระราม 2 แขวงแสมดำ  เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10110",
+    "store_code_oracle": "0528AB",
+    "store_nick3": "AMC",
+    "store_name_th": "Auto1 เซ็นทรัล มหาชัย",
+    "store_name_en": "Auto1 Central Mahachai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัล มหาชัย)",
+    "formal_address_th": "98 ห้องเอแซด 101 ชั้น 1 หมู่ที่ 4  ตำบลนาดี อำเภอเมืองสมุทรสาคร จังหวัดสมุทรสาคร 74000 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10111",
+    "store_code_oracle": "0528AD",
+    "store_nick3": "ABC",
+    "store_name_th": "Auto1 โรบินสัน บ้านฉาง",
+    "store_name_en": "Auto1 Robinson Ban Chang",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน โรบินสัน บ้านฉาง)",
+    "formal_address_th": "162 หมู่ 6 ตำบลบ้านฉาง อำเภอบ้านฉาง จังหวัดระยอง 21130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10112",
+    "store_code_oracle": "0528AE",
+    "store_nick3": "AFR",
+    "store_name_th": "Auto1 ฟิวเจอร์พาร์ครังสิต",
+    "store_name_en": "Auto1 Future Park Rangsit",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10113",
+    "store_code_oracle": "0528AF",
+    "store_nick3": "AHY",
+    "store_name_th": "Auto1 เซ็นทรัล หาดใหญ่",
+    "store_name_en": "Auto1 Central Hat Yai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัล หาดใหญ่)",
+    "formal_address_th": "1518, 1518/1, 1518/2 ห้อง G11  ชั้น G ถนนกาญจนวณิชย์ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10114",
+    "store_code_oracle": "0528AG",
+    "store_nick3": "ACT",
+    "store_name_th": "Auto1 เซ็นทรัล จันทบุรี",
+    "store_name_en": "Auto1 Central Chanthaburi",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน เซ็นทรัล จันทบุรี)",
+    "formal_address_th": "199 ห้อง G70 ชั้น G หมู่ 7 ตำบลจันทนิมิต อำเมืองจันทบุรี จังหวัดจันทบุรี 22000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10115",
+    "store_code_oracle": "",
+    "store_nick3": "ABT",
+    "store_name_th": "Auto 1 บางบัวทอง (TW)",
+    "store_name_en": "Auto 1 Bangbuathong (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10116",
+    "store_code_oracle": "",
+    "store_nick3": "ABN",
+    "store_name_th": "Auto 1 บางนา (TW)",
+    "store_name_en": "Auto 1 Bangna (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10117",
+    "store_code_oracle": "",
+    "store_nick3": "ACS",
+    "store_name_th": "Auto 1 ฉะเชิงเทรา (TW)",
+    "store_name_en": "Auto 1 Chachoengsao (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาฉะเชิงเทรา)",
+    "formal_address_th": "99 หมู่ที่ 2 ตำบลโสธร  อำเภอเมืองฉะเชิงเทรา จังหวัดฉะเชิงเทรา 24000 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10118",
+    "store_code_oracle": "",
+    "store_nick3": "ABR",
+    "store_name_th": "Auto 1 สระบุรี (TW)",
+    "store_name_en": "Auto 1 Saraburi (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาสระบุรี)",
+    "formal_address_th": "88/9 หมู่ที่ 8  ตำบลตลิ่งชัน อำเภอเมืองสระบุรี จังหวัดสระบุรี 18000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10119",
+    "store_code_oracle": "",
+    "store_nick3": "APT",
+    "store_name_th": "Auto 1 ปทุมธานี (TW)",
+    "store_name_en": "Auto 1 Pathum Thani (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10120",
+    "store_code_oracle": "",
+    "store_nick3": "ACB",
+    "store_name_th": "Auto 1 ชลบุรี",
+    "store_name_en": "Auto 1 Chonburi (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10121",
+    "store_code_oracle": "",
+    "store_nick3": "ABP",
+    "store_name_th": "Auto 1 บางพลี (TW)",
+    "store_name_en": "Auto 1 Bang Phli (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10122",
+    "store_code_oracle": "0528AH",
+    "store_nick3": "ARP",
+    "store_name_th": "Auto1 โรบินสันราชพฤกษ์",
+    "store_name_en": "Auto1 Robinson Rajchapruke",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน โรบินสันราชพฤกษ์)",
+    "formal_address_th": "19/11 หมู่ 4 ตำบลคลองข่อย อำเภอปากเกร็ด จังหวัดนนทบุรี 11120"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10123",
+    "store_code_oracle": "",
+    "store_nick3": "AR4",
+    "store_name_th": "Auto 1 รังสิต คลอง 4",
+    "store_name_en": "Auto 1 Rangsit Klong 4",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขารังสิต คลองสี่)",
+    "formal_address_th": "70 หมู่ 2 ตำบลบึงยี่โถ อำเภอธัญบุรี จังหวัดปทุมธานี 12130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10124",
+    "store_code_oracle": "",
+    "store_nick3": "ASP",
+    "store_name_th": "Auto 1 ไทวัสดุสมุทรปราการ",
+    "store_name_en": "Auto 1 Thai Watsadu Samutprakarn",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขา สมุทรปราการ ลำดับสาขา 00133",
+    "formal_address_th": "เลขที่ 6 หมู่ 7 ต.บางเมือง อ.เมืองสมุทรปราการ จ.สมุทรปราการ 10270"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10125",
+    "store_code_oracle": "0528AI",
+    "store_nick3": "AMB",
+    "store_name_th": "Auto1 แม็คโครบางบัวทอง",
+    "store_name_en": "Auto1 Makro Bangbuathong",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน แม็คโครบางบัวทอง",
+    "formal_address_th": "47 หมู่ 2 ตำบลบางบัวทอง  อำเภอบางบัวทอง จังหวัดนนทบุรี  11110 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10126",
+    "store_code_oracle": "",
+    "store_nick3": "AP2",
+    "store_name_th": "AUTO1 ไทวัสดุภูเก็ตฉลอง",
+    "store_name_en": "AUTO1 Thai Watsadu  Phuket (Chalong)    ",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขา ภูเก็ต(ฉลอง) ลำดับสาขา 00131",
+    "formal_address_th": "10/52 ม.1 ต.ฉลอง อ.เมืองภูเก็ต จ.ภูเก็ต 83130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10127",
+    "store_code_oracle": "",
+    "store_nick3": "AP1",
+    "store_name_th": "Auto 1 BnB ภูเก็ต",
+    "store_name_en": "AUTO1 BnB Phuket",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาภูเก็ต 1",
+    "formal_address_th": "79 หมู่ที่ 5 ต.วิชิต อ.เมืองภูเก็ต จ.ภูเก็ต 83000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10128",
+    "store_code_oracle": "",
+    "store_nick3": "AC1",
+    "store_name_th": "Auto1 เชียงใหม่ สันทราย",
+    "store_name_en": "Auto 1 Chiangmai Sansai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขา เชียงใหม่ สันทราย สาขาที่ 00137",
+    "formal_address_th": "552 หมู่ที่ 4 ตำบลสันทรายน้อย อำเภอสันทราย จังหวัดเชียงใหม่ 50210"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10129",
+    "store_code_oracle": "",
+    "store_nick3": "AME",
+    "store_name_th": "Auto 1 ไทวัสดุเมืองเอก (TW)",
+    "store_name_en": "Auto 1 Thai Watsadu Mueang Ek (TW)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10130",
+    "store_code_oracle": "",
+    "store_nick3": "ABY",
+    "store_name_th": "Auto 1 ไทวัสดุ บางใหญ่",
+    "store_name_en": "Auto 1 Thaiwasadu Bangyai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน บางใหญ่) สาขาที่ 00139",
+    "formal_address_th": "29 หมู่ที่ 2 ตำบลปลายบาง อำเภอบางกรวย จังหวัดนนทบุรี 11130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10131",
+    "store_code_oracle": "",
+    "store_nick3": "ABB",
+    "store_name_th": "Auto 1 ไทวัสดุ บางบอน",
+    "store_name_en": "Auto 1 Thaiwasadu Bang Bon",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน บางบอน) ",
+    "formal_address_th": "89 Moo 3 Bang Nam Chuet, Mueang Samut Sakhon, Samut Sakhon 74000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10132",
+    "store_code_oracle": "0528AJ",
+    "store_nick3": "AWV",
+    "store_name_th": "Auto1 เซ็นทรัล เวสต์วิลล์",
+    "store_name_en": "Auto1 Central Westville",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เซ็นทรัล เวสต์วิลล์",
+    "formal_address_th": "999 ห้องจี60 ชั้น จี หมู่ 5  ตำบลมหาสวัสดิ์  อำเภอบางกรวย จังหวัดนนทบุรี  11130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10133",
+    "store_code_oracle": "",
+    "store_nick3": "ABS",
+    "store_name_th": "Auto1 ไทวัสดุ บางแสน",
+    "store_name_en": "Auto1 Thaiwasadu Bangsaen",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาออโต้วัน บางแสน) ",
+    "formal_address_th": "87 หมู่ 4 ตำบลห้วยกะปิ อำเภอเมืองชลบุรี จังหวัดชลบุรี 20130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10134",
+    "store_code_oracle": "",
+    "store_nick3": "AAY",
+    "store_name_th": "Auto1 ไทวัสดุ อยุธยา",
+    "store_name_en": "Auto1 TW Ayutthaya",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วันไทวัสดุอยุธยา",
+    "formal_address_th": "111/3 หมู่ 3 ตำบลคลองสวนพลู อำเภอพระนครศรีอยุธยา จังหวัดพระนครศรีอยุธยา 13000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10135",
+    "store_code_oracle": "",
+    "store_nick3": "ANI",
+    "store_name_th": "Auto1 ไทวัสดุนครอินทร์",
+    "store_name_en": "Auto1 Thai Watsadu Nakhon In",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขา Auto1 ไทวัสดุนครอินทร์) ",
+    "formal_address_th": "30/4  หมู่ 3 ตำบลบางไผ่ อำเภอเมืองนนทบุรี จังหวัดนนทบุรี 11130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10136",
+    "store_code_oracle": "",
+    "store_nick3": "APY",
+    "store_name_th": "Auto1 BNB พัทยา",
+    "store_name_en": "Auto1 Thai Watsadu Pattaya",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขา Auto1 BNB พัทยา) ",
+    "formal_address_th": "565/66 ม.10 ต.หนองปรือ อ.บางละมุงจ.ชลบุรี 20150"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10137",
+    "store_code_oracle": "0528AK",
+    "store_nick3": "AC2",
+    "store_name_th": "Auto1 เพาเวอร์บาย จันทบุรี",
+    "store_name_en": "Auto1 Powerbuy Chanthaburi",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เพาเวอร์บาย จันทบุรี",
+    "formal_address_th": "25/5 ถนนพระยาตรัง ตำบลวัดใหม่ อำเภอเมืองจันทบุรี จังหวัดจันทบุรี 22000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10138",
+    "store_code_oracle": "0528AQ",
+    "store_nick3": "ANP",
+    "store_name_th": "Auto1 เซ็นทรัล นครปฐม",
+    "store_name_en": "Auto1 Central Nakhon Pathom",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เซ็นทรัล นครปฐม",
+    "formal_address_th": "833 ห้องเลขที่ LG01 ชั้น 1 ถนนเพชรเกษม ตำบลสนามจันทร์ อำเภอเมืองนครปฐม จังหวัดนครปฐม 73000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10139",
+    "store_code_oracle": "",
+    "store_nick3": "AHT",
+    "store_name_th": "Auto 1 ไทวัสหาดใหญ่",
+    "store_name_en": "Auto 1 TWD Hat Yai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วันไทวัสดุหาดใหญ่",
+    "formal_address_th": "1119 หมู่1 ถนนเลี่ยงเมือง(สายเอเชีย) ต.ควนลัง อ.หาดใหญ่ จ.สงขลา 90110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10140",
+    "store_code_oracle": "",
+    "store_nick3": "AKR",
+    "store_name_th": "Auto1 ไทวัสดุแกลง",
+    "store_name_en": "Auto1 TW Klaeng",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วันไทวัสดุแกลง",
+    "formal_address_th": "222 หมู่12 ตำบลทุ่งควายกิน อำเภอแกลง จังหวัดระยอง 21110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10141",
+    "store_code_oracle": "0528AR",
+    "store_nick3": "ASM",
+    "store_name_th": "Auto1 สายไหม",
+    "store_name_en": "Auto1 Saimai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน สายไหม",
+    "formal_address_th": "15/11 ถนนสายไหม  แขวงสายไหม เขตสายไหม  จังหวัดกรุงเทพมหานคร 10220"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10142",
+    "store_code_oracle": "0528AS",
+    "store_nick3": "ATR",
+    "store_name_th": "Auto1 เทพรักษ์",
+    "store_name_en": "Auto1 Thep Rak",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เทพรักษ์",
+    "formal_address_th": "899/9 ถนนเทพรักษ์ แขวงท่าแร้ง เขตบางเขน จังหวัดกรุงเทพมหานคร 10230"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10143",
+    "store_code_oracle": "0528AT",
+    "store_nick3": "ASW",
+    "store_name_th": "Auto1 สุขสวัสดิ์",
+    "store_name_en": "Auto1 Suksawat",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน สุขสวัสดิ์",
+    "formal_address_th": "335 ม.19 ตำบลบางพึ่ง อำเภอพระประแดง จ.สมุทรปราการ 10130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10144",
+    "store_code_oracle": "0528AU",
+    "store_nick3": "AJR",
+    "store_name_th": "Auto1 จรัญสนิทวงศ์",
+    "store_name_en": "Auto1 Charansanitwong",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน จรัญสนิทวงศ์",
+    "formal_address_th": "527/130 ถนนจรัญสนิทวงศ์ แขวงบางขุนศรี เขตบางกอกน้อย จังหวัดกรุงเทพมหานคร 10700"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10145",
+    "store_code_oracle": "0528AV",
+    "store_nick3": "AK1",
+    "store_name_th": "Auto1 เซ็นทรัล ขอนแก่น",
+    "store_name_en": "Auto1 Central Khon Kaen",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เซ็นทรัล ขอนแก่น",
+    "formal_address_th": "99/9 ห้อง AZ101-102 ชั้น1 ถนนศรีจันทร์ ตำบลในเมือง อำเภอเมืองขอนแก่น จังหวัดขอนแก่น 40000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10146",
+    "store_code_oracle": "",
+    "store_nick3": "APC",
+    "store_name_th": "Auto 1 ปากช่อง (TW)",
+    "store_name_en": "Auto 1 Pakchong (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วันไทวัสดุปากช่อง",
+    "formal_address_th": "7 หมู่ 11 ตำบลหนองน้ำแดง อำเภอปากช่อง จังหวัดนครราชสีมา 30130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10147",
+    "store_code_oracle": "",
+    "store_nick3": "ACP",
+    "store_name_th": "Auto 1 ชัยพฤกษ์ (TW)",
+    "store_name_en": "Auto 1 Chaiyapruek (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วันไทวัสดุชัยพฤกษ์",
+    "formal_address_th": "46/21 หมู่ที่ 5 ตำบลบางพลับ อำเภอปากเกร็ด จังหวัดนนทบุรี 11120"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10148",
+    "store_code_oracle": "",
+    "store_nick3": "ACI",
+    "store_name_th": "Auto1 เชียงราย (TW)",
+    "store_name_en": "Auto 1 Chiangrai (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ไทวัสดุเชียงราย",
+    "formal_address_th": "99/20 หมู่ 13 ตำบลสันทราย อำเภอเมืองเชียงราย จังหวัดเชียงราย 57000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10149",
+    "store_code_oracle": "",
+    "store_nick3": "MHS",
+    "store_name_th": "Auto 1 มหาสารคาม (TW)",
+    "store_name_en": "Auto 1 Maha Sarakham (TW)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ไทวัสดุมหาสารคาม",
+    "formal_address_th": "303 หมู่ 11  ตำบลเกิ้ง อำเภอเมืองมหาสารคาม จังหวัดมหาสารคาม 44000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10150",
+    "store_code_oracle": "0528AW",
+    "store_nick3": "AKB",
+    "store_name_th": "Auto1 เซ็นทรัล กระบี่",
+    "store_name_en": "Auto1 Central Krabi",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เซ็นทรัล กระบี่",
+    "formal_address_th": "55/5,55/6,55/7 ห้องเลขที่ G127 ชั้น G ถนนศรีพังงา ตำบลกระบี่ใหญ่ อำเภอเมืองกระบี่ จังหวัดกระบี่ 81000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10151",
+    "store_code_oracle": "0528AX",
+    "store_nick3": "AC3",
+    "store_name_th": "Auto1 โรบินสัน ชัยภูมิ",
+    "store_name_en": "Auto1 Robinson Chaiyaphum",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน โรบินสัน ชัยภูมิ",
+    "formal_address_th": "299/9 หมู่ 6 ตำบลในเมือง อำเภอเมืองชัยภูมิ จังหวัดชัยภูมิ 36000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10152",
+    "store_code_oracle": "0528AY",
+    "store_nick3": "AS1",
+    "store_name_th": "Auto1 โรบินสัน สุพรรณบุรี",
+    "store_name_en": "Auto1 Robinson Suphan Buri",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน โรบินสัน สุพรรณบุรี",
+    "formal_address_th": "449 หมู่ 5 ตำบลท่าระหัด อำเภอเมืองสุพรรณบุรี จังหวัดสุพรรณบุรี 72000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10153",
+    "store_code_oracle": "0528AZ",
+    "store_nick3": "ANY",
+    "store_name_th": "Auto1 นครนายก",
+    "store_name_en": "Auto1 Nakhon Nayok",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน นครนายก",
+    "formal_address_th": "1-111/6 อาคารออโต้วัน ถนนเขาทุเรียน ตำบลนครนายก อำเภอเมืองนครนายก จังหวัดนครนายก 26000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10154",
+    "store_code_oracle": "0528BA",
+    "store_nick3": "AKC",
+    "store_name_th": "Auto1 กาญจนบุรี",
+    "store_name_en": "Auto1 Kanchanaburi",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน กาญจนบุรี",
+    "formal_address_th": "111 หมู่ที่ 9 อาคารออโต้วัน ตำบลปากแพรก อำเภอเมืองกาญจนบุรี  จังหวัดกาญจนบุรี 71000 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10155",
+    "store_code_oracle": "0528BB",
+    "store_nick3": "ARB",
+    "store_name_th": "Auto1 รัตนาธิเบศร์",
+    "store_name_en": "Auto1 Rattanatibeth",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน รัตนาธิเบศร์",
+    "formal_address_th": "405/4 อาคารออโต้วัน ถนนรัตนาธิเบศร์  ตำบลบางกระสอ อำเภอเมืองนนทบุรี จังหวัดนนทบุรี 11000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10156",
+    "store_code_oracle": "0528BC",
+    "store_nick3": "ARN",
+    "store_name_th": "Auto1 ราษฎร์พัฒนา",
+    "store_name_en": "Auto1 Ratphatthana",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ราษฎร์พัฒนา",
+    "formal_address_th": "219/1 ถนนราษฎร์พัฒนา แขวงราษฎร์พัฒนา เขตสะพานสูง จังหวัดกรุงเทพมหานคร 10240"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10157",
+    "store_code_oracle": "0528BD",
+    "store_nick3": "AK2",
+    "store_name_th": "Auto1 โกโฮลเซลล์ขอนแก่น",
+    "store_name_en": "Auto1 GO Wholesale Khon Kaen",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน โกโฮลเซลล์ขอนแก่น",
+    "formal_address_th": "1/51 ถนนประชาสโมสร ตำบลในเมือง อำเภอเมืองขอนแก่น จังหวัดขอนแก่น 40000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10158",
+    "store_code_oracle": "0528BE",
+    "store_nick3": "AM1",
+    "store_name_th": "Auto1 มหาชัย",
+    "store_name_en": "Auto1 Mahachai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน มหาชัย",
+    "formal_address_th": "5/5 หมู่ที่ 3 อาคารออโต้วัน ตำบลนาดี อำเภอเมืองสมุทรสาคร จังหวัดสมุทรสาคร 74000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10159",
+    "store_code_oracle": "0528BF",
+    "store_nick3": "AC4",
+    "store_name_th": "Auto1 เชียงใหม่",
+    "store_name_en": "Auto1 Chiang Mai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เชียงใหม่",
+    "formal_address_th": "111 หมู่ 1 อาคารออโต้วัน ตำบลไชยสถาน  อำเภอสารภี จังหวัดเชียงใหม่ 50140"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10160",
+    "store_code_oracle": "0528BG",
+    "store_nick3": "AS2",
+    "store_name_th": "Auto1 ศรีมหาโพธิ",
+    "store_name_en": "Auto1 Si Maha Phot",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ศรีมหาโพธิ",
+    "formal_address_th": "898 หมู่ 7 อาคารออโต้วัน ตำบลท่าตูม อำเภอศรีมหาโพธิ จังหวัดปราจีนบุรี 25140"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10161",
+    "store_code_oracle": "0528BH",
+    "store_nick3": "A30",
+    "store_name_th": "Auto1 ระยอง",
+    "store_name_en": "Auto1 Rayong",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ระยอง",
+    "formal_address_th": "999/9 หมู่ที่ 1 อาคารออโต้วัน ตำบลเชิงเนิน  อำเภอเมืองระยอง  จังหวัดระยอง 21000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10162",
+    "store_code_oracle": "0528BI",
+    "store_nick3": "A02",
+    "store_name_th": "AUTO 1 บางบัวทอง *",
+    "store_name_en": "Auto1 BANGBUATHONG *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางบัวทอง",
+    "formal_address_th": "59/9 หมู่ 1 อาคารออโต้วัน ตำบลบางบัวทอง  อำเภอบางบัวทอง จังหวัดนนทบุรี  11110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10163",
+    "store_code_oracle": "0528BJ",
+    "store_nick3": "A04",
+    "store_name_th": "AUTO 1 บางนา *",
+    "store_name_en": "Auto1 BANGNA *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางนา",
+    "formal_address_th": "54 หมู่ที่ 13 อาคารออโต้วัน ตำบลบางแก้ว อำเภอบางพลี จังหวัดสมุทรปราการ 10540"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10164",
+    "store_code_oracle": "0528BK",
+    "store_nick3": "A01",
+    "store_name_th": "AUTO 1 ปทุมธานี *",
+    "store_name_en": "Auto1 PATHUM THANI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ปทุมธานี",
+    "formal_address_th": "99/10 หมู่ที่ 5 อาคารออโต้วัน ตำบลบางเดื่อ  อำเภอเมืองปทุมธานี จังหวัดปทุมธานี 12000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10165",
+    "store_code_oracle": "0528BL",
+    "store_nick3": "A03",
+    "store_name_th": "AUTO 1 บางพลี *",
+    "store_name_en": "Auto1 BANGPHLI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางพลี",
+    "formal_address_th": "111/15 หมู่ที่ 9 อาคารออโต้วัน ตำบลบางปลา อำเภอบางพลี จังหวัดสมุทรปราการ 10540"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10166",
+    "store_code_oracle": "0528BM",
+    "store_nick3": "A05",
+    "store_name_th": "AUTO 1 ชลบุรี *",
+    "store_name_en": "Auto1 CHONBURI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ชลบุรี",
+    "formal_address_th": "413/81 หมู่ที่ 5 อาคารออโต้วัน ตำบลบ้านสวน อำเภอเมืองชลบุรี จังหวัดชลบุรี 20000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10167",
+    "store_code_oracle": "0528BN",
+    "store_nick3": "A06",
+    "store_name_th": "AUTO 1 สระบุรี *",
+    "store_name_en": "Auto1 SARABURI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน สระบุรี",
+    "formal_address_th": "88/9 หมู่ที่ 8 อาคารออโต้วัน ตำบลตลิ่งชัน อำเภอเมืองสระบุรี จังหวัดสระบุรี 18000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10168",
+    "store_code_oracle": "0528BO",
+    "store_nick3": "A07",
+    "store_name_th": "AUTO 1 ฉะเชิงเทรา *",
+    "store_name_en": "Auto1 CHACHOENGSAO *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ฉะเชิงเทรา",
+    "formal_address_th": "99 หมู่ที่ 2 อาคารออโต้วัน ตำบลโสธร  อำเภอเมืองฉะเชิงเทรา จังหวัดฉะเชิงเทรา 24000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10169",
+    "store_code_oracle": "0528BP",
+    "store_nick3": "A08",
+    "store_name_th": "AUTO 1 รังสิต คลอง 4 *",
+    "store_name_en": "Auto1 RANGSIT KLONG 4 *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน รังสิต คลองสี",
+    "formal_address_th": "70 หมู่ 2 อาคารออโต้วัน ตำบลบึงยี่โถ อำเภอธัญบุรี จังหวัดปทุมธานี 12130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10170",
+    "store_code_oracle": "0528BQ",
+    "store_nick3": "A09",
+    "store_name_th": "AUTO 1 ภูเก็ต เฟสติวัล *",
+    "store_name_en": "Auto1 PHUKET FESTIVAL *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ภูเก็ต เฟสติวัล",
+    "formal_address_th": "79 หมู่ 5 อาคารออโต้วัน ตำบลวิชิต  อำเภอเมืองภูเก็ต จังหวัดภูเก็ต 83000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10171",
+    "store_code_oracle": "0528BR",
+    "store_nick3": "A10",
+    "store_name_th": "AUTO 1 ภูเก็ต(ฉลอง) *",
+    "store_name_en": "Auto1 PHUKET (CHALONG) *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ภูเก็ต (ฉลอง)",
+    "formal_address_th": "10/52 หมู่ 1 อาคารออโต้วัน ตำบลฉลอง อำเภอเมืองภูเก็ต จังหวัดภูเก็ต 83130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10172",
+    "store_code_oracle": "0528BS",
+    "store_nick3": "A11",
+    "store_name_th": "AUTO 1 สมุทรปราการ *",
+    "store_name_en": "Auto1 SAMUT PRAKAN *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน สมุทรปราการ",
+    "formal_address_th": "6 หมู่ 7 อาคารออโต้วัน ตำบลบางเมือง อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ 10270"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10173",
+    "store_code_oracle": "0528BT",
+    "store_nick3": "A13",
+    "store_name_th": "AUTO 1 เมืองเอก *",
+    "store_name_en": "Auto1 MUANG EK *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เมืองเอก",
+    "formal_address_th": "298 หมู่ 13 อาคารออโต้วัน ถนนพหลโยธิน ตำบลคูคต อำเภอลำลูกกา จังหวัดปทุมธานี 12130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10174",
+    "store_code_oracle": "0528BU",
+    "store_nick3": "A12",
+    "store_name_th": "AUTO 1 เชียงใหม่ สันทราย *",
+    "store_name_en": "Auto1 CHIANG SANSAI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เชียงใหม่ สันทราย",
+    "formal_address_th": "552 หมู่ 4 อาคารออโต้วัน ตำบลสันทรายน้อย อำเภอสันทราย จังหวัดเชียงใหม่ 50210"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10175",
+    "store_code_oracle": "0528BV",
+    "store_nick3": "A14",
+    "store_name_th": "AUTO 1 บางใหญ่ *",
+    "store_name_en": "Auto1 BANGYAI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางใหญ่",
+    "formal_address_th": "29 หมู่ 2 อาคารออโต้วัน ตำบลปลายบาง อำเภอบางกรวย จังหวัดนนทบุรี 11130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10176",
+    "store_code_oracle": "0528BW",
+    "store_nick3": "A15",
+    "store_name_th": "AUTO 1 บางบอน *",
+    "store_name_en": "Auto1 BANGBON *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางบอน",
+    "formal_address_th": "89 หมู่ 3 อาคารออโต้วัน ตำบลบางน้ำจืด อำเภอเมืองสมุทรสาคร จังหวัดสมุทรสาคร 74000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10177",
+    "store_code_oracle": "0528BX",
+    "store_nick3": "A16",
+    "store_name_th": "Auto1 บางแสน *",
+    "store_name_en": "Auto1 BANGSAEN *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บางแสน",
+    "formal_address_th": "87 หมู่ 4 อาคารออโต้วัน ตำบลห้วยกะปิ อำเภอเมืองชลบุรี จังหวัดชลบุรี 20130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10178",
+    "store_code_oracle": "0528BY",
+    "store_nick3": "A17",
+    "store_name_th": "Auto1 นครอินทร์ *",
+    "store_name_en": "Auto1 NAKHON IN *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน นครอินทร์",
+    "formal_address_th": "30/4  หมู่ 3 อาคารออโต้วัน ตำบลบางไผ่ อำเภอเมืองนนทบุรี จังหวัดนนทบุรี 11000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10179",
+    "store_code_oracle": "0528BZ",
+    "store_nick3": "A18",
+    "store_name_th": "Auto1 CFW พัทยา *",
+    "store_name_en": "Auto1 CFW PATTAYA *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน พัทยา",
+    "formal_address_th": "565/66 หมู่ที่ 10 อาคารออโต้วัน ตำบลหนองปรือ อำเภอบางละมุง จังหวัดชลบุรี 20150"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10180",
+    "store_code_oracle": "0528CA",
+    "store_nick3": "A19",
+    "store_name_th": "Auto1 อยุธยา *",
+    "store_name_en": "Auto1 AYUTTHAYA *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน อยุธยา",
+    "formal_address_th": "111/3 หมู่ 3 อาคารออโต้วัน ตำบลคลองสวนพลู อำเภอพระนครศรีอยุธยา จังหวัดพระนครศรีอยุธยา 13000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10181",
+    "store_code_oracle": "0528CB",
+    "store_nick3": "A20",
+    "store_name_th": "Auto1 หาดใหญ่ *",
+    "store_name_en": "Auto1 HAT YAI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน หาดใหญ่",
+    "formal_address_th": "1119 หมู่ 1 อาคารออโต้วัน ถนนเลี่ยงเมือง(สายเอเชีย) ตำบลควนลัง อำเภอหาดใหญ่ จังหวัดสงขลา 90110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10182",
+    "store_code_oracle": "0528CC",
+    "store_nick3": "A21",
+    "store_name_th": "Auto1 แกลง *",
+    "store_name_en": "Auto1 KLAENG *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน แกลง",
+    "formal_address_th": "222 หมู่ 12 อาคารออโต้วัน ตำบลทุ่งควายกิน อำเภอแกลง จังหวัดระยอง 21110"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10183",
+    "store_code_oracle": "0528CD",
+    "store_nick3": "A22",
+    "store_name_th": "Auto1 ปากช่อง *",
+    "store_name_en": "Auto1 PAKCHONG *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ปากช่อง",
+    "formal_address_th": "7 หมู่ 11 อาคารออโต้วัน ตำบลหนองน้ำแดง อำเภอปากช่อง จังหวัดนครราชสีมา 30130"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10184",
+    "store_code_oracle": "0528CE",
+    "store_nick3": "A23",
+    "store_name_th": "Auto1 ชัยพฤกษ์ *",
+    "store_name_en": "Auto1 CHAIYAPRUEK *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน ชัยพฤกษ์",
+    "formal_address_th": "46/21 หมู่ที่ 5 อาคารออโต้วัน ตำบลบางพลับ อำเภอปากเกร็ด จังหวัดนนทบุรี 11120"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10185",
+    "store_code_oracle": "0528CF",
+    "store_nick3": "A24",
+    "store_name_th": "Auto1 เชียงราย *",
+    "store_name_en": "Auto1 CHIANGRAI *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน เชียงราย",
+    "formal_address_th": "99/20 หมู่ 13 อาคารออโต้วัน ตำบลสันทราย อำเภอเมืองเชียงราย จังหวัดเชียงราย 57000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10186",
+    "store_code_oracle": "0528CG",
+    "store_nick3": "A25",
+    "store_name_th": "Auto1 มหาสารคาม *",
+    "store_name_en": "Auto1 MAHASARAKAM *",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน มหาสารคาม",
+    "formal_address_th": "303 หมู่ 11 อาคารออโต้วัน ตำบลเกิ้ง อำเภอเมืองมหาสารคาม จังหวัดมหาสารคาม 44000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10187",
+    "store_code_oracle": "0528CH",
+    "store_nick3": "ADG",
+    "store_name_th": "Auto1 บิ๊กซี อำนาจเจริญ",
+    "store_name_en": "Auto1 BigC Amnat Charoen",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาออโต้วัน บิ๊กซีอำนาจเจริญ",
+    "formal_address_th": "477/2 หมู่ 7 ตำบลบุ่ง อำเภอเมืองอำนาจเจริญ จังหวัดอำนาจเจริญ 37000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10188",
+    "store_code_oracle": "0528CI",
+    "store_nick3": "A29",
+    "store_name_th": "Auto1 ไทวัสดุสุขาภิบาล 3",
+    "store_name_en": "Auto1 TWD Sukhaphiban 3",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน ไทวัสดุสุขาภิบาล 3)",
+    "formal_address_th": "38 ถนนร่มเกล้า  แขวงมีนบุรี  เขตมีนบุรี จังหวัดกรุงเทพมหานคร  10510 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10189",
+    "store_code_oracle": "0528CJ",
+    "store_nick3": "A33",
+    "store_name_th": "Auto1 โรบินสัน ลพบุรี",
+    "store_name_en": "Auto1 RBS Lopburi",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน โรบินสัน ลพบุรี)",
+    "formal_address_th": "555/1 หมู่ที่ 4  ตำบลกกโก อำเภอเมืองลพบุรี จังหวัดลพบุรี 15000 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10190",
+    "store_code_oracle": "0528CK",
+    "store_nick3": "A32",
+    "store_name_th": "AUTO 1 เทพารักษ์",
+    "store_name_en": "Auto1 Thepharak",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน เทพารักษ์)",
+    "formal_address_th": "177 หมู่ที่ 8 ตำบลบางพลีใหญ่ อำเภอบางพลี จังหวัดสมุทรปราการ 10540 "
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10191",
+    "store_code_oracle": "0528CL",
+    "store_nick3": "A31",
+    "store_name_th": "AUTO 1 CPN ชลบุรี",
+    "store_name_en": "Auto1 CPN Chon Buri",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน ซีพีเอ็น ชลบุรี)",
+    "formal_address_th": "55/88-89, 55/91 ห้องเอสเอชจี01 ชั้นจี หมู่ที่ 1 ถนนสุขุมวิท ตำบลเสม็ด อำเภอเมืองชลบุรี จังหวัดชลบุรี 20000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10192",
+    "store_code_oracle": "0528CM",
+    "store_nick3": "A35",
+    "store_name_th": "AUTO 1 เลียบคลอง 2 แยกซาฟารี",
+    "store_name_en": "Auto1 Liap Khlong 2 Yaek Safari",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน เลียบคลอง 2 แยกซาฟารี)",
+    "formal_address_th": "349 ถนนเลียบคลองสอง แขวงบางชัน เขตคลองสามวา จังหวัดกรุงเทพมหานคร 10510"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10193",
+    "store_code_oracle": "0528CN",
+    "store_nick3": "A36",
+    "store_name_th": "Auto1 บางแค",
+    "store_name_en": "Auto1 Bang Khae",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน บางแค)",
+    "formal_address_th": "508/2 ถนนเพชรเกษม แขวงบางแคเหนือ เขตบางแค จังหวัดกรุงเทพมหานคร 10160"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10194",
+    "store_code_oracle": "0528CO",
+    "store_nick3": "A38",
+    "store_name_th": "Auto1 เซ็นทรัล ชิดลม",
+    "store_name_en": "Auto1 Central Chidlom",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน เซ็นทรัล ชิดลม)",
+    "formal_address_th": "1027 ห้อง 002 ชั้นจี ถนนเพลินจิต แขวงลุมพินี เขตปทุมวัน จังหวัดกรุงเทพมหานคร 10330"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10195",
+    "store_code_oracle": "0528CP",
+    "store_nick3": "A39",
+    "store_name_th": "Auto1 เซ็นทรัล ขอนแก่น แคมปัส",
+    "store_name_en": "Auto1 Central Khon Kaen Campus",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน เซ็นทรัล ขอนแก่น แคมปัส)",
+    "formal_address_th": "3/3 ห้องจี55 ชั้นจี หมู่ 14 ตำบลในเมือง อำเภอเมืองขอนแก่น จังหวัดขอนแก่น 40000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10196",
+    "store_code_oracle": "0528CQ",
+    "store_nick3": "A42",
+    "store_name_th": "Auto1 ไทวัสดุราชบุรี",
+    "store_name_en": "Auto1 TWD Ratchaburi",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน ไทวัสดุราชบุรี)",
+    "formal_address_th": "189 หมู่ที่ 9 อาคารออโต้วัน ตำบลพงสวาย อำเภอเมืองราชบุรี จังหวัดราชบุรี 70000"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10197",
+    "store_code_oracle": "0528CR",
+    "store_nick3": "A40",
+    "store_name_th": "Auto1 สะพานใหม่",
+    "store_name_en": "Auto1 Saphan Mai",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน สะพานใหม่)",
+    "formal_address_th": "437/1 ถนนพหลโยธิน แขวงอนุสาวรีย์ เขตบางเขน จังหวัดกรุงเทพมหานคร 10220"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "10198",
+    "store_code_oracle": "0528CS",
+    "store_nick3": "A37",
+    "store_name_th": "* Auto1 ไทวัสดุ พระราม 2",
+    "store_name_en": "* Auto1 TWD Rama2",
+    "formal_name_th": "บจก. ซีอาร์ซี ไทวัสดุ (ออโต้วัน ไทวัสดุ พระราม 2)",
+    "formal_address_th": "268/2 อาคารออโต้วัน ถนนพระรามที่ 2 แขวงแสมดำ  เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+  },
+  {
+    "in_bu": "A1",
+    "store_code": "160001",
+    "store_code_oracle": "0528A2",
+    "store_nick3": "AT1",
+    "store_name_th": "Auto1 สำนักงานใหญ่",
+    "store_name_en": "Auto1 Head Office",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60004",
+    "store_code_oracle": "052853",
+    "store_nick3": "DC1",
+    "store_name_th": "CHG คลังสินค้าวังน้อย",
+    "store_name_en": "CHG Distribution Center",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60005",
+    "store_code_oracle": "052816",
+    "store_nick3": "RTB",
+    "store_name_th": "BB รัตนาธิเบศร์",
+    "store_name_en": "BB Rattanatibeth",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60014",
+    "store_code_oracle": "052820",
+    "store_nick3": "PTY",
+    "store_name_th": "BB พัทยา",
+    "store_name_en": "BB Pattaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60016",
+    "store_code_oracle": "052821",
+    "store_nick3": "PKF",
+    "store_name_th": "BB ภูเก็ต เฟสติวัล",
+    "store_name_en": "BB Phuket Festival",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60017",
+    "store_code_oracle": "052822",
+    "store_nick3": "RCP",
+    "store_name_th": "BB ราชพฤกษ์",
+    "store_name_en": "BB Ratchapruke",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60021",
+    "store_code_oracle": "052880",
+    "store_nick3": "BCT",
+    "store_name_th": "BB เซ็นทรัล จันทบุรี",
+    "store_name_en": "BB CDS Chanthaburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60809",
+    "store_code_oracle": "",
+    "store_nick3": "ECO",
+    "store_name_th": "BB มาร์เก็ตเพลส DC",
+    "store_name_en": "BB Store Market Place DC",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60949",
+    "store_code_oracle": "052812",
+    "store_nick3": "CAP",
+    "store_name_th": "BB เชียงใหม่ แอร์พอร์ต",
+    "store_name_en": "BB Chiang Mai Airport",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "BB",
+    "store_code": "60950",
+    "store_code_oracle": "052813",
+    "store_nick3": "KMP",
+    "store_name_th": "BB มิตรภาพ ขอนแก่น",
+    "store_name_en": "BB Mittraphap Khon Kaen",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "6000101",
+    "store_code_oracle": "0528G2",
+    "store_nick3": "GHO",
+    "store_name_th": "Go Wow สำนักงานใหญ่",
+    "store_name_en": "Go Wow Head Office",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60303",
+    "store_code_oracle": "",
+    "store_nick3": "G01",
+    "store_name_th": "Go Wow Event ไทวัสดุบางใหญ่",
+    "store_name_en": "Go Wow TWD Bangyai Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60304",
+    "store_code_oracle": "0528G6",
+    "store_nick3": "G06",
+    "store_name_th": "Go Wow โรบินสัน สุพรรณบุรี",
+    "store_name_en": "Go Wow RBS Suphan Buri",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60305",
+    "store_code_oracle": "0528G5",
+    "store_nick3": "G05",
+    "store_name_th": "Go Wow โรบินสัน บ่อวิน",
+    "store_name_en": "Go Wow RBS Bo Win",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60306",
+    "store_code_oracle": "0528G7",
+    "store_nick3": "G07",
+    "store_name_th": "Go Wow โรบินสัน ศรีราชา",
+    "store_name_en": "Go Wow RBS Si Racha",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60307",
+    "store_code_oracle": "0528G9",
+    "store_nick3": "G09",
+    "store_name_th": "Go Wow โรบินสัน ลาดกระบัง",
+    "store_name_en": "Go Wow RBS Lat Krabang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60308",
+    "store_code_oracle": "0528G4",
+    "store_nick3": "G04",
+    "store_name_th": "Go Wow อิมพีเรียล สำโรง",
+    "store_name_en": "Go Wow Imperial Samrong",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60309",
+    "store_code_oracle": "0528G8",
+    "store_nick3": "G08",
+    "store_name_th": "Go Wow ซีพีเอ็น บางนา",
+    "store_name_en": "Go Wow CPN Bangna",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60310",
+    "store_code_oracle": "",
+    "store_nick3": "H00",
+    "store_name_th": "Go Wow เอ็กซ์โป ",
+    "store_name_en": "Go Wow Expo",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60311",
+    "store_code_oracle": "",
+    "store_nick3": "H01",
+    "store_name_th": "Go Wow บิ๊กซี สุขาภิบาล3-2",
+    "store_name_en": "Go Wow BigC Sukhaphiban3-",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60312",
+    "store_code_oracle": "",
+    "store_nick3": "H02",
+    "store_name_th": "Go Wow บิ๊กซี ลำปาง",
+    "store_name_en": "Go Wow BigC Lampang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60313",
+    "store_code_oracle": "0528H7",
+    "store_nick3": "H07",
+    "store_name_th": "Go Wow ซีพีเอ็น ศรีราชา",
+    "store_name_en": "Go Wow CPN Si Racha",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60314",
+    "store_code_oracle": "0528H4",
+    "store_nick3": "H04",
+    "store_name_th": "Go Wow ซีคอน ศรีนครินทร์",
+    "store_name_en": "Go Wow Seacon Srinakarin",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60315",
+    "store_code_oracle": "0528H3",
+    "store_nick3": "H03",
+    "store_name_th": "Go Wow ซีพีเอ็น อยุธยา",
+    "store_name_en": "Go Wow CPN Ayutthaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60316",
+    "store_code_oracle": "052874",
+    "store_nick3": "RSM",
+    "store_name_th": "Go Wow โรบินสัน สมุทรปราการ",
+    "store_name_en": "Go Wow RBS Samut Prakan",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60317",
+    "store_code_oracle": "0528H5",
+    "store_nick3": "H05",
+    "store_name_th": "Go Wow โรบินสัน ฉะเชิงเทรา",
+    "store_name_en": "Go Wow RBS Chachoengsao",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60318",
+    "store_code_oracle": "0528H9",
+    "store_nick3": "H09",
+    "store_name_th": "Go Wow บ้านฉาง",
+    "store_name_en": "Go Wow Ban Chang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60319",
+    "store_code_oracle": "0528GA",
+    "store_nick3": "G0A",
+    "store_name_th": "Go Wow ยูดี ทาวน์",
+    "store_name_en": "Go Wow UD Town",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว ยูดี ทาวน์)",
+    "formal_address_th": "45/5 ห้องเลขที่ ยูดี ฮอลล์ 01-06  ถนนทองใหญ่ ตำบลหมากแข้ง อำเภอเมืองอุดรธานี จังหวัดอุดรธานี 41000"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60320",
+    "store_code_oracle": "0528GB",
+    "store_nick3": "G0B",
+    "store_name_th": "Go Wow ลีวิวัฒน์ ท่าสะอ้าน",
+    "store_name_en": "Go Wow Leeviwat Tha Sa-an",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว ลีวิวัฒน์ ท่าสะอ้าน)",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60321",
+    "store_code_oracle": "0528GC",
+    "store_nick3": "G0C",
+    "store_name_th": "Go Wow หัวหิน",
+    "store_name_en": "Go Wow Hua Hin",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว หัวหิน)",
+    "formal_address_th": "226/3 ถนนเพชรเกษม ตำบลหัวหิน อำเภอหัวหิน จังหวัดประจวบคีรีขันธ์ 77110"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60322",
+    "store_code_oracle": "0528GD",
+    "store_nick3": "WSK",
+    "store_name_th": "Go Wow สีคิ้ว",
+    "store_name_en": "Go Wow Sikhio",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว สีคิ้ว)",
+    "formal_address_th": "330 หมู่ 9 ตำบลสีคิ้ว อำเภอสีคิ้ว จังหวัดนครราชสีมา 30140"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60323",
+    "store_code_oracle": "0528GE",
+    "store_nick3": "WSP",
+    "store_name_th": "Go Wow ทรัพย์พัฒนา",
+    "store_name_en": "Go Wow Subpattana",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว ทรัพย์พัฒนา)",
+    "formal_address_th": "45/24 หมู่ 4 ตำบลบางเมือง อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ 10270"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60324",
+    "store_code_oracle": "",
+    "store_nick3": "WLR",
+    "store_name_th": "*** Go Wow บิ๊กซี ลพบุรี",
+    "store_name_en": "*** Go Wow Big C Lop Buri",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว บิ๊กซี ลพบุรี)",
+    "formal_address_th": "2 หมู่ 1 ห้อง 2ซีอาร์0208/2 ชั้น 2 ตำบลท่าศาลา อำเภอเมืองลพบุรี จังหวัดลพบุรี 15000"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60325",
+    "store_code_oracle": "",
+    "store_nick3": "WTS",
+    "store_name_th": "Go Wow โกท่าศาลา",
+    "store_name_en": "Go Wow Go Tha Sala",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว โกท่าศาลา)",
+    "formal_address_th": "236/6 หมู่ 3  ตำบลท่าศาลา อำเภอท่าศาลา จังหวัดนครศรีธรรมราช 80160"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60326",
+    "store_code_oracle": "0528GH",
+    "store_nick3": "WCD",
+    "store_name_th": "Go Wow โกจันดี",
+    "store_name_en": "Go Wow Go Chan Di",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว โกจันดี)",
+    "formal_address_th": "188/8 หมู่ 3  ตำบลจันดี อำเภอฉวาง จังหวัดนครศรีธรรมราช 80250"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60327",
+    "store_code_oracle": "",
+    "store_nick3": "WTK",
+    "store_name_th": "Go Wow ท่าข้าม",
+    "store_name_en": "Go Wow Tha Kham",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว ท่าข้าม)",
+    "formal_address_th": "111/70 ถนนท่าข้าม แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60328",
+    "store_code_oracle": "0528GJ",
+    "store_nick3": "WSS",
+    "store_name_th": "Go Wow โรบินสัน ศรีสมาน",
+    "store_name_en": "Go Wow Robinson Srisaman",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว โรบินสัน ศรีสมาน)",
+    "formal_address_th": "99 ชั้น 2 หมู่ 1 ตำบลบ้านใหม่ อำเภอปากเกร็ด จังหวัดนนทบุรี 11120"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60329",
+    "store_code_oracle": "0528GK",
+    "store_nick3": "WND",
+    "store_name_th": "Go Wow Event ไทวัสดุนครอินทร์",
+    "store_name_en": "Go Wow TWD Nakhon In Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60330",
+    "store_code_oracle": "0528GL",
+    "store_nick3": "WRP",
+    "store_name_th": "Go Wow ร่อนพิบูลย์",
+    "store_name_en": "Go Wow Ron Phibun",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว โกร่อนพิบูลย์)",
+    "formal_address_th": "394/9 หมู่ 13 ตำบลร่อนพิบูลย์ อำเภอร่อนพิบูลย์ จังหวัดนครศรีธรรมราช 80130"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60331",
+    "store_code_oracle": "0528GM",
+    "store_nick3": "WHY",
+    "store_name_th": "Go Wow เซ็นทรัล หาดใหญ่",
+    "store_name_en": "Go Wow Go Central Hat Yai",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว เซ็นทรัล หาดใหญ่)",
+    "formal_address_th": "1518, 1518/1,1518/2 ห้องเลขที่ 421 ชั้น 4 ถนนกาญจนวณิชย์ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60332",
+    "store_code_oracle": "",
+    "store_nick3": "WSM",
+    "store_name_th": "Go Wow ไทวัสดุ สมุทรปราการ",
+    "store_name_en": "Go Wow TWD Samut Prakan",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60805",
+    "store_code_oracle": "",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event ไทวัสดุรังสิตคลอง",
+    "store_name_en": "Go Wow TWD Rangsit Khlong 4 Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60807",
+    "store_code_oracle": "",
+    "store_nick3": "GHO",
+    "store_name_th": "Go Wow ไทวัสดุ บางนา",
+    "store_name_en": "Go Wow TWD Bangna",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60810",
+    "store_code_oracle": "",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event TW บางบัวทอง",
+    "store_name_en": "Go Wow Event TW Bangbuathong",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60816",
+    "store_code_oracle": "",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event ไทวัสดุบางพลี",
+    "store_name_en": "Go Wow TWD Bang Phli Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60818",
+    "store_code_oracle": "",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event ศาลายา",
+    "store_name_en": "GO Wow Salaya Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60819",
+    "store_code_oracle": "052862",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event TWD นครราชสีมา",
+    "store_name_en": "GO Wow TWD Nakhonratchasima Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60822",
+    "store_code_oracle": "052802",
+    "store_nick3": "G",
+    "store_name_th": "Go Wow Event TWD ระยอง",
+    "store_name_en": "GO Wow TWD Rayong Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60823",
+    "store_code_oracle": "",
+    "store_nick3": "HAY",
+    "store_name_th": "GO Wow หาดใหญ่ (อีเวนท์)",
+    "store_name_en": "GO Wow Hadyai (Event)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (โก ว้าว เซ็นทรัล หาดใหญ่)",
+    "formal_address_th": "1518, 1518/1,1518/2 ห้องเลขที่ 421 ชั้น 4 ถนนกาญจนวณิชย์ ตำบลหาดใหญ่ อำเภอหาดใหญ่ จังหวัดสงขลา 90110"
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "60830",
+    "store_code_oracle": "052824",
+    "store_nick3": "WK3",
+    "store_name_th": "Go Wow Event TWD สุขาภิบาล3",
+    "store_name_en": "Go Wow TWD Sukhaphibal3 Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "90717",
+    "store_code_oracle": "",
+    "store_nick3": "G03",
+    "store_name_th": "Go Wow ราชพฤกษ์",
+    "store_name_en": "Go Wow Ratchapruke",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "90749",
+    "store_code_oracle": "",
+    "store_nick3": "H08",
+    "store_name_th": "Go Wow BB เชียงใหม่ แอร์พอร์ต",
+    "store_name_en": "Go Wow BB Chiang Mai Airp",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "GO",
+    "store_code": "90750",
+    "store_code_oracle": "",
+    "store_nick3": "G02",
+    "store_name_th": "Go Wow มิตรภาพ ขอนแก่น",
+    "store_name_en": "Go Wow Mittraphap Khon Ka",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60333",
+    "store_code_oracle": "052801",
+    "store_nick3": "J02",
+    "store_name_th": "JOY TW-บางนา (แคนทีน)",
+    "store_name_en": "JOY TW- Bangna (Canteen)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60334",
+    "store_code_oracle": "052801",
+    "store_nick3": "J03",
+    "store_name_th": "JOY อีเวนท์ เอ็กซ์โป",
+    "store_name_en": "JOY Event Expo",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60335",
+    "store_code_oracle": "0528HA",
+    "store_nick3": "JBY",
+    "store_name_th": "JOY TW-บางใหญ่",
+    "store_name_en": "JOY TW- Bang Yai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60336",
+    "store_code_oracle": "052844",
+    "store_nick3": "JPT",
+    "store_name_th": "JOY TW-ปทุมธานี",
+    "store_name_en": "JOY TW- Pathum Thani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60337",
+    "store_code_oracle": "052813",
+    "store_nick3": "JMK",
+    "store_name_th": "JOY BB-มิตรภาพ ขอนแก่น",
+    "store_name_en": "JOY BB-Mittraphap Khon Kaen",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60338",
+    "store_code_oracle": "052843",
+    "store_nick3": "JCS",
+    "store_name_th": "JOY TW-ฉะเชิงเทรา",
+    "store_name_en": "JOY TW- Chachoengsao",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60339",
+    "store_code_oracle": "052845",
+    "store_nick3": "JSP",
+    "store_name_th": "JOY TW-พัทยาใต้",
+    "store_name_en": "JOY TW- South Pattaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60340",
+    "store_code_oracle": "052847",
+    "store_nick3": "JCB",
+    "store_name_th": "JOY TW-ชลบุรี",
+    "store_name_en": "JOY TW- Chonburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60341",
+    "store_code_oracle": "052859",
+    "store_nick3": "JLK",
+    "store_name_th": "JOY TW-ลำลูกกา",
+    "store_name_en": "JOY TW- Lamlukka",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60344",
+    "store_code_oracle": "052866",
+    "store_nick3": "JNC",
+    "store_name_th": "JOY Cafe หนองจอก",
+    "store_name_en": "JOY Cafe Nongchok",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60345",
+    "store_code_oracle": "052883",
+    "store_nick3": "JBB",
+    "store_name_th": "JOY Cafe บางบอน",
+    "store_name_en": "JOY Cafe Bangbon",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "JO",
+    "store_code": "60346",
+    "store_code_oracle": "052875",
+    "store_nick3": "JAY",
+    "store_name_th": "JOY TW-อยุธยา",
+    "store_name_en": "JOY TW- Ayutthaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60001",
+    "store_code_oracle": "052801",
+    "store_nick3": "HO1",
+    "store_name_th": "CTD สำนักงานใหญ่",
+    "store_name_en": "CTD Head Office",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60011",
+    "store_code_oracle": "052811",
+    "store_nick3": "DS1",
+    "store_name_th": "CTD ไดเร็คเซลล์",
+    "store_name_en": "CTD Direct Sale",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60020",
+    "store_code_oracle": "052877",
+    "store_nick3": "SSM",
+    "store_name_th": "TW ศรีสมาน",
+    "store_name_en": "TW Srisaman",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาศรีสมาน)",
+    "formal_address_th": "320 หมู่ 3 ตำบลบ้านใหม่ อำเภอปากเกร็ด จังหวัดนนทบุรี 11120"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60022",
+    "store_code_oracle": "052881",
+    "store_nick3": "BAS",
+    "store_name_th": "TW บางแสน",
+    "store_name_en": "TW Bangsaen",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาบางแสน)",
+    "formal_address_th": "87 หมู่ 4 ตำบลห้วยกะปิ อำเภอเมืองชลบุรี จังหวัดชลบุรี 20130"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60023",
+    "store_code_oracle": "052886",
+    "store_nick3": "RS4",
+    "store_name_th": "TW รังสิต คลองสี่",
+    "store_name_en": "TW Rangsit Klong 4",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขารังสิต คลองสี่)",
+    "formal_address_th": "70 หมู่ 2 ตำบลบึงยี่โถ อำเภอธัญบุรี จังหวัดปทุมธานี 12130"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60024",
+    "store_code_oracle": "052889",
+    "store_nick3": "PKC",
+    "store_name_th": "TW ภูเก็ต (ฉลอง)",
+    "store_name_en": "TW Phuket (Chalong)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาภูเก็ต (ฉลอง)",
+    "formal_address_th": "10/52 หมู่ 1 ตำบลฉลอง อำเภอเมืองภูเก็ต จังหวัดภูเก็ต 83130"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60025",
+    "store_code_oracle": "052890",
+    "store_nick3": "MEK",
+    "store_name_th": "TW เมืองเอก",
+    "store_name_en": "TW Mueang Ek",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60026",
+    "store_code_oracle": "052891",
+    "store_nick3": "SMP",
+    "store_name_th": "TW สมุทรปราการ",
+    "store_name_en": "TW Samut Prakan",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60027",
+    "store_code_oracle": "052894",
+    "store_nick3": "CMS",
+    "store_name_th": "TW เชียงใหม่ สันทราย",
+    "store_name_en": "TW Chiangmai Sansai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60028",
+    "store_code_oracle": "0528HA",
+    "store_nick3": "BYI",
+    "store_name_th": "TW บางใหญ่",
+    "store_name_en": "TW Bang Yai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60029",
+    "store_code_oracle": "0528HB",
+    "store_nick3": "NIN",
+    "store_name_th": "TW นครอินทร์",
+    "store_name_en": "TW Nakhon In",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด  สาขานครอินทร์",
+    "formal_address_th": "30/4  หมู่ 3 ตำบลบางไผ่ อำเภอเมืองนนทบุรี จังหวัดนนทบุรี 11130"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60030",
+    "store_code_oracle": "0528HC",
+    "store_nick3": "UDK",
+    "store_name_th": "TW อุดรธานี กุดสระ",
+    "store_name_en": "TW Udon Thani Kut Sa",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด  สาขาอุดรธานี กุดสระ",
+    "formal_address_th": "11/1 หมู่ 6 ตำบลกุดสระ อำเภอเมืองอุดรธานี จังหวัดอุดรธานี 41000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60031",
+    "store_code_oracle": "0528HD",
+    "store_nick3": "RA3",
+    "store_name_th": "TW พระราม 3",
+    "store_name_en": "TW RAMA3",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60032",
+    "store_code_oracle": "052816",
+    "store_nick3": "RTB",
+    "store_name_th": "TW รัตนาธิเบศร์",
+    "store_name_en": "TW Rattanatibeth",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60802",
+    "store_code_oracle": "052898",
+    "store_nick3": "E1",
+    "store_name_th": "BB/TW อีเว้นท์",
+    "store_name_en": "BB/TW Event",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60808",
+    "store_code_oracle": "052844",
+    "store_nick3": "MKP",
+    "store_name_th": "TW มาร์เก็ตเพลส",
+    "store_name_en": "TW Store Market Place",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60918",
+    "store_code_oracle": "052823",
+    "store_nick3": "BBT",
+    "store_name_th": "TW บางบัวทอง",
+    "store_name_en": "TW Bangbuathong",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60919",
+    "store_code_oracle": "052824",
+    "store_nick3": "SK3",
+    "store_name_th": "TW สุขาภิบาล3",
+    "store_name_en": "TW Sukhaphiban 3",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60920",
+    "store_code_oracle": "052825",
+    "store_nick3": "BNA",
+    "store_name_th": "TW บางนา",
+    "store_name_en": "TW Bangna",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60921",
+    "store_code_oracle": "052826",
+    "store_nick3": "PNL",
+    "store_name_th": "TW พิษณุโลก",
+    "store_name_en": "TW Phitsanulok",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60922",
+    "store_code_oracle": "052827",
+    "store_nick3": "SRN",
+    "store_name_th": "TW สุรินทร์",
+    "store_name_en": "TW Surin",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60923",
+    "store_code_oracle": "052828",
+    "store_nick3": "LPA",
+    "store_name_th": "TW ลำปาง",
+    "store_name_en": "TW Lampang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60924",
+    "store_code_oracle": "052829",
+    "store_nick3": "BRA",
+    "store_name_th": "TW บุรีรัมย์",
+    "store_name_en": "TW Buriram",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60925",
+    "store_code_oracle": "052830",
+    "store_nick3": "MHA",
+    "store_name_th": "TW มหาชัย",
+    "store_name_en": "TW Mahachai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60926",
+    "store_code_oracle": "052831",
+    "store_nick3": "SKN",
+    "store_name_th": "TW สกลนคร",
+    "store_name_en": "TW Sakon Nakhon",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60927",
+    "store_code_oracle": "052832",
+    "store_nick3": "SRT",
+    "store_name_th": "TW สุราษฏร์ธานี",
+    "store_name_en": "TW Surat Thani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60928",
+    "store_code_oracle": "052833",
+    "store_nick3": "KKN",
+    "store_name_th": "TW ขอนแก่น",
+    "store_name_en": "TW Khon Kaen",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60929",
+    "store_code_oracle": "052834",
+    "store_nick3": "LBR",
+    "store_name_th": "TW ลพบุรี",
+    "store_name_en": "TW Lop Buri",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60930",
+    "store_code_oracle": "052835",
+    "store_nick3": "CHA",
+    "store_name_th": "TW ชะอำ",
+    "store_name_en": "TW Cha-am",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60931",
+    "store_code_oracle": "052836",
+    "store_nick3": "HAY",
+    "store_name_th": "TW หาดใหญ่",
+    "store_name_en": "TW Hadyai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60932",
+    "store_code_oracle": "052837",
+    "store_nick3": "CTB",
+    "store_name_th": "TW จันทบุรี",
+    "store_name_en": "TW Chanthaburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60933",
+    "store_code_oracle": "052838",
+    "store_nick3": "UBN",
+    "store_name_th": "TW อุบลราชธานี",
+    "store_name_en": "TW Ubon Ratchathani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60934",
+    "store_code_oracle": "052839",
+    "store_nick3": "CMA",
+    "store_name_th": "TW เชียงใหม่",
+    "store_name_en": "TW Chiangmai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60935",
+    "store_code_oracle": "052840",
+    "store_nick3": "RET",
+    "store_name_th": "TW ร้อยเอ็ด",
+    "store_name_en": "TW Roi Et",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60936",
+    "store_code_oracle": "052841",
+    "store_nick3": "SPB",
+    "store_name_th": "TW สุพรรณบุรี",
+    "store_name_en": "TW Suphan Buri",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60937",
+    "store_code_oracle": "052842",
+    "store_nick3": "KCB",
+    "store_name_th": "TW กาญจนบุรี",
+    "store_name_en": "TW Kanchanaburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60938",
+    "store_code_oracle": "052843",
+    "store_nick3": "CCS",
+    "store_name_th": "TW ฉะเชิงเทรา",
+    "store_name_en": "TW Chachoengsao",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60939",
+    "store_code_oracle": "052802",
+    "store_nick3": "RAY",
+    "store_name_th": "TW ระยอง",
+    "store_name_en": "TW Rayong",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60940",
+    "store_code_oracle": "052803",
+    "store_nick3": "PCB",
+    "store_name_th": "TW เพชรบูรณ์",
+    "store_name_en": "TW Phetchabun",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60941",
+    "store_code_oracle": "052804",
+    "store_nick3": "SLY",
+    "store_name_th": "TW ศาลายา",
+    "store_name_en": "TW Salaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60942",
+    "store_code_oracle": "052805",
+    "store_nick3": "MHS",
+    "store_name_th": "TW มหาสารคาม",
+    "store_name_en": "TW Maha Sarakham",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60944",
+    "store_code_oracle": "052807",
+    "store_nick3": "MDH",
+    "store_name_th": "TW มุกดาหาร",
+    "store_name_en": "TW Mukdahan",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60945",
+    "store_code_oracle": "052808",
+    "store_nick3": "TRG",
+    "store_name_th": "TW ตรัง",
+    "store_name_en": "TW Trang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60946",
+    "store_code_oracle": "052809",
+    "store_nick3": "TAK",
+    "store_name_th": "TW ตาก",
+    "store_name_en": "TW Tak",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60947",
+    "store_code_oracle": "052810",
+    "store_nick3": "UDN",
+    "store_name_th": "TW อุดรธานี",
+    "store_name_en": "TW Udon Thani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60951",
+    "store_code_oracle": "052814",
+    "store_nick3": "NBP",
+    "store_name_th": "TW หนองบัวลำภู",
+    "store_name_en": "TW Nongbualamphu",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60952",
+    "store_code_oracle": "052815",
+    "store_nick3": "SBR",
+    "store_name_th": "TW สระบุรี",
+    "store_name_en": "TW Saraburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60953",
+    "store_code_oracle": "052844",
+    "store_nick3": "PTM",
+    "store_name_th": "TW ปทุมธานี",
+    "store_name_en": "TW Pathum Thani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60954",
+    "store_code_oracle": "052845",
+    "store_nick3": "PT2",
+    "store_name_th": "TW พัทยาใต้",
+    "store_name_en": "TW South Pattaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60955",
+    "store_code_oracle": "052846",
+    "store_nick3": "PKT",
+    "store_name_th": "TW ภูเก็ต ถลาง",
+    "store_name_en": "TW Phuket Thalang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60956",
+    "store_code_oracle": "052847",
+    "store_nick3": "CBR",
+    "store_name_th": "TW ชลบุรี",
+    "store_name_en": "TW Chonburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60958",
+    "store_code_oracle": "052848",
+    "store_nick3": "CRA",
+    "store_name_th": "TW เชียงราย",
+    "store_name_en": "TW Chiangrai",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60959",
+    "store_code_oracle": "052849",
+    "store_nick3": "BAP",
+    "store_name_th": "TW บางพลี",
+    "store_name_en": "TW Bangphli",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60960",
+    "store_code_oracle": "052850",
+    "store_nick3": "NWM",
+    "store_name_th": "TW นวมินทร์",
+    "store_name_en": "TW Nawamin",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60961",
+    "store_code_oracle": "052851",
+    "store_nick3": "SRC",
+    "store_name_th": "TW ศรีราชา",
+    "store_name_en": "TW Sriracha",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60962",
+    "store_code_oracle": "052852",
+    "store_nick3": "CWT",
+    "store_name_th": "TW แจ้งวัฒนะ",
+    "store_name_en": "TW Chaengwattana",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60963",
+    "store_code_oracle": "052854",
+    "store_nick3": "RST",
+    "store_name_th": "TW รังสิต 1",
+    "store_name_en": "TW Rangsit 1",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60964",
+    "store_code_oracle": "052855",
+    "store_nick3": "RA2",
+    "store_name_th": "TW พระราม 2",
+    "store_name_en": "TW Rama 2",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60966",
+    "store_code_oracle": "052857",
+    "store_nick3": "CYK",
+    "store_name_th": "TW ชัยพฤกษ์",
+    "store_name_en": "TW Chaiyapruke",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60967",
+    "store_code_oracle": "052858",
+    "store_nick3": "EON",
+    "store_name_th": "อีคอมเมอร์ซ",
+    "store_name_en": "E-Commerce (Dark Store)",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาอี-คอมเมิร์ซ)",
+    "formal_address_th": "345 หมู่ที่ 5  ตำบลบ่อตาโล่ อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา 13170"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60968",
+    "store_code_oracle": "052859",
+    "store_nick3": "LLK",
+    "store_name_th": "TW ลำลูกกา",
+    "store_name_en": "TW Lamlukka",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60969",
+    "store_code_oracle": "052861",
+    "store_nick3": "OMN",
+    "store_name_th": "TW อ้อมน้อย",
+    "store_name_en": "TW Om Noi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60970",
+    "store_code_oracle": "052862",
+    "store_nick3": "NMA",
+    "store_name_th": "TW นครราชสีมา",
+    "store_name_en": "TW Nakhon Ratchasima ",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60971",
+    "store_code_oracle": "052863",
+    "store_nick3": "NPT",
+    "store_name_th": "TW นครปฐม",
+    "store_name_en": "TW Nakhon Pathom",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60972",
+    "store_code_oracle": "052864",
+    "store_nick3": "SIM",
+    "store_name_th": "TW ศรีมหาโพธิ",
+    "store_name_en": "TW Si Maha Phot",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60973",
+    "store_code_oracle": "052865",
+    "store_nick3": "BAC",
+    "store_name_th": "TW บ้านฉาง",
+    "store_name_en": "TW Ban Chang",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60974",
+    "store_code_oracle": "052866",
+    "store_nick3": "NCK",
+    "store_name_th": "TW หนองจอก",
+    "store_name_en": "TW Nong Chok",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60975",
+    "store_code_oracle": "052868",
+    "store_nick3": "PAK",
+    "store_name_th": "TW ปากช่อง",
+    "store_name_en": "TW Pak Chong",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60976",
+    "store_code_oracle": "052869",
+    "store_nick3": "PBI",
+    "store_name_th": "TW เพชรบุรี",
+    "store_name_en": "TW Phetburi",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60977",
+    "store_code_oracle": "052870",
+    "store_nick3": "AMT",
+    "store_name_th": "TW อมตะนคร",
+    "store_name_en": "TW Amata Nakorn",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60978",
+    "store_code_oracle": "052871",
+    "store_nick3": "NST",
+    "store_name_th": "TW นครศรีธรรมราช",
+    "store_name_en": "TW Nakhon Si Thammarat",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60979",
+    "store_code_oracle": "052872",
+    "store_nick3": "SSW",
+    "store_name_th": "TW สุขสวัสดิ์",
+    "store_name_en": "TW Suksawat",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60980",
+    "store_code_oracle": "052873",
+    "store_nick3": "BOW",
+    "store_name_th": "TW บ่อวิน",
+    "store_name_en": "TW Bo Win",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60981",
+    "store_code_oracle": "052875",
+    "store_nick3": "AYD",
+    "store_name_th": "TW อยุธยา",
+    "store_name_en": "TW Ayutthaya",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60982",
+    "store_code_oracle": "052876",
+    "store_nick3": "SKL",
+    "store_name_th": "TW สงขลา",
+    "store_name_en": "TW Songkhla",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60983",
+    "store_code_oracle": "052879",
+    "store_nick3": "CYP",
+    "store_name_th": "TW ชัยภูมิ",
+    "store_name_en": "TW Chaiyaphum",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60984",
+    "store_code_oracle": "052882",
+    "store_nick3": "NAN",
+    "store_name_th": "TW น่าน",
+    "store_name_en": "TW Nan",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาน่าน)",
+    "formal_address_th": "621 หมู่ 11  ตำบลไชยสถาน  อำเภอเมืองน่าน  จังหวัดน่าน  55000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60985",
+    "store_code_oracle": "052883",
+    "store_nick3": "BBO",
+    "store_name_th": "TW บางบอน",
+    "store_name_en": "TW Bang Bon",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาบางบอน)",
+    "formal_address_th": "89 Moo 3 Bang Nam Chuet, Mueang Samut Sakhon, Samut Sakhon 74000 "
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60986",
+    "store_code_oracle": "052885",
+    "store_nick3": "MAC",
+    "store_name_th": "TW แม่จัน",
+    "store_name_en": "TW Mae Chan",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด (สาขาแม่จัน)",
+    "formal_address_th": "516 , 516/1 หมู่ 4  ตำบลแม่จัน อำเภอแม่จัน จังหวัดเชียงราย 57110"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60987",
+    "store_code_oracle": "052887",
+    "store_nick3": "KPT",
+    "store_name_th": "TW กำแพงเพชร",
+    "store_name_en": "TW Kam Phaeng Phet",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60988",
+    "store_code_oracle": "052888",
+    "store_nick3": "NHU",
+    "store_name_th": "TW นครราชสีมา (หัวทะเล)",
+    "store_name_en": "TW Nakhon Ratchasima (Hua thale)",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60989",
+    "store_code_oracle": "052892",
+    "store_nick3": "CNT",
+    "store_name_th": "TW ชัยนาท",
+    "store_name_en": "TW Chai Nat",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด  สาขาชัยนาท",
+    "formal_address_th": "359 ถนนทางหลวง 340 ตำบลบ้านกล้วย อำเภอเมืองชัยนาท จังหวัดชัยนาท 17000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60990",
+    "store_code_oracle": "052893",
+    "store_nick3": "SSK",
+    "store_name_th": "TW ศรีสะเกษ",
+    "store_name_en": "TW Si Sa Ket",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาศรีสะเกษ",
+    "formal_address_th": "368 หมู่ 6 ตำบลโพนข่า อำเภอเมืองศรีสะเกษ จังหวัดศรีสะเกษ 33000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60991",
+    "store_code_oracle": "052895",
+    "store_nick3": "LEI",
+    "store_name_th": "TW เลย",
+    "store_name_en": "TW Loei",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60992",
+    "store_code_oracle": "052896",
+    "store_nick3": "YST",
+    "store_name_th": "TW ยโสธร",
+    "store_name_en": "TW Yasothon",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขายโสธร",
+    "formal_address_th": "458 หมู่ 8 ตำบลตาดทอง อำเภอเมืองยโสธร จังหวัดยโสธร 35000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60993",
+    "store_code_oracle": "052897",
+    "store_nick3": "NKS",
+    "store_name_th": "TW นครสวรรค์",
+    "store_name_en": "TW Nakhon Sawan",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขานครสวรรค์",
+    "formal_address_th": "999/99 หมู่ 6 ตำบลหนองกรด อำเภอเมืองนครสวรรค์ จังหวัดนครสวรรค์ 60240"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60994",
+    "store_code_oracle": "05281A",
+    "store_nick3": "ARU",
+    "store_name_th": "TW อรัญประเทศ",
+    "store_name_en": "TW Arunyaprathet",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60995",
+    "store_code_oracle": "05281B",
+    "store_nick3": "SKE",
+    "store_name_th": "TW สระแก้ว",
+    "store_name_en": "TW Sa Kaeo",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60996",
+    "store_code_oracle": "05281C",
+    "store_nick3": "KLA",
+    "store_name_th": "TW แกลง",
+    "store_name_en": "TW Klaeng",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "60997",
+    "store_code_oracle": "05281D",
+    "store_nick3": "UTI",
+    "store_name_th": "TW อุทัยธานี",
+    "store_name_en": "TW Uthai Thani",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "61600",
+    "store_code_oracle": "05281E",
+    "store_nick3": "PRE",
+    "store_name_th": "TW แพร่",
+    "store_name_en": "TW Phrae",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาแพร่",
+    "formal_address_th": "227 หมู่ 8 ตำบลนาจักร อำเภอเมืองแพร่ จังหวัดแพร่ 54000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "61601",
+    "store_code_oracle": "05281F",
+    "store_nick3": "KSN",
+    "store_name_th": "TW กาฬสินธุ์",
+    "store_name_en": "TW Kalasin",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขากาฬสินธุ์",
+    "formal_address_th": "22 ถนนเลี่ยงเมืองหัวคู ตำบลกาฬสินธุ์ อำเภอเมืองกาฬสินธุ์ จังหวัดกาฬสินธุ์ 46000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "61602",
+    "store_code_oracle": "05281G",
+    "store_nick3": "NYK",
+    "store_name_th": "TW นครนายก",
+    "store_name_en": "TW Nakhon Nayok",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขานครนายก",
+    "formal_address_th": "1-111/6 ถนนเขาทุเรียน ตำบลนครนายก อำเภอเมืองนครนายก จังหวัดนครนายก 26000"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "61603",
+    "store_code_oracle": "05281H",
+    "store_nick3": "SMU",
+    "store_name_th": "* TW เกาะสมุย",
+    "store_name_en": "* TW Koh Samui",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาเกาะสมุย",
+    "formal_address_th": "266/24 หมู่ที่ 3 ตำบลอ่างทอง อำเภอเกาะสมุย จังหวัดสุราษฎร์ธานี 84140"
+  },
+  {
+    "in_bu": "TW",
+    "store_code": "61604",
+    "store_code_oracle": "05281I",
+    "store_nick3": "RBR",
+    "store_name_th": "TW ราชบุรี",
+    "store_name_en": "TW Ratchaburi",
+    "formal_name_th": "บริษัท ซีอาร์ซี ไทวัสดุ จำกัด สาขาราชบุรี ",
+    "formal_address_th": "189 หมู่ที่ 9  ตำบลพงสวาย อำเภอเมืองราชบุรี จังหวัดราชบุรี 70000"
+  },
+  {
+    "in_bu": "VF",
+    "store_code": "60943",
+    "store_code_oracle": "052860",
+    "store_nick3": "VFX",
+    "store_name_th": "วีฟิกซ์",
+    "store_name_en": "vFix",
+    "formal_name_th": "",
+    "formal_address_th": ""
+  }
+]
