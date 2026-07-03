@@ -8,6 +8,8 @@ export default function MasterLocations() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
+  const [user, setUser] = useState(null);
+  const canManage = user && ["ADMIN", "TIER1", "TIER2", "TIER3"].includes(user.role?.toUpperCase());
   const [form, setForm] = useState({
     location_code: "",
     location_name: "",
@@ -34,7 +36,12 @@ export default function MasterLocations() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    fetchData();
+    fetch("/api/auth/me")
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setUser(d.user); });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,16 +100,18 @@ export default function MasterLocations() {
           <i className="fa-solid fa-location-dot" style={{ marginRight: "8px", color: "var(--primary-light)" }}></i>
           Locations (สถานที่)
         </h2>
-        <button 
-          className="btn btn-success" 
-          onClick={() => { 
-            setShowForm(true); 
-            setEditItem(null); 
-            setForm({ location_code: "", location_name: "", location_type: "store", floor: "", address: "", bu_id: "" }); 
-          }}
-        >
-          <i className="fa-solid fa-plus"></i> เพิ่มสถานที่ใหม่
-        </button>
+        {canManage && (
+          <button 
+            className="btn btn-success" 
+            onClick={() => { 
+              setShowForm(true); 
+              setEditItem(null); 
+              setForm({ location_code: "", location_name: "", location_type: "store", floor: "", address: "", bu_id: "" }); 
+            }}
+          >
+            <i className="fa-solid fa-plus"></i> เพิ่มสถานที่ใหม่
+          </button>
+        )}
       </div>
 
       <div style={{ display: "flex", gap: "10px", marginBottom: "16px", alignItems: "center" }}>
@@ -203,7 +212,7 @@ export default function MasterLocations() {
                     <th>BU</th>
                     <th>Floor</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    {canManage && <th>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -225,23 +234,25 @@ export default function MasterLocations() {
                           {item.is_active ? "Active" : "Inactive"}
                         </span>
                       </td>
-                      <td>
-                        <div style={{ display: "flex", gap: "6px" }}>
-                          <button className="btn btn-outline btn-sm" onClick={() => handleEdit(item)}>
-                            <i className="fa-solid fa-pen"></i>
-                          </button>
-                          {item.is_active && (
-                            <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => handleDelete(item.location_id)}>
-                              <i className="fa-solid fa-trash"></i>
+                      {canManage && (
+                        <td>
+                          <div style={{ display: "flex", gap: "6px" }}>
+                            <button className="btn btn-outline btn-sm" onClick={() => handleEdit(item)}>
+                              <i className="fa-solid fa-pen"></i>
                             </button>
-                          )}
-                        </div>
-                      </td>
+                            {item.is_active && (
+                              <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => handleDelete(item.location_id)}>
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))}
                   {filteredItems.length === 0 && (
                     <tr>
-                      <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>ไม่พบข้อมูล Location</td>
+                      <td colSpan={canManage ? 7 : 6} style={{ textAlign: "center", padding: "20px" }}>ไม่พบข้อมูล Location</td>
                     </tr>
                   )}
                 </tbody>

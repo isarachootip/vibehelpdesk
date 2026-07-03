@@ -26,6 +26,8 @@ export default function MasterHardware() {
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [form, setForm] = useState({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" });
+  const [user, setUser] = useState(null);
+  const canManage = user && ["ADMIN", "TIER1", "TIER2", "TIER3"].includes(user.role?.toUpperCase());
 
   const [selectedHardware, setSelectedHardware] = useState(null); // For symptoms
   const [symptomForm, setSymptomForm] = useState({ symptom_code: "", symptom_name: "", description: "" });
@@ -49,7 +51,12 @@ export default function MasterHardware() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    fetchData();
+    fetch("/api/auth/me")
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setUser(d.user); });
+  }, []);
 
   const fetchNextCode = async (category) => {
     if (!category) {
@@ -133,9 +140,11 @@ export default function MasterHardware() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700 }}><i className="fa-solid fa-microchip" style={{ marginRight: "8px", color: "var(--warning)" }}></i>Hardware / Products</h2>
-        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" }); setSelectedHardware(null); }}>
-          <i className="fa-solid fa-plus"></i> เพิ่ม Hardware ใหม่
-        </button>
+        {canManage && (
+          <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ hardware_code: "", hardware_name: "", category: "", brand: "", model: "", description: "" }); setSelectedHardware(null); }}>
+            <i className="fa-solid fa-plus"></i> เพิ่ม Hardware ใหม่
+          </button>
+        )}
       </div>
 
       {showForm && (
@@ -215,8 +224,12 @@ export default function MasterHardware() {
                           <button className="btn btn-primary btn-sm" onClick={() => { setSelectedHardware(item); setShowForm(false); }} title="จัดการอาการเสีย">
                             <i className="fa-solid fa-list-ul"></i> อาการเสีย ({item.symptoms?.length || 0})
                           </button>
-                          <button className="btn btn-outline btn-sm" onClick={() => handleEdit(item)}><i className="fa-solid fa-pen"></i></button>
-                          {item.is_active && <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => handleDelete(item.hardware_id)}><i className="fa-solid fa-trash"></i></button>}
+                          {canManage && (
+                            <>
+                              <button className="btn btn-outline btn-sm" onClick={() => handleEdit(item)}><i className="fa-solid fa-pen"></i></button>
+                              {item.is_active && <button className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => handleDelete(item.hardware_id)}><i className="fa-solid fa-trash"></i></button>}
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -235,38 +248,42 @@ export default function MasterHardware() {
               <button className="btn btn-ghost btn-sm" onClick={() => setSelectedHardware(null)}><i className="fa-solid fa-times"></i></button>
             </div>
             <div className="card-body">
-              <form onSubmit={handleSymptomSubmit} style={{ marginBottom: "16px", padding: "12px", background: "var(--bg-lighter)", borderRadius: "6px" }}>
-                <h4 style={{ fontSize: "0.9rem", marginBottom: "8px" }}>{editSymptom ? "แก้ไขอาการเสีย" : "เพิ่มอาการเสีย"}</h4>
-                <div className="form-group">
-                  <input className="form-control" value={symptomForm.symptom_code} onChange={e => setSymptomForm(f => ({ ...f, symptom_code: e.target.value }))} placeholder="รหัสอาการ (เช่น S-01)" required style={{ marginBottom: "8px" }} />
-                  <input className="form-control" value={symptomForm.symptom_name} onChange={e => setSymptomForm(f => ({ ...f, symptom_name: e.target.value }))} placeholder="ชื่ออาการ (เช่น พิมพ์ไม่ออก)" required style={{ marginBottom: "8px" }} />
-                </div>
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editSymptom ? "อัปเดต" : "เพิ่ม"}</button>
-                  {editSymptom && <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setEditSymptom(null); setSymptomForm({ symptom_code: "", symptom_name: "", description: "" }); }}>ยกเลิก</button>}
-                </div>
-              </form>
+              {canManage && (
+                <form onSubmit={handleSymptomSubmit} style={{ marginBottom: "16px", padding: "12px", background: "var(--bg-lighter)", borderRadius: "6px" }}>
+                  <h4 style={{ fontSize: "0.9rem", marginBottom: "8px" }}>{editSymptom ? "แก้ไขอาการเสีย" : "เพิ่มอาการเสีย"}</h4>
+                  <div className="form-group">
+                    <input className="form-control" value={symptomForm.symptom_code} onChange={e => setSymptomForm(f => ({ ...f, symptom_code: e.target.value }))} placeholder="รหัสอาการ (เช่น S-01)" required style={{ marginBottom: "8px" }} />
+                    <input className="form-control" value={symptomForm.symptom_name} onChange={e => setSymptomForm(f => ({ ...f, symptom_name: e.target.value }))} placeholder="ชื่ออาการ (เช่น พิมพ์ไม่ออก)" required style={{ marginBottom: "8px" }} />
+                  </div>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <button type="submit" className="btn btn-primary btn-sm"><i className="fa-solid fa-check"></i> {editSymptom ? "อัปเดต" : "เพิ่ม"}</button>
+                    {editSymptom && <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setEditSymptom(null); setSymptomForm({ symptom_code: "", symptom_name: "", description: "" }); }}>ยกเลิก</button>}
+                  </div>
+                </form>
+              )}
 
               <div className="table-wrap">
                 <table className="data-table" style={{ fontSize: "0.85rem" }}>
-                  <thead><tr><th>รหัส</th><th>อาการ</th><th></th></tr></thead>
+                  <thead><tr><th>รหัส</th><th>อาการ</th>{canManage && <th></th>}</tr></thead>
                   <tbody>
                     {selectedHardware.symptoms?.map(sym => (
                       <tr key={sym.symptom_id}>
                         <td>{sym.symptom_code}</td>
                         <td>{sym.symptom_name}</td>
-                        <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
-                          <button className="btn btn-ghost btn-sm" style={{ padding: "2px 6px" }} onClick={() => { setEditSymptom(sym); setSymptomForm({ symptom_code: sym.symptom_code, symptom_name: sym.symptom_name, description: sym.description || "" }); }}>
-                            <i className="fa-solid fa-pen"></i>
-                          </button>
-                          <button className="btn btn-ghost btn-sm" style={{ padding: "2px 6px", color: "var(--danger)" }} onClick={() => handleDeleteSymptom(sym.symptom_id)}>
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
-                        </td>
+                        {canManage && (
+                          <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
+                            <button className="btn btn-ghost btn-sm" style={{ padding: "2px 6px" }} onClick={() => { setEditSymptom(sym); setSymptomForm({ symptom_code: sym.symptom_code, symptom_name: sym.symptom_name, description: sym.description || "" }); }}>
+                              <i className="fa-solid fa-pen"></i>
+                            </button>
+                            <button className="btn btn-ghost btn-sm" style={{ padding: "2px 6px", color: "var(--danger)" }} onClick={() => handleDeleteSymptom(sym.symptom_id)}>
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     ))}
                     {(!selectedHardware.symptoms || selectedHardware.symptoms.length === 0) && (
-                      <tr><td colSpan="3" style={{ textAlign: "center", padding: "10px" }}>ยังไม่มีข้อมูลอาการเสีย</td></tr>
+                      <tr><td colSpan={canManage ? 3 : 2} style={{ textAlign: "center", padding: "10px" }}>ยังไม่มีข้อมูลอาการเสีย</td></tr>
                     )}
                   </tbody>
                 </table>

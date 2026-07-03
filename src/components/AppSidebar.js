@@ -91,6 +91,14 @@ export default function AppSidebar({ user, onLogout }) {
           <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
           <span className="nav-label">รายการอุปกรณ์ทั้งหมด</span>
         </a>
+        <a href="/master/locations" className="nav-item" id="nav-locations">
+          <i className="fa-solid fa-map-marker-alt nav-icon" style={{ color: "#3b82f6" }}></i>
+          <span className="nav-label">สถานที่ / สาขาทั้งหมด</span>
+        </a>
+        <a href="/master/hardware" className="nav-item" id="nav-hardware">
+          <i className="fa-solid fa-microchip nav-icon" style={{ color: "#10b981" }}></i>
+          <span className="nav-label">รุ่นฮาร์ดแวร์ทั้งหมด</span>
+        </a>
 
         {canSeeTier1 && (
           <>
@@ -137,14 +145,6 @@ export default function AppSidebar({ user, onLogout }) {
             <a href="/master/systems" className="nav-item" id="nav-master-systems">
               <i className="fa-solid fa-server nav-icon"></i>
               <span className="nav-label">Systems / Software</span>
-            </a>
-            <a href="/master/hardware" className="nav-item" id="nav-master-hardware">
-              <i className="fa-solid fa-microchip nav-icon"></i>
-              <span className="nav-label">Hardware / Products</span>
-            </a>
-            <a href="/master/locations" className="nav-item" id="nav-master-locations">
-              <i className="fa-solid fa-map-marker-alt nav-icon"></i>
-              <span className="nav-label">Locations</span>
             </a>
             <a href="/master/users" className="nav-item" id="nav-master-users">
               <i className="fa-solid fa-users nav-icon"></i>
