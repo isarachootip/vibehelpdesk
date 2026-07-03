@@ -24,6 +24,27 @@ export default function MasterUsers() {
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+
+  const handleImportExcel = async () => {
+    if (!confirm("คุณต้องการนำเข้ารายการผู้ใช้ทั้งหมดจากไฟล์ Excel (user_TW) หรือไม่? (ใช้เวลาประมาณ 10-30 วินาที)")) return;
+    setIsImporting(true);
+    try {
+      const res = await fetch("/api/master/users/import", { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`นำเข้าสำเร็จ: ${data.success} ผู้ใช้ (ล้มเหลว ${data.errors.length} รายการ)`);
+        fetchData();
+      } else {
+        alert(data.error || "เกิดข้อผิดพลาด");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   // Search / Filter state
   const [searchText, setSearchText] = useState("");
@@ -141,9 +162,19 @@ export default function MasterUsers() {
             ({filtered.length} รายการ)
           </span>
         </h2>
-        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm(initialForm); setShowPassword(false); }}>
-          <i className="fa-solid fa-plus"></i> เพิ่ม User ใหม่
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button 
+            className="btn btn-outline" 
+            onClick={handleImportExcel}
+            disabled={isImporting}
+            style={{ display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <i className="fa-solid fa-file-excel" style={{ color: "#10b981" }}></i> {isImporting ? "กำลังนำเข้า..." : "นำเข้าผู้ใช้จาก Excel"}
+          </button>
+          <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm(initialForm); setShowPassword(false); }}>
+            <i className="fa-solid fa-plus"></i> เพิ่ม User ใหม่
+          </button>
+        </div>
       </div>
 
       {/* Search & Filter Bar */}
