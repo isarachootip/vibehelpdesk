@@ -111,6 +111,7 @@ function CreateTicketForm() {
     asset_id: "",
     hardware_symptom: "",
     sub_option: "",
+    location_id: "",
     location_text: "",
     reporter_name: "",
     reporter_email: "",
@@ -480,38 +481,80 @@ function CreateTicketForm() {
               <div>
                 {/* Hardware: select device then symptom */}
                 {/* 1. IT Asset Selection (Shown for all categories; required for computer/hardware, optional for others) */}
+                {/* 0. Location Selection (Required for all categories, must choose before choosing IT Asset) */}
+                <div className="form-group">
+                  <label>สถานที่ / สาขา (Location) <span className="req">*</span></label>
+                  <select 
+                    name="location_id" 
+                    className="form-control" 
+                    value={form.location_id} 
+                    onChange={e => {
+                      const val = e.target.value;
+                      setForm(prev => {
+                        const next = { ...prev, location_id: val, asset_id: "" };
+                        if (val) {
+                          const locObj = masterData.locations.find(l => l.location_id === parseInt(val));
+                          if (locObj) {
+                            next.location_text = `${locObj.location_code} - ${locObj.location_name}${locObj.floor ? ` ชั้น ${locObj.floor}` : ''}`;
+                          }
+                        } else {
+                          next.location_text = "";
+                        }
+                        return next;
+                      });
+                    }} 
+                    required
+                  >
+                    <option value="">-- เลือกสถานที่ / สาขา --</option>
+                    {masterData.locations
+                      .filter(l => l.bu_id?.toString() === form.bu_id)
+                      .map(l => (
+                        <option key={l.location_id} value={l.location_id}>
+                          {l.location_code} - {l.location_name} {l.floor ? `ชั้น ${l.floor}` : ''}
+                        </option>
+                      ))
+                    }
+                  </select>
+                </div>
+
+                {/* 1. IT Asset Selection (Shown for all categories; required for computer/hardware, optional for others) */}
                 <div className="form-group">
                   <label>
                     เลือกจากทะเบียนทรัพย์สิน (IT Asset) {selectedCategory?.useHardware && <span className="req">*</span>}
                   </label>
-                  <select name="asset_id" className="form-control" value={form.asset_id} onChange={e => {
-                    const val = e.target.value;
-                    setForm(prev => {
-                      const next = { ...prev, asset_id: val };
-                      if (val && val !== "other") {
-                        const assetObj = assets.find(a => a.asset_id === parseInt(val));
-                        if (assetObj) {
-                          next.location_text = assetObj.location
-                            ? `${assetObj.location.location_code} — ${assetObj.location.location_name}${assetObj.location.floor ? ` ชั้น ${assetObj.location.floor}` : ''}`
-                            : "";
+                  <select 
+                    name="asset_id" 
+                    className="form-control" 
+                    value={form.asset_id} 
+                    onChange={e => {
+                      const val = e.target.value;
+                      setForm(prev => ({ ...prev, asset_id: val }));
+                    }} 
+                    required={selectedCategory?.useHardware}
+                    disabled={!form.location_id}
+                  >
+                    {!form.location_id ? (
+                      <option value="">-- กรุณาเลือกสถานที่/สาขาก่อน --</option>
+                    ) : (
+                      <>
+                        <option value="">
+                          {selectedCategory?.useHardware 
+                            ? "-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --" 
+                            : "-- เลือกอุปกรณ์ที่เกี่ยวข้อง (ถ้ามี/ไม่บังคับ) --"
+                          }
+                        </option>
+                        {assets
+                          .filter(ast => ast.location_id?.toString() === form.location_id)
+                          .map(ast => (
+                            <option key={ast.asset_id} value={ast.asset_id}>
+                              [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''}
+                            </option>
+                          ))
                         }
-                      }
-                      return next;
-                    });
-                  }} required={selectedCategory?.useHardware}>
-                    <option value="">
-                      {selectedCategory?.useHardware 
-                        ? "-- เลือกทรัพย์สิน/อุปกรณ์ที่มีปัญหา --" 
-                        : "-- เลือกอุปกรณ์ที่เกี่ยวข้อง (ถ้ามี/ไม่บังคับ) --"
-                      }
-                    </option>
-                    {assets.filter(ast => ast.bu_id.toString() === form.bu_id).map(ast => (
-                      <option key={ast.asset_id} value={ast.asset_id}>
-                        [{ast.asset_code}] {ast.brand} {ast.model} {ast.serial_no ? `(S/N: ${ast.serial_no})` : ''} — {ast.location ? ast.location.location_code : 'ไม่ระบุสถานที่'}
-                      </option>
-                    ))}
-                    {selectedCategory?.useHardware && (
-                      <option value="other">⚠️ ไม่มีในทะเบียนทรัพย์สิน / อุปกรณ์ส่วนตัว</option>
+                        {selectedCategory?.useHardware && (
+                          <option value="other">⚠️ ไม่มีในทะเบียนทรัพย์สิน / อุปกรณ์ส่วนตัว</option>
+                        )}
+                      </>
                     )}
                   </select>
                 </div>
