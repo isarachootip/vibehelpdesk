@@ -10,7 +10,7 @@ export async function proxy(request) {
 
   // Define public paths that don't need authentication
   const isPublicPage = pathname === '/login';
-  const isAuthApi = pathname.startsWith('/api/auth');
+  const isAuthApi = pathname.startsWith('/api/auth') || pathname === '/api/debug/env';
   const isStaticFile = 
     pathname.startsWith('/_next') || 
     pathname.startsWith('/favicon.ico') || 
