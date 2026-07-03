@@ -8,8 +8,28 @@ export default function MasterBU() {
   const [editItem, setEditItem] = useState(null);
   const [form, setForm] = useState({ 
     bu_code: "", bu_name: "", bu_description: "", 
-    contact_person: "", phone: "", line_id: "", website: "" 
+    contact_person: "", phone: "", line_id: "", website: "", logo_url: "" 
   });
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append("files", file);
+
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (res.ok && data.files && data.files[0]) {
+        setForm(f => ({ ...f, logo_url: data.files[0].file_url }));
+      } else {
+        alert(data.error || "อัปโหลดล้มเหลว");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("เกิดข้อผิดพลาดในการอัปโหลด");
+    }
+  };
 
   const fetchData = () => {
     fetch("/api/master/bu").then(r => r.json()).then(d => { if (Array.isArray(d)) setItems(d); setLoading(false); }).catch(() => setLoading(false));
@@ -21,7 +41,7 @@ export default function MasterBU() {
     const url = editItem ? `/api/master/bu/${editItem.bu_id}` : "/api/master/bu";
     const method = editItem ? "PUT" : "POST";
     const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-    if (res.ok) { fetchData(); setShowForm(false); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "" }); }
+    if (res.ok) { fetchData(); setShowForm(false); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "", logo_url: "" }); }
     else { const err = await res.json(); alert(err.error || "Error"); }
   };
 
@@ -30,7 +50,7 @@ export default function MasterBU() {
     setForm({ 
       bu_code: item.bu_code, bu_name: item.bu_name, bu_description: item.bu_description || "",
       contact_person: item.contact_person || "", phone: item.phone || "", 
-      line_id: item.line_id || "", website: item.website || ""
+      line_id: item.line_id || "", website: item.website || "", logo_url: item.logo_url || ""
     });
     setShowForm(true);
   };
@@ -45,7 +65,7 @@ export default function MasterBU() {
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <h2 style={{ fontSize: "1.2rem", fontWeight: 700 }}><i className="fa-solid fa-building" style={{ marginRight: "8px", color: "var(--primary-light)" }}></i>Business Units</h2>
-        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "" }); }}>
+        <button className="btn btn-success" onClick={() => { setShowForm(true); setEditItem(null); setForm({ bu_code: "", bu_name: "", bu_description: "", contact_person: "", phone: "", line_id: "", website: "", logo_url: "" }); }}>
           <i className="fa-solid fa-plus"></i> เพิ่ม BU ใหม่
         </button>
       </div>
@@ -102,6 +122,28 @@ export default function MasterBU() {
                     <input className="form-control" value={form.bu_description} onChange={e => setForm(f => ({ ...f, bu_description: e.target.value }))} placeholder="คำอธิบาย (optional)" />
                   </div>
                 </div>
+                <div className="form-row">
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label>BU Logo (โลโก้แบรนด์)</label>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "4px" }}>
+                      {form.logo_url ? (
+                        <img src={form.logo_url} alt="Logo Preview" style={{ width: "40px", height: "40px", objectFit: "contain", border: "1px solid var(--border)", borderRadius: "4px", padding: "2px" }} />
+                      ) : (
+                        <div style={{ width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-lighter)", border: "1px dashed var(--border)", borderRadius: "4px", color: "var(--text-muted)", fontSize: "0.8rem" }}>No Logo</div>
+                      )}
+                      <input type="file" accept="image/*" onChange={handleLogoUpload} style={{ display: "none" }} id="logo-upload-input" />
+                      <button type="button" className="btn btn-outline btn-sm" onClick={() => document.getElementById('logo-upload-input').click()}>
+                        <i className="fa-solid fa-cloud-arrow-up"></i> อัปโหลดรูปภาพ
+                      </button>
+                      {form.logo_url && (
+                        <button type="button" className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }} onClick={() => setForm(f => ({ ...f, logo_url: "" }))}>
+                          ลบรูป
+                        </button>
+                      )}
+                    </div>
+                    <input className="form-control" style={{ marginTop: "8px", fontSize: "0.85rem" }} value={form.logo_url} onChange={e => setForm(f => ({ ...f, logo_url: e.target.value }))} placeholder="หรือระบุ URL รูปภาพโลโก้ตรงนี้..." />
+                  </div>
+                </div>
                 <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", marginTop: "20px" }}>
                   <button type="button" className="btn btn-ghost" onClick={() => { setShowForm(false); setEditItem(null); }}>ยกเลิก</button>
                   <button type="submit" className="btn btn-primary"><i className="fa-solid fa-check"></i> {editItem ? "อัปเดต" : "บันทึก"}</button>
@@ -117,10 +159,17 @@ export default function MasterBU() {
         <div className="card-body" style={{ padding: 0 }}>
           <div className="table-wrap">
             <table className="data-table">
-              <thead><tr><th>BU Code</th><th>BU Name</th><th>Description</th><th>Contact Info</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Logo</th><th>BU Code</th><th>BU Name</th><th>Description</th><th>Contact Info</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>
                 {items.map(item => (
                   <tr key={item.bu_id} style={{ opacity: item.is_active ? 1 : 0.5 }}>
+                    <td>
+                      {item.logo_url ? (
+                        <img src={item.logo_url} alt={item.bu_code} style={{ width: "32px", height: "32px", objectFit: "contain" }} />
+                      ) : (
+                        <div style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-lighter)", borderRadius: "4px", color: "var(--text-muted)", fontSize: "0.75rem" }}>-</div>
+                      )}
+                    </td>
                     <td><span className="chip">{item.bu_code}</span></td>
                     <td style={{ fontWeight: 600 }}>{item.bu_name}</td>
                     <td className="text-muted" style={{ fontSize: ".82rem" }}>{item.bu_description || "-"}</td>
