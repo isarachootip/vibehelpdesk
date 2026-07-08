@@ -381,10 +381,19 @@ function CreateTicketForm() {
                       }}
                     >
                       {bu.logo_url ? (
-                        <img src={bu.logo_url} alt={bu.bu_code}
-                          style={{ width: "64px", height: "64px", objectFit: "contain", marginBottom: "10px", borderRadius: "8px" }}
-                          onError={e => { e.currentTarget.style.display = 'none'; }}
-                        />
+                        <div style={{
+                          width: "100%",
+                          height: "64px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginBottom: "10px",
+                        }}>
+                          <img src={bu.logo_url} alt={bu.bu_code}
+                            style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", borderRadius: "8px" }}
+                            onError={e => { e.currentTarget.parentNode.style.display = 'none'; }}
+                          />
+                        </div>
                       ) : (
                         <div style={{
                           width: "64px", height: "64px", borderRadius: "12px",
