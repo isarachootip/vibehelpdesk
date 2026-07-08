@@ -41,14 +41,13 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
-    
-    // Soft delete
-    const article = await prisma.knowledgeBase.update({
+
+    // Hard delete
+    await prisma.knowledgeBase.delete({
       where: { id: parseInt(id) },
-      data: { is_active: false }
     });
-    
-    return NextResponse.json({ success: true, article });
+
+    return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
