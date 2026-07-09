@@ -58,6 +58,7 @@ export default function SystemSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [visibleSecrets, setVisibleSecrets] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Announcement state
   const [activeAnnouncements, setActiveAnnouncements] = useState([]);
@@ -75,6 +76,15 @@ export default function SystemSettings() {
   }, []);
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setCurrentUser(data.user);
+        }
+      })
+      .catch(err => console.error("Failed to fetch user:", err));
+
     fetch("/api/settings")
       .then(res => res.json())
       .then(data => {
@@ -479,14 +489,14 @@ export default function SystemSettings() {
                   </label>
                   <div style={{ position: "relative" }}>
                     <input
-                      type={conf.is_secret && !visibleSecrets[conf.config_key] ? "password" : "text"}
+                      type={conf.is_secret && (!visibleSecrets[conf.config_key] || currentUser?.email !== "isarachootip@gmail.com") ? "password" : "text"}
                       className="form-control"
                       value={conf.config_value || ""}
                       onChange={e => handleLineChange(index, e.target.value)}
                       placeholder={`ใส่ค่า ${conf.config_key}`}
                       style={{ paddingRight: "40px" }}
                     />
-                    {conf.is_secret && (
+                    {conf.is_secret && currentUser?.email === "isarachootip@gmail.com" && (
                       <button
                         type="button"
                         onClick={() => setVisibleSecrets(prev => ({ ...prev, [conf.config_key]: !prev[conf.config_key] }))}
