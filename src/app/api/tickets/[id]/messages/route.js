@@ -152,6 +152,10 @@ export async function POST(request, { params }) {
     return NextResponse.json(message, { status: 201 });
   } catch (error) {
     console.error('POST /api/tickets/[id]/messages error:', error);
-    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to send message', 
+      message: error.message, 
+      stack: error.stack 
+    }, { status: 500 });
   }
 }
