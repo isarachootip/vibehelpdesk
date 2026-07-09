@@ -175,6 +175,86 @@ async function main() {
   console.log(`✅ ${systemData.length} System Groups seeded`);
 
   // ===========================
+  // 4.5 Hardware & Symptoms
+  // ===========================
+  const hardwareData = [
+    {
+      hardware_code: 'HW-PC',
+      hardware_name: 'คอมพิวเตอร์ตั้งโต๊ะ (PC/Desktop)',
+      brand: 'Dell',
+      model: 'OptiPlex 3090',
+      category: 'Computer',
+      symptoms: [
+        { symptom_code: 'PC-NOPOWER', symptom_name: 'เปิดเครื่องไม่ติด / ไฟไม่เข้า' },
+        { symptom_code: 'PC-SLOW', symptom_name: 'เครื่องทำงานช้ามาก / ค้างบ่อย' },
+        { symptom_code: 'PC-BLUE', symptom_name: 'หน้าจอฟ้า (Blue Screen)' },
+        { symptom_code: 'PC-NOBOOT', symptom_name: 'เปิดเครื่องได้แต่เข้า Windows ไม่ได้' },
+      ]
+    },
+    {
+      hardware_code: 'HW-NB',
+      hardware_name: 'โน้ตบุ๊ก (Notebook/Laptop)',
+      brand: 'Lenovo',
+      model: 'ThinkPad L14',
+      category: 'Computer',
+      symptoms: [
+        { symptom_code: 'NB-BATTERY', symptom_name: 'แบตเตอรี่เสื่อม / ชาร์จไฟไม่เข้า' },
+        { symptom_code: 'NB-WIFI', symptom_name: 'เชื่อมต่อ Wi-Fi ไม่ได้' },
+        { symptom_code: 'NB-KEYBOARD', symptom_name: 'คีย์บอร์ดกดไม่ติดบางปุ่ม' },
+        { symptom_code: 'NB-SCREEN', symptom_name: 'หน้าจอแตก / จอเป็นเส้น' },
+      ]
+    },
+    {
+      hardware_code: 'HW-PRN',
+      hardware_name: 'เครื่องพิมพ์ (Printer)',
+      brand: 'HP',
+      model: 'LaserJet Pro M404n',
+      category: 'Printer',
+      symptoms: [
+        { symptom_code: 'PRN-JAM', symptom_name: 'กระดาษติดในเครื่อง (Paper Jam)' },
+        { symptom_code: 'PRN-NOFEED', symptom_name: 'เครื่องพิมพ์ไม่ดึงกระดาษ' },
+        { symptom_code: 'PRN-BLANK', symptom_name: 'พิมพ์ออกมาเป็นกระดาษเปล่า / หมึกจาง' },
+        { symptom_code: 'PRN-OFFLINE', symptom_name: 'เครื่องขึ้นสถานะ Offline / เชื่อมต่อไม่ได้' },
+      ]
+    },
+    {
+      hardware_code: 'HW-POS',
+      hardware_name: 'เครื่องคิดเงิน POS',
+      brand: 'FEC',
+      model: 'AerPOS AP-3615',
+      category: 'POS',
+      symptoms: [
+        { symptom_code: 'POS-FREEZE', symptom_name: 'เครื่องค้างหน้าขายสินค้า / ทัชสกรีนไม่ตอบสนอง' },
+        { symptom_code: 'POS-DRAWER', symptom_name: 'ลิ้นชักเก็บเงินไม่เปิดอัตโนมัติ' },
+        { symptom_code: 'POS-SCANNER', symptom_name: 'เครื่องสแกนบาร์โค้ดไม่อ่านรหัสสินค้า' },
+        { symptom_code: 'POS-THERMAL', symptom_name: 'เครื่องพิมพ์ใบเสร็จความร้อนไม่ทำงาน' },
+      ]
+    }
+  ];
+
+  for (const hw of hardwareData) {
+    const { symptoms, ...hwInfo } = hw;
+    const createdHw = await prisma.hardware.upsert({
+      where: { hardware_code: hwInfo.hardware_code },
+      update: hwInfo,
+      create: hwInfo,
+    });
+    
+    for (const sym of symptoms) {
+      await prisma.hardwareSymptom.upsert({
+        where: { hardware_id_symptom_code: { hardware_id: createdHw.hardware_id, symptom_code: sym.symptom_code } },
+        update: { symptom_name: sym.symptom_name },
+        create: {
+          hardware_id: createdHw.hardware_id,
+          symptom_code: sym.symptom_code,
+          symptom_name: sym.symptom_name,
+        }
+      });
+    }
+  }
+  console.log(`✅ ${hardwareData.length} Hardware types and symptoms seeded`);
+
+  // ===========================
   // 5. Sample Tickets (Demo Data)
   // ===========================
   const twdBu = await prisma.businessUnit.findUnique({ where: { bu_code: 'TWD' } });

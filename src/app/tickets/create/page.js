@@ -259,6 +259,7 @@ function CreateTicketForm() {
     const payload = {
       ...form,
       symptom: symptomText || form.symptom,
+      description: form.description || symptomText || form.symptom,
       priority: "Medium", // IT sets priority — always default Medium
     };
 
@@ -705,20 +706,6 @@ function CreateTicketForm() {
                   placeholder={selectedCategory?.id === "create_user" ? "ระบุเหตุผลและสิทธิ์ที่ต้องการ เช่น สิทธิ์แคชเชียร์, สิทธิ์ผู้จัดการร้าน..." : "อธิบายอาการที่พบเพิ่มเติม..."} required></textarea>
               </div>
 
-              <div className="form-group">
-                <label>
-                  {selectedCategory?.id === "create_user" ? "ข้อมูลผู้ใช้ที่จะสร้าง (เช่น ชื่อ-นามสกุล, รหัสพนักงาน, แผนก/ตำแหน่ง)" : "รายละเอียดเพิ่มเติม / ขั้นตอนก่อนเกิดปัญหา"}{" "}
-                  <span className="req">*</span>
-                </label>
-                <textarea name="description" className="form-control" rows="3" value={form.description} onChange={handleChange}
-                  placeholder={selectedCategory?.id === "create_user" ? "ระบุชื่อ-สกุล, รหัสพนักงาน, ตำแหน่ง และข้อมูลผู้ใช้ที่ต้องการขอสิทธิ์..." : "อธิบายสิ่งที่ทำก่อนเกิดปัญหา..."} required></textarea>
-              </div>
-
-              <div className="form-group">
-                <label>จุดเกิดเหตุ (Location) <span className="req">*</span></label>
-                <input type="text" name="location_text" className="form-control" value={form.location_text} onChange={handleChange}
-                  placeholder="เช่น สาขา, ชั้น, แผนก, โต๊ะที่" required />
-              </div>
 
               {/* File Upload */}
               <div style={{ marginTop: "16px" }}>
