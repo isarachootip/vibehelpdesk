@@ -104,52 +104,30 @@ export async function POST(request) {
           });
         }
 
-        // 3. If still no active ticket, automatically create a new one
+        // 3. If still no active ticket, reply to the user that they need an active ticket
         if (!activeTicket) {
-          let displayName = 'LINE User';
-          if (channelAccessToken) {
+          if (channelAccessToken && event.replyToken) {
             try {
-              const profileRes = await fetch(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
-                headers: { 'Authorization': `Bearer ${channelAccessToken}` }
+              await fetch('https://api.line.me/v2/bot/message/reply', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${channelAccessToken}`
+                },
+                body: JSON.stringify({
+                  replyToken: event.replyToken,
+                  messages: [{
+                    type: 'text',
+                    text: `ขออภัยค่ะ ระบบไม่พบใบแจ้งงานที่กำลังดำเนินการของคุณ\n\nหากคุณเพิ่งแจ้งซ่อมหรือเปิดใบงาน กรุณาระบุเลขที่ใบงาน (เช่น TWDxxxxxxxx) เพื่อเริ่มต้นแชต หรือติดต่อเจ้าหน้าที่ IT Support เพื่อเปิดใบงานในระบบก่อนนะคะ`
+                  }]
+                })
               });
-              if (profileRes.ok) {
-                const profile = await profileRes.json();
-                if (profile.displayName) {
-                  displayName = profile.displayName;
-                }
-              }
-            } catch (err) {
-              console.error('Failed to fetch LINE profile:', err);
+            } catch (replyErr) {
+              console.error('Failed to send reply to LINE:', replyErr);
             }
           }
-
-          // Get default Business Unit
-          const defaultBu = await prisma.businessUnit.findFirst({ where: { is_active: true } });
-          const buId = defaultBu ? defaultBu.bu_id : 1;
-          const buCode = defaultBu ? defaultBu.bu_code : 'TWD';
-
-          // Generate ticket number
-          const ticket_no = await generateTicketNo(buCode, buId);
-
-          // Create active ticket session
-          activeTicket = await prisma.ticket.create({
-            data: {
-              ticket_no,
-              subject: `แชตจาก LINE: ${displayName}`,
-              problem_type: 'software',
-              bu_id: buId,
-              reporter_name: displayName,
-              reporter_line_id: lineUserId,
-              status: 'NEW',
-              priority: 'Medium',
-              description: `เปิดตั๋วแชตอัตโนมัติจากการทักทายผ่าน LINE ของ ${displayName}`,
-              symptom: text
-            }
-          });
-        }
-
-        // 4. Save message under the active ticket
-        if (activeTicket) {
+        } else {
+          // 4. Save message under the active ticket
           await prisma.ticketMessage.create({
             data: {
               ticket_id: activeTicket.ticket_id,
