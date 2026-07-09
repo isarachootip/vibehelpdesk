@@ -35,6 +35,43 @@ export async function POST(request, { params }) {
 
     // Verify ticket exists
     const ticket = await prisma.ticket.findUnique({ where: { ticket_id: parseInt(id) } });
+    
+    // Save API hit details to DB for debugging
+    try {
+      await prisma.systemConfig.upsert({
+        where: { config_key: 'LINE_PUSH_DEBUG' },
+        update: {
+          config_value: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            status: 'api_hit',
+            sender_type: sender_type || 'REPORTER',
+            ticket_found: !!ticket,
+            reporter_line_id: ticket?.reporter_line_id || null,
+            reporter_line_id_length: ticket?.reporter_line_id?.length || 0,
+            reporter_line_id_starts_with_u: ticket?.reporter_line_id?.startsWith('U') || false,
+            ticket_no: ticket?.ticket_no || null,
+            message_text
+          })
+        },
+        create: {
+          config_key: 'LINE_PUSH_DEBUG',
+          config_value: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            status: 'api_hit',
+            sender_type: sender_type || 'REPORTER',
+            ticket_found: !!ticket,
+            reporter_line_id: ticket?.reporter_line_id || null,
+            reporter_line_id_length: ticket?.reporter_line_id?.length || 0,
+            reporter_line_id_starts_with_u: ticket?.reporter_line_id?.startsWith('U') || false,
+            ticket_no: ticket?.ticket_no || null,
+            message_text
+          })
+        }
+      });
+    } catch (dbErr) {
+      console.error('Failed to write api_hit log:', dbErr);
+    }
+
     if (!ticket) {
       return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
     }
