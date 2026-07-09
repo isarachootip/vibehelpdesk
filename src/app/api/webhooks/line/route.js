@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import prisma from '@/lib/prisma';
+import { generateTicketNo } from '@/lib/ticket-utils';
 
 export async function POST(request) {
   try {
@@ -34,72 +35,95 @@ export async function POST(request) {
       if (event.type === 'message' && event.message.type === 'text') {
         const lineUserId = event.source.userId;
         const text = event.message.text;
-        const replyToken = event.replyToken;
 
-        let ticketId = null;
+        let activeTicket = null;
         let actualMessage = text;
-        let ticketNoStr = "";
 
-        const match = text.match(/TICKET-\d+/i);
-        if (match) {
-          const ticketNo = match[0].toUpperCase();
+        // 1. Try to match a ticket number in the message text
+        const ticketNoMatch = text.match(/[A-Z0-9]{3,20}\d{8}\d{4,6}/i) || text.match(/TICKET-\d+/i);
+        if (ticketNoMatch) {
+          const ticketNo = ticketNoMatch[0].toUpperCase();
           const ticket = await prisma.ticket.findUnique({ where: { ticket_no: ticketNo } });
           if (ticket) {
-            ticketId = ticket.ticket_id;
-            ticketNoStr = ticket.ticket_no;
-            actualMessage = text.replace(match[0], '').replace(/^:\s*/, '').trim();
-
-            // Update ticket with the actual LINE User ID so we can Push to them later
+            activeTicket = ticket;
+            actualMessage = text.replace(ticketNoMatch[0], '').replace(/^[:\s\-]+/, '').trim();
+            // Update ticket with the LINE User ID if not set or changed
             if (ticket.reporter_line_id !== lineUserId) {
               await prisma.ticket.update({
-                where: { ticket_id: ticketId },
+                where: { ticket_id: ticket.ticket_id },
                 data: { reporter_line_id: lineUserId }
               });
             }
           }
-        } else {
-          // Find the latest ticket where reporter_line_id matches this LINE User ID
-          const latestTicket = await prisma.ticket.findFirst({
-            where: { reporter_line_id: lineUserId },
-            orderBy: { created_at: 'desc' }
-          });
-          if (latestTicket) {
-            ticketId = latestTicket.ticket_id;
-            ticketNoStr = latestTicket.ticket_no;
-          }
         }
 
-        if (ticketId) {
-          if (actualMessage) {
-            await prisma.ticketMessage.create({
-              data: {
-                ticket_id: ticketId,
-                sender_type: 'REPORTER',
-                sender_id: null,
-                sender_name: 'LINE User', 
-                message_text: actualMessage,
-                source: 'LINE'
+        // 2. If no explicit ticket matched, find the latest active ticket for this LINE user
+        if (!activeTicket) {
+          activeTicket = await prisma.ticket.findFirst({
+            where: {
+              reporter_line_id: lineUserId,
+              status: { notIn: ['CLOSED', 'RESOLVED', 'CANCELLED'] }
+            },
+            orderBy: { created_at: 'desc' }
+          });
+        }
+
+        // 3. If still no active ticket, automatically create a new one
+        if (!activeTicket) {
+          let displayName = 'LINE User';
+          if (channelAccessToken) {
+            try {
+              const profileRes = await fetch(`https://api.line.me/v2/bot/profile/${lineUserId}`, {
+                headers: { 'Authorization': `Bearer ${channelAccessToken}` }
+              });
+              if (profileRes.ok) {
+                const profile = await profileRes.json();
+                if (profile.displayName) {
+                  displayName = profile.displayName;
+                }
               }
-            });
+            } catch (err) {
+              console.error('Failed to fetch LINE profile:', err);
+            }
           }
-        } else {
-          // Tell them to provide a ticket number
-          if (channelAccessToken && replyToken) {
-            await fetch('https://api.line.me/v2/bot/message/reply', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${channelAccessToken}`
-              },
-              body: JSON.stringify({
-                replyToken,
-                messages: [{
-                  type: 'text',
-                  text: 'กรุณาระบุหมายเลข Ticket ที่ต้องการติดต่อ เช่น "TICKET-12345: สวัสดีครับ"'
-                }]
-              })
-            });
-          }
+
+          // Get default Business Unit
+          const defaultBu = await prisma.businessUnit.findFirst({ where: { is_active: true } });
+          const buId = defaultBu ? defaultBu.bu_id : 1;
+          const buCode = defaultBu ? defaultBu.bu_code : 'TWD';
+
+          // Generate ticket number
+          const ticket_no = await generateTicketNo(buCode, buId);
+
+          // Create active ticket session
+          activeTicket = await prisma.ticket.create({
+            data: {
+              ticket_no,
+              subject: `แชตจาก LINE: ${displayName}`,
+              problem_type: 'software',
+              bu_id: buId,
+              reporter_name: displayName,
+              reporter_line_id: lineUserId,
+              status: 'NEW',
+              priority: 'Medium',
+              description: `เปิดตั๋วแชตอัตโนมัติจากการทักทายผ่าน LINE ของ ${displayName}`,
+              symptom: text
+            }
+          });
+        }
+
+        // 4. Save message under the active ticket
+        if (activeTicket) {
+          await prisma.ticketMessage.create({
+            data: {
+              ticket_id: activeTicket.ticket_id,
+              sender_type: 'REPORTER',
+              sender_id: null,
+              sender_name: activeTicket.reporter_name || 'LINE User',
+              message_text: actualMessage || text,
+              source: 'LINE'
+            }
+          });
         }
       }
     }
