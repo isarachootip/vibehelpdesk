@@ -11,6 +11,7 @@ export async function proxy(request) {
   // Define public paths that don't need authentication
   const isPublicPage = pathname === '/login';
   const isAuthApi = pathname.startsWith('/api/auth');
+  const isWebhookApi = pathname.startsWith('/api/webhooks');
   const isStaticFile = 
     pathname.startsWith('/_next') || 
     pathname.startsWith('/favicon.ico') || 
@@ -18,7 +19,7 @@ export async function proxy(request) {
     pathname.startsWith('/uploads') ||
     pathname.includes('.'); // files like .png, .jpg, etc.
 
-  if (isAuthApi || isStaticFile) {
+  if (isAuthApi || isWebhookApi || isStaticFile) {
     return NextResponse.next();
   }
 
