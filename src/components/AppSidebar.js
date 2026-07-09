@@ -67,14 +67,10 @@ export default function AppSidebar({ user, onLogout }) {
               <i className="fa-solid fa-list-check nav-icon"></i>
               <span className="nav-label">ติดตาม Ticket ของฉัน</span>
             </a>
-            <a href="/my-assets" className="nav-item" id="nav-my-assets">
-              <i className="fa-solid fa-laptop nav-icon"></i>
-              <span className="nav-label">อุปกรณ์ของฉัน</span>
-            </a>
           </>
         )}
 
-        {role !== "TIER1" && (
+        {!isGeneralUser && role !== "TIER1" && (
           <>
             <a href="/tickets/create" className="nav-item" id="nav-create-ticket">
               <i className="fa-solid fa-plus-circle nav-icon"></i>
@@ -87,18 +83,22 @@ export default function AppSidebar({ user, onLogout }) {
           </>
         )}
 
-        <a href="/assets" className="nav-item" id="nav-assets">
-          <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
-          <span className="nav-label">รายการอุปกรณ์ทั้งหมด</span>
-        </a>
-        <a href="/master/locations" className="nav-item" id="nav-locations">
-          <i className="fa-solid fa-map-marker-alt nav-icon" style={{ color: "#3b82f6" }}></i>
-          <span className="nav-label">สถานที่ / สาขาทั้งหมด</span>
-        </a>
-        <a href="/master/hardware" className="nav-item" id="nav-hardware">
-          <i className="fa-solid fa-microchip nav-icon" style={{ color: "#10b981" }}></i>
-          <span className="nav-label">รุ่นฮาร์ดแวร์ทั้งหมด</span>
-        </a>
+        {!isGeneralUser && (
+          <>
+            <a href="/assets" className="nav-item" id="nav-assets">
+              <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
+              <span className="nav-label">รายการอุปกรณ์ทั้งหมด</span>
+            </a>
+            <a href="/master/locations" className="nav-item" id="nav-locations">
+              <i className="fa-solid fa-map-marker-alt nav-icon" style={{ color: "#3b82f6" }}></i>
+              <span className="nav-label">สถานที่ / สาขาทั้งหมด</span>
+            </a>
+            <a href="/master/hardware" className="nav-item" id="nav-hardware">
+              <i className="fa-solid fa-microchip nav-icon" style={{ color: "#10b981" }}></i>
+              <span className="nav-label">รุ่นฮาร์ดแวร์ทั้งหมด</span>
+            </a>
+          </>
+        )}
 
         {canSeeTier1 && (
           <>

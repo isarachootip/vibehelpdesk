@@ -22,6 +22,14 @@ const PROBLEM_CATEGORIES = [
     useSystem: true,
   },
   {
+    id: "create_user",
+    label: "ขอสิทธิ์เข้าใช้งาน / Create User",
+    icon: "fa-user-plus",
+    color: "#ec4899",
+    problem_type: "software",
+    useSystem: true,
+  },
+  {
     id: "network",
     label: "เครือข่าย / IP / Internet",
     icon: "fa-network-wired",
@@ -95,6 +103,7 @@ function CreateTicketForm() {
   const searchParams = useSearchParams();
   const urlAssetId = searchParams.get("asset_id");
   const [masterData, setMasterData] = useState({ bus: [], systems: [], locations: [], users: [], hardware: [] });
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -113,6 +122,7 @@ function CreateTicketForm() {
     sub_option: "",
     location_id: "",
     location_text: "",
+    reporter_id: "",
     reporter_name: "",
     reporter_email: "",
     reporter_phone: "",
@@ -132,8 +142,9 @@ function CreateTicketForm() {
       fetch("/api/master").then((res) => res.json()),
       fetch("/api/assets").then((res) => res.ok ? res.json() : []).catch(() => []),
       fetch("/api/kb").then((res) => res.ok ? res.json() : []).catch(() => []),
+      fetch("/api/auth/me").then((res) => res.ok ? res.json() : null).catch(() => null),
     ])
-      .then(([d, ass, kb]) => {
+      .then(([d, ass, kb, me]) => {
         if (d && !d.error) {
           setMasterData({
             bus: d.bus || [],
@@ -145,6 +156,17 @@ function CreateTicketForm() {
         }
         setAssets(Array.isArray(ass) ? ass : []);
         setKbArticles(Array.isArray(kb) ? kb : []);
+        if (me && me.user) {
+          setCurrentUser(me.user);
+          setForm(prev => ({
+            ...prev,
+            reporter_id: me.user.user_id ? me.user.user_id.toString() : "",
+            reporter_name: me.user.full_name || "",
+            reporter_email: me.user.email || "",
+            reporter_phone: me.user.phone || "",
+            bu_id: me.user.bu_id ? me.user.bu_id.toString() : prev.bu_id,
+          }));
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -432,38 +454,71 @@ function CreateTicketForm() {
           </div>
           <div className="card-body">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "16px" }}>
-              {PROBLEM_CATEGORIES.map(cat => (
+              {PROBLEM_CATEGORIES
+                .filter(cat => cat.id !== "create_user" || ["END_USER", "USER"].includes(currentUser?.role?.toUpperCase()))
+                .map(cat => (
+                  <div
+                    key={cat.id}
+                    onClick={() => handleSelectCategory(cat)}
+                    style={{
+                      border: "2px solid",
+                      borderColor: selectedCategory?.id === cat.id ? cat.color : "var(--border)",
+                      borderRadius: "12px",
+                      padding: "20px 16px",
+                      textAlign: "center",
+                      cursor: "pointer",
+                      transition: "all .2s",
+                      background: selectedCategory?.id === cat.id ? `${cat.color}18` : "var(--bg-secondary)",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.background = `${cat.color}12`; }}
+                    onMouseLeave={e => {
+                      if (selectedCategory?.id !== cat.id) {
+                        e.currentTarget.style.borderColor = "var(--border)";
+                        e.currentTarget.style.background = "var(--bg-secondary)";
+                      }
+                    }}
+                  >
+                    <div style={{
+                      width: "56px", height: "56px", borderRadius: "12px",
+                      background: `${cat.color}22`, display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 12px", fontSize: "1.5rem", color: cat.color,
+                    }}>
+                      <i className={`fa-solid ${cat.icon}`}></i>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: ".9rem" }}>{cat.label}</div>
+                  </div>
+                ))}
+
+              {/* Add device button: Visible only to T1 role */}
+              {currentUser?.role?.toUpperCase() === "TIER1" && (
                 <div
-                  key={cat.id}
-                  onClick={() => handleSelectCategory(cat)}
+                  onClick={() => router.push("/assets/create")}
                   style={{
-                    border: "2px solid",
-                    borderColor: selectedCategory?.id === cat.id ? cat.color : "var(--border)",
+                    border: "2px dashed var(--border)",
                     borderRadius: "12px",
                     padding: "20px 16px",
                     textAlign: "center",
                     cursor: "pointer",
                     transition: "all .2s",
-                    background: selectedCategory?.id === cat.id ? `${cat.color}18` : "var(--bg-secondary)",
+                    background: "var(--bg-secondary)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = cat.color; e.currentTarget.style.background = `${cat.color}12`; }}
-                  onMouseLeave={e => {
-                    if (selectedCategory?.id !== cat.id) {
-                      e.currentTarget.style.borderColor = "var(--border)";
-                      e.currentTarget.style.background = "var(--bg-secondary)";
-                    }
-                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--primary-light)"; e.currentTarget.style.background = "rgba(59,130,246,.04)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.background = "var(--bg-secondary)"; }}
                 >
                   <div style={{
                     width: "56px", height: "56px", borderRadius: "12px",
-                    background: `${cat.color}22`, display: "flex", alignItems: "center", justifyContent: "center",
-                    margin: "0 auto 12px", fontSize: "1.5rem", color: cat.color,
+                    background: "rgba(59,130,246,.08)", display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 12px", fontSize: "1.8rem", color: "var(--primary-light)",
                   }}>
-                    <i className={`fa-solid ${cat.icon}`}></i>
+                    <i className="fa-solid fa-plus"></i>
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: ".9rem" }}>{cat.label}</div>
+                  <div style={{ fontWeight: 700, fontSize: ".9rem", color: "var(--text-muted)" }}>เพิ่มอุปกรณ์</div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -607,7 +662,10 @@ function CreateTicketForm() {
               {/* Software: select system */}
               {selectedCategory?.useSystem && (
                 <div className="form-group">
-                  <label>ระบบที่มีปัญหา <span className="req">*</span></label>
+                  <label>
+                    {selectedCategory?.id === "create_user" ? "ระบบที่ต้องการขอสิทธิ์ / สร้าง User" : "ระบบที่มีปัญหา"}{" "}
+                    <span className="req">*</span>
+                  </label>
                   <select name="system_id" className="form-control" value={form.system_id} onChange={handleChange} required>
                     <option value="">-- เลือกระบบ --</option>
                     {masterData.systems.map(sys => (
@@ -635,19 +693,25 @@ function CreateTicketForm() {
               <div className="form-group">
                 <label>หัวข้อ (Subject) <span className="req">*</span></label>
                 <input type="text" name="subject" className="form-control" value={form.subject} onChange={handleChange}
-                  placeholder="เช่น POS ไม่เปิด, จอคอมดับ, Internet ใช้ไม่ได้" required />
+                  placeholder={selectedCategory?.id === "create_user" ? "เช่น ขอสิทธิ์เข้าใช้งาน POS, สร้าง User สมาชิกใหม่" : "เช่น POS ไม่เปิด, จอคอมดับ, Internet ใช้ไม่ได้"} required />
               </div>
 
               <div className="form-group">
-                <label>อาการที่พบ / รายละเอียดเพิ่มเติม <span className="req">*</span></label>
+                <label>
+                  {selectedCategory?.id === "create_user" ? "รายละเอียดความต้องการ / สิทธิ์ที่ต้องการ" : "อาการที่พบ / รายละเอียดเพิ่มเติม"}{" "}
+                  <span className="req">*</span>
+                </label>
                 <textarea name="symptom" className="form-control" rows="3" value={form.symptom} onChange={handleChange}
-                  placeholder="อธิบายอาการที่พบเพิ่มเติม..." required></textarea>
+                  placeholder={selectedCategory?.id === "create_user" ? "ระบุเหตุผลและสิทธิ์ที่ต้องการ เช่น สิทธิ์แคชเชียร์, สิทธิ์ผู้จัดการร้าน..." : "อธิบายอาการที่พบเพิ่มเติม..."} required></textarea>
               </div>
 
               <div className="form-group">
-                <label>รายละเอียดเพิ่มเติม / ขั้นตอนก่อนเกิดปัญหา <span className="req">*</span></label>
+                <label>
+                  {selectedCategory?.id === "create_user" ? "ข้อมูลผู้ใช้ที่จะสร้าง (เช่น ชื่อ-นามสกุล, รหัสพนักงาน, แผนก/ตำแหน่ง)" : "รายละเอียดเพิ่มเติม / ขั้นตอนก่อนเกิดปัญหา"}{" "}
+                  <span className="req">*</span>
+                </label>
                 <textarea name="description" className="form-control" rows="3" value={form.description} onChange={handleChange}
-                  placeholder="อธิบายสิ่งที่ทำก่อนเกิดปัญหา..." required></textarea>
+                  placeholder={selectedCategory?.id === "create_user" ? "ระบุชื่อ-สกุล, รหัสพนักงาน, ตำแหน่ง และข้อมูลผู้ใช้ที่ต้องการขอสิทธิ์..." : "อธิบายสิ่งที่ทำก่อนเกิดปัญหา..."} required></textarea>
               </div>
 
               <div className="form-group">
