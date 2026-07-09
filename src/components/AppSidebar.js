@@ -85,6 +85,10 @@ export default function AppSidebar({ user, onLogout }) {
 
         {!isGeneralUser && (
           <>
+            <a href="/chat" className="nav-item" id="nav-chat">
+              <i className="fa-solid fa-comments nav-icon" style={{ color: "#ec4899" }}></i>
+              <span className="nav-label">ห้องแชตทั้งหมด</span>
+            </a>
             <a href="/assets" className="nav-item" id="nav-assets">
               <i className="fa-solid fa-boxes-stacked nav-icon" style={{ color: "#8b5cf6" }}></i>
               <span className="nav-label">รายการอุปกรณ์ทั้งหมด</span>
