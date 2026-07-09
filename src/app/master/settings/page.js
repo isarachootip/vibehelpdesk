@@ -57,6 +57,7 @@ export default function SystemSettings() {
   ]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [visibleSecrets, setVisibleSecrets] = useState({});
 
   // Announcement state
   const [activeAnnouncements, setActiveAnnouncements] = useState([]);
@@ -476,13 +477,35 @@ export default function SystemSettings() {
                     {conf.config_key}
                     {conf.is_secret && <span style={{ marginLeft: "8px", fontSize: ".7rem", color: "var(--danger)" }}><i className="fa-solid fa-lock"></i> Secret</span>}
                   </label>
-                  <input
-                    type={conf.is_secret ? "password" : "text"}
-                    className="form-control"
-                    value={conf.config_value || ""}
-                    onChange={e => handleLineChange(index, e.target.value)}
-                    placeholder={`ใส่ค่า ${conf.config_key}`}
-                  />
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type={conf.is_secret && !visibleSecrets[conf.config_key] ? "password" : "text"}
+                      className="form-control"
+                      value={conf.config_value || ""}
+                      onChange={e => handleLineChange(index, e.target.value)}
+                      placeholder={`ใส่ค่า ${conf.config_key}`}
+                      style={{ paddingRight: "40px" }}
+                    />
+                    {conf.is_secret && (
+                      <button
+                        type="button"
+                        onClick={() => setVisibleSecrets(prev => ({ ...prev, [conf.config_key]: !prev[conf.config_key] }))}
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          background: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "var(--text-muted)",
+                          padding: "4px"
+                        }}
+                      >
+                        <i className={`fa-solid ${visibleSecrets[conf.config_key] ? "fa-eye-slash" : "fa-eye"}`}></i>
+                      </button>
+                    )}
+                  </div>
                   {conf.description && <p className="text-muted" style={{ fontSize: ".75rem", marginTop: "4px" }}>{conf.description}</p>}
                 </div>
               ))}
