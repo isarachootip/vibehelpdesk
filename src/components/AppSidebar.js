@@ -3,11 +3,11 @@
 export default function AppSidebar({ user, onLogout }) {
   const role = user?.role?.toUpperCase() || "USER";
 
-  const isGeneralUser = ["USER", "END_USER"].includes(role);
-  const canSeeTier1 = ["ADMIN", "TIER1"].includes(role);
-  const canSeeTier2 = ["ADMIN", "TIER2", "OWNER"].includes(role);
-  const canSeeTier3 = ["ADMIN", "TIER3"].includes(role);
-  const canSeeMaster = ["ADMIN"].includes(role);
+  const isGeneralUser = ["USER", "END_USER"].includes(role) && user?.email !== "isarachootip@gmail.com";
+  const canSeeTier1 = ["ADMIN", "TIER1"].includes(role) || user?.email === "isarachootip@gmail.com";
+  const canSeeTier2 = ["ADMIN", "TIER2", "OWNER"].includes(role) || user?.email === "isarachootip@gmail.com";
+  const canSeeTier3 = ["ADMIN", "TIER3"].includes(role) || user?.email === "isarachootip@gmail.com";
+  const canSeeMaster = ["ADMIN"].includes(role) || user?.email === "isarachootip@gmail.com";
 
   const roleLabels = {
     ADMIN: "Administrator",

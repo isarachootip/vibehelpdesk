@@ -25,7 +25,7 @@ export default function ChatDashboard() {
       .then((data) => {
         if (data.user) {
           const role = data.user.role?.toUpperCase();
-          if (["USER", "END_USER"].includes(role)) {
+          if (["USER", "END_USER"].includes(role) && data.user.email !== "isarachootip@gmail.com") {
             // Redirect normal users to their own ticket page
             router.push("/tickets/my");
             return;
