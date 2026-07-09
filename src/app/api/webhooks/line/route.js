@@ -15,7 +15,7 @@ export async function POST(request) {
     const configMap = {};
     configs.forEach(c => configMap[c.config_key] = c.config_value);
 
-    const channelSecret = configMap['LINE_CHANNEL_SECRET'] || process.env.LINE_CHANNEL_SECRET;
+    const channelSecret = (configMap['LINE_CHANNEL_SECRET'] || process.env.LINE_CHANNEL_SECRET || '').trim();
     if (channelSecret && signature) {
       const hash = crypto.createHmac('SHA256', channelSecret).update(bodyText).digest('base64');
       if (hash !== signature) {
@@ -29,7 +29,7 @@ export async function POST(request) {
       return NextResponse.json({ status: 'ok' });
     }
 
-    const channelAccessToken = configMap['LINE_CHANNEL_ACCESS_TOKEN'] || process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const channelAccessToken = (configMap['LINE_CHANNEL_ACCESS_TOKEN'] || process.env.LINE_CHANNEL_ACCESS_TOKEN || '').trim();
 
     for (const event of body.events) {
       if (event.type === 'message' && event.message.type === 'text') {
