@@ -16,17 +16,34 @@ export async function POST(request) {
     configs.forEach(c => configMap[c.config_key] = c.config_value);
 
     const channelSecret = (configMap['LINE_CHANNEL_SECRET'] || process.env.LINE_CHANNEL_SECRET || '').trim();
-    if (channelSecret && signature) {
-      const hash = crypto.createHmac('sha256', channelSecret).update(bodyText).digest('base64');
-      console.log('=== LINE WEBHOOK SIGNATURE VERIFICATION ===');
-      console.log('Headers Signature:', signature);
-      console.log('Calculated Signature:', hash);
-      console.log('Secret length used:', channelSecret.length);
-      console.log('Match status:', hash === signature);
-      if (hash !== signature) {
-        console.error('LINE signature verification failed!');
+    
+    // Save debug details to file
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const hash = channelSecret && signature 
+        ? crypto.createHmac('sha256', channelSecret).update(bodyText).digest('base64')
+        : null;
+
+      fs.writeFileSync(
+        path.join(process.cwd(), 'public', 'line-verify-debug.json'),
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          hasSignature: !!signature,
+          hasChannelSecret: !!channelSecret,
+          secretLength: channelSecret.length,
+          headersSignature: signature,
+          calculatedSignature: hash,
+          match: hash === signature,
+          bodyText: bodyText
+        }, null, 2)
+      );
+
+      if (channelSecret && signature && hash !== signature) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
+    } catch (err) {
+      console.error('Failed to process signature and write debug file:', err);
     }
 
     const body = JSON.parse(bodyText);
