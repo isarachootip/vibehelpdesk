@@ -60,6 +60,18 @@ export async function GET() {
     });
     const pushDebug = pushRecord ? JSON.parse(pushRecord.config_value) : { status: 'no_push_triggered_yet' };
 
+    // Fetch last 10 tickets
+    const recentTickets = await prisma.ticket.findMany({
+      orderBy: { created_at: 'desc' },
+      take: 10
+    });
+
+    // Fetch last 10 messages
+    const recentMessages = await prisma.ticketMessage.findMany({
+      orderBy: { created_at: 'desc' },
+      take: 10
+    });
+
     return NextResponse.json({
       status: 'success',
       environment: {
@@ -68,7 +80,16 @@ export async function GET() {
       },
       database: debugInfo,
       last_verify_attempt: verifyDebug,
-      last_push_attempt: pushDebug
+      last_push_attempt: pushDebug,
+      recent_tickets: recentTickets.map(t => ({
+        ticket_id: t.ticket_id,
+        ticket_no: t.ticket_no,
+        subject: t.subject,
+        reporter_line_id: t.reporter_line_id,
+        status: t.status,
+        created_at: t.created_at
+      })),
+      recent_messages: recentMessages
     });
 
   } catch (error) {
