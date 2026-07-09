@@ -17,33 +17,46 @@ export async function POST(request) {
 
     const channelSecret = (configMap['LINE_CHANNEL_SECRET'] || process.env.LINE_CHANNEL_SECRET || '').trim();
     
-    // Save debug details to file
+    // Save debug details to database
     try {
-      const fs = require('fs');
-      const path = require('path');
       const hash = channelSecret && signature 
         ? crypto.createHmac('sha256', channelSecret).update(bodyText).digest('base64')
         : null;
 
-      fs.writeFileSync(
-        path.join(process.cwd(), 'public', 'line-verify-debug.json'),
-        JSON.stringify({
-          timestamp: new Date().toISOString(),
-          hasSignature: !!signature,
-          hasChannelSecret: !!channelSecret,
-          secretLength: channelSecret.length,
-          headersSignature: signature,
-          calculatedSignature: hash,
-          match: hash === signature,
-          bodyText: bodyText
-        }, null, 2)
-      );
+      await prisma.systemConfig.upsert({
+        where: { config_key: 'LINE_VERIFY_DEBUG' },
+        update: {
+          config_value: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            hasSignature: !!signature,
+            hasChannelSecret: !!channelSecret,
+            secretLength: channelSecret.length,
+            headersSignature: signature,
+            calculatedSignature: hash,
+            match: hash === signature,
+            bodyText: bodyText
+          })
+        },
+        create: {
+          config_key: 'LINE_VERIFY_DEBUG',
+          config_value: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            hasSignature: !!signature,
+            hasChannelSecret: !!channelSecret,
+            secretLength: channelSecret.length,
+            headersSignature: signature,
+            calculatedSignature: hash,
+            match: hash === signature,
+            bodyText: bodyText
+          })
+        }
+      });
 
       if (channelSecret && signature && hash !== signature) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
     } catch (err) {
-      console.error('Failed to process signature and write debug file:', err);
+      console.error('Failed to process signature and save debug to DB:', err);
     }
 
     const body = JSON.parse(bodyText);
