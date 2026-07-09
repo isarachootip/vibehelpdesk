@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 // GET all messages for a ticket
 export async function GET(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const messages = await prisma.ticketMessage.findMany({
       where: { ticket_id: parseInt(id) },
       include: {
@@ -25,7 +25,7 @@ export async function GET(request, { params }) {
 // POST a new message to a ticket
 export async function POST(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { sender_type, sender_id, sender_name, message_text, source } = body;
 
