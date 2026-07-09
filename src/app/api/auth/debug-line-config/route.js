@@ -54,6 +54,12 @@ export async function GET() {
     });
     const verifyDebug = debugRecord ? JSON.parse(debugRecord.config_value) : { status: 'no_verify_triggered_yet' };
 
+    // Read push debug info from DB
+    const pushRecord = await prisma.systemConfig.findUnique({
+      where: { config_key: 'LINE_PUSH_DEBUG' }
+    });
+    const pushDebug = pushRecord ? JSON.parse(pushRecord.config_value) : { status: 'no_push_triggered_yet' };
+
     return NextResponse.json({
       status: 'success',
       environment: {
@@ -61,7 +67,8 @@ export async function GET() {
         LINE_CHANNEL_ACCESS_TOKEN_env_exists: !!process.env.LINE_CHANNEL_ACCESS_TOKEN,
       },
       database: debugInfo,
-      last_verify_attempt: verifyDebug
+      last_verify_attempt: verifyDebug,
+      last_push_attempt: pushDebug
     });
 
   } catch (error) {

@@ -60,23 +60,51 @@ export async function POST(request, { params }) {
       const config = await prisma.systemConfig.findUnique({
         where: { config_key: 'LINE_CHANNEL_ACCESS_TOKEN' }
       });
-      const channelAccessToken = config?.config_value || process.env.LINE_CHANNEL_ACCESS_TOKEN;
+      const channelAccessToken = (config?.config_value || process.env.LINE_CHANNEL_ACCESS_TOKEN || '').trim();
       
       if (channelAccessToken) {
         try {
-          await fetch('https://api.line.me/v2/bot/message/push', {
+          const pushPayload = {
+            to: ticket.reporter_line_id,
+            messages: [{
+              type: 'text',
+              text: `[อัปเดตจาก IT Support]\nTicket: ${ticket.ticket_no}\nข้อความ: ${message_text}`
+            }]
+          };
+
+          const lineRes = await fetch('https://api.line.me/v2/bot/message/push', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${channelAccessToken}`
             },
-            body: JSON.stringify({
-              to: ticket.reporter_line_id,
-              messages: [{
-                type: 'text',
-                text: `[อัปเดตจาก IT Support]\nTicket: ${ticket.ticket_no}\nข้อความ: ${message_text}`
-              }]
-            })
+            body: JSON.stringify(pushPayload)
+          });
+
+          const lineResBody = await lineRes.text();
+
+          // Save debug logs to DB
+          await prisma.systemConfig.upsert({
+            where: { config_key: 'LINE_PUSH_DEBUG' },
+            update: {
+              config_value: JSON.stringify({
+                timestamp: new Date().toISOString(),
+                status: lineRes.status,
+                body: lineResBody,
+                payload: pushPayload,
+                tokenLength: channelAccessToken.length
+              })
+            },
+            create: {
+              config_key: 'LINE_PUSH_DEBUG',
+              config_value: JSON.stringify({
+                timestamp: new Date().toISOString(),
+                status: lineRes.status,
+                body: lineResBody,
+                payload: pushPayload,
+                tokenLength: channelAccessToken.length
+              })
+            }
           });
         } catch (pushErr) {
           console.error('Failed to push to LINE:', pushErr);
