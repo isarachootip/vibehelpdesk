@@ -17,8 +17,14 @@ export async function POST(request) {
 
     const channelSecret = (configMap['LINE_CHANNEL_SECRET'] || process.env.LINE_CHANNEL_SECRET || '').trim();
     if (channelSecret && signature) {
-      const hash = crypto.createHmac('SHA256', channelSecret).update(bodyText).digest('base64');
+      const hash = crypto.createHmac('sha256', channelSecret).update(bodyText).digest('base64');
+      console.log('=== LINE WEBHOOK SIGNATURE VERIFICATION ===');
+      console.log('Headers Signature:', signature);
+      console.log('Calculated Signature:', hash);
+      console.log('Secret length used:', channelSecret.length);
+      console.log('Match status:', hash === signature);
       if (hash !== signature) {
+        console.error('LINE signature verification failed!');
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
     }
