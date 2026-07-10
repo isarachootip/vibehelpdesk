@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useRef } from "react";
 
+function normalizeTicketNo(ticketNo) {
+  if (!ticketNo) return ticketNo;
+  const match = ticketNo.trim().match(/^([A-Z0-9]+?)(\d{4}(?:20|25)\d{2})(\d{4,6})$/i);
+  if (match) {
+    const prefix = match[1].toUpperCase();
+    const dateStr = match[2];
+    const seqStr = match[3].padStart(5, '0');
+    return `${prefix}${dateStr}${seqStr}`;
+  }
+  return ticketNo.trim();
+}
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [ticketNo, setTicketNo] = useState("");
@@ -35,13 +47,12 @@ export default function ChatWidget() {
     e.preventDefault();
     if (!ticketNo.trim()) return;
 
-    // A real implementation would verify the ticket by No. and maybe Email/Phone
-    // For PoC, we will just search the ticket list
     try {
-      const res = await fetch(`/api/tickets?search=${ticketNo.trim()}`);
+      const normalizedInput = normalizeTicketNo(ticketNo).toLowerCase();
+      const res = await fetch(`/api/tickets?search=${normalizedInput}`);
       if (res.ok) {
         const data = await res.json();
-        const ticket = data.find(t => t.ticket_no.toLowerCase() === ticketNo.trim().toLowerCase());
+        const ticket = data.find(t => normalizeTicketNo(t.ticket_no).toLowerCase() === normalizedInput);
         if (ticket) {
           setHasTicket(true);
           setTicketId(ticket.ticket_id);

@@ -20,6 +20,18 @@ export async function generateTicketNo(buCode, buId) {
   const running = String(counter.last_number).padStart(5, '0');
   return `${buCode}${dateKey}${running}`;
 }
+// Normalize ticket number by padding running sequence to 5 digits if needed
+export function normalizeTicketNo(ticketNo) {
+  if (!ticketNo) return ticketNo;
+  const match = ticketNo.trim().match(/^([A-Z0-9]+?)(\d{4}(?:20|25)\d{2})(\d{4,6})$/i);
+  if (match) {
+    const prefix = match[1].toUpperCase();
+    const dateStr = match[2];
+    const seqStr = match[3].padStart(5, '0');
+    return `${prefix}${dateStr}${seqStr}`;
+  }
+  return ticketNo.trim();
+}
 
 // Format date for display
 export function formatDate(date) {

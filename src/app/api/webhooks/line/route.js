@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import prisma from '@/lib/prisma';
-import { generateTicketNo } from '@/lib/ticket-utils';
+import { generateTicketNo, normalizeTicketNo } from '@/lib/ticket-utils';
 
 export async function POST(request) {
   try {
@@ -76,9 +76,9 @@ export async function POST(request) {
         let actualMessage = text;
 
         // 1. Try to match a ticket number in the message text
-        const ticketNoMatch = text.match(/[A-Z0-9]{3,20}\d{8}\d{4,6}/i) || text.match(/TICKET-\d+/i);
+        const ticketNoMatch = text.match(/([A-Z0-9]{2,20}?)(\d{4}(?:20|25)\d{2})(\d{4,6})/i) || text.match(/TICKET-\d+/i);
         if (ticketNoMatch) {
-          const ticketNo = ticketNoMatch[0].toUpperCase();
+          const ticketNo = normalizeTicketNo(ticketNoMatch[0].toUpperCase());
           const ticket = await prisma.ticket.findUnique({ where: { ticket_no: ticketNo } });
           if (ticket) {
             activeTicket = ticket;

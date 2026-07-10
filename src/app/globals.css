@@ -476,6 +476,11 @@ textarea.form-control { height: auto; padding: 12px 14px; resize: vertical; }
   margin-left: 70px;
 }
 
+/* ─── SIDEBAR OVERLAY ─── */
+.sidebar-overlay {
+  display: none;
+}
+
 /* ─── MOBILE RESPONSIVE ─── */
 @media (max-width: 768px) {
   .sidebar {
@@ -483,6 +488,14 @@ textarea.form-control { height: auto; padding: 12px 14px; resize: vertical; }
   }
   #app.sidebar-open .sidebar {
     left: 0;
+  }
+  #app.sidebar-open .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 90;
   }
   .main-content {
     margin-left: 0 !important;

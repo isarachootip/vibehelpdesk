@@ -83,6 +83,27 @@ export default function AppLayout({ children }) {
     return () => clearInterval(interval);
   }, [isLoginPage]);
 
+  // Handle mobile responsive default state & window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Collapse sidebar on mobile when navigating
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setIsCollapsed(true);
+    }
+  }, [pathname]);
 
   // Handle Logout
   const handleLogout = async () => {
@@ -162,6 +183,9 @@ export default function AppLayout({ children }) {
     <div id="app" className={`${isCollapsed ? "collapsed" : ""} ${!isCollapsed ? "sidebar-open" : ""}`}>
       {/* Sidebar with active user */}
       <AppSidebar user={user} onLogout={handleLogout} />
+
+      {/* Sidebar overlay for mobile click-to-close */}
+      <div className="sidebar-overlay" onClick={() => setIsCollapsed(true)} />
 
       {/* Main Content */}
       <main className="main-content">

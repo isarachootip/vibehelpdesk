@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { generateTicketNo } from '@/lib/ticket-utils';
+import { generateTicketNo, normalizeTicketNo } from '@/lib/ticket-utils';
 
 // GET: List all tickets with filters
 export async function GET(request) {
@@ -18,7 +18,9 @@ export async function GET(request) {
     if (bu_id) where.bu_id = parseInt(bu_id);
     if (system_id) where.system_id = parseInt(system_id);
     if (search) {
+      const normalizedSearch = normalizeTicketNo(search);
       where.OR = [
+        { ticket_no: { contains: normalizedSearch, mode: 'insensitive' } },
         { ticket_no: { contains: search, mode: 'insensitive' } },
         { subject: { contains: search, mode: 'insensitive' } },
         { symptom: { contains: search, mode: 'insensitive' } },
